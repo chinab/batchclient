@@ -1,0 +1,9 @@
+1.application.xml的装载依靠serlet容器的listener功能装载，去掉Contextloadplugin和ApplicationInitPlugin。
+2.请求编码filter更换为spring自带的filter
+3.所有hbm.xml文件都迁移至content/resource/hbm下
+4.更改代理方式，在代理配置中增加
+<property name="proxyTargetClass">
+   	<value>true</value>
+</property>属性
+使用cglib完成aop代理，可以代理类和接口
+5.修改SpringBaseTestCase，增加log4j的支持

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="optionBo" class="com.mindstatus.bo.impl.OptionBoImpl">
+		<property name="msPropTypeDao">
+			<ref bean="msPropTypeDaoProxy" />
+		</property>
+		<property name="msPropListDao">
+			<ref bean="msPropListDaoProxy" />
+		</property>
+	</bean>
+
+	<bean id="optionBoProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="optionBo" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="get*">PROPAGATION_SUPPORTS</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="msEmployeeBo" class="com.mindstatus.bo.impl.MsEmployeeBoImpl">
+		<property name="msEmployeeDao">
+			<ref bean="msEmployeeDaoProxy" />
+		</property>
+	</bean>
+
+	<bean id="msEmployeeBoProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msEmployeeBo" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="msUserBo" class="com.mindstatus.bo.impl.MsUserBoImpl">
+		<property name="msUserDao">
+			<ref bean="msUserDaoProxy" />
+		</property>
+	</bean>
+
+	<bean id="msUserBoProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msUserBo" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="logon*">PROPAGATION_REQUIRED</prop>
+				<prop key="regist*">PROPAGATION_REQUIRED</prop>
+				<prop key="modify*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

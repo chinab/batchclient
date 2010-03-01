@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="optionListProvider" class="com.mindstatus.cache.OptionListProvider">
+		<property name="optionBo">
+			<ref bean="optionBoProxy" />
+		</property>
+		<property name="hasNullValue" value="true"/>
+	</bean>
+
+	<bean id="optionListCache" class="com.vicutu.cache.impl.MapCacheImpl" init-method="init">
+		<property name="cacheDataProvider">
+			<ref bean="optionListProvider" />
+		</property>
+	</bean>
+	
+	<bean id="queryTemplateProvider" class="com.mindstatus.cache.QueryTemplateProvider"/>
+
+	<bean id="queryTemplateCache" class="com.vicutu.cache.impl.MapCacheImpl"  init-method="init">
+		<property name="cacheDataProvider">
+			<ref bean="queryTemplateProvider" />
+		</property>
+	</bean>
+	
+	<bean id="cacheManager" class="com.vicutu.cache.impl.MapCacheManagerImpl" destroy-method="removeAll">
+		<property name="caches">
+      		<map>
+        		<entry key="optionListCache" value-ref="optionListCache"/>
+        		<entry key="queryTemplateCache" value-ref="queryTemplateCache"/>
+      		</map>
+    	</property>
+	</bean>
+	
+</beans>

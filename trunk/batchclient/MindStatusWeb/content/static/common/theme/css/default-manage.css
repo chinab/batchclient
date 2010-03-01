@@ -1,0 +1,425 @@
+BODY {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	
+	margin-top: 0px; 
+	margin-right: 2px; 
+	margin-bottom: 0px; 
+	margin-left: 3px; 
+	background-color: #e9e9e9;
+	
+	scrollbar-arrow-color: #29517b;
+    scrollbar-base-color: #cccccc;
+    scrollbar-highlight-color: #5A7FAC;
+    scrollbar-shadow-color: #5A7FAC;
+    scrollbar-3dlight-color: #ffffff;
+    scrollbar-darkshadow-color: #ffffff;
+    scrollbar-face-color: #ffffff;
+    scrollbar-track-color: #efefef;
+}
+
+.box {
+	border: 1px solid #C0C0C0;
+    width: 92px;
+    height: 20px;
+    clip: rect( 0px, 91px, 20px, 0px );
+    overflow: hidden;
+}
+
+.box2 {
+	border: 1px solid #F4F4F4;
+    width: 90px;
+    height: 18px;
+    clip: rect( 0px, 89px, 18px, 0px );
+    overflow: hidden;
+}
+
+select{
+	position: relative;
+	left: -2px;
+	top: -2px;
+	width: 93px;
+	line-height: 14px;
+	color: #000066;
+	border-style: none;
+	border-width: 0px;
+	font-size: 9pt;
+}
+
+.leftBorder {
+	background-color:#e9e9e9;
+	background-image: url(images/manage/bg.png); 
+	background-repeat: repeat-y; 
+	background-position: left;
+}
+
+.rightBorder {
+	background-color:#e9e9e9;
+	background-image: url(images/manage/bg.png); 
+	background-repeat: repeat-y; 
+	background-position: right;
+}
+
+TD 
+{
+    font-size: 9pt;
+}
+
+INPUT {
+    
+    font-size: 9pt;
+}
+
+
+TEXTAREA 
+{
+    font-size:9pt;
+}
+
+A 
+{
+    font-size: 9pt;
+    color: #336699;
+    text-decoration: none;
+}
+A:link
+{
+    color: #003366;
+    text-decoration: none;
+}
+A:visited
+{
+    color: #336699;
+    text-decoration: none;
+}
+A:hover
+{
+    color: #00991A;
+    text-decoration: none;
+}
+A:active 
+{
+    color: red;
+    text-decoration: underline;
+}
+
+DIV.menu 
+{
+	background: #fcfcfc;
+
+	border-left: #bcbcbc 1px solid;
+	border-right: #bcbcbc 1px outset;
+	border-top: #bcbcbc 1px solid;
+	border-bottom: #bcbcbc 1px outset;
+	overflow: auto;
+	position: absolute;
+
+	font-weight: bold;
+	font-size: 9pt;
+	cursor:default;
+}
+DIV.menu .mouseover 
+{
+	background: #b6bdd2;
+	font-size: 9pt;
+}
+DIV.menu TR 
+{
+	background: #fcfcfc;
+	font-size: 9pt;
+}
+
+/********** for tree ********/
+.tree-control 
+{
+}
+.tree-control TD
+{	
+	padding-bottom:0px;
+	padding-left:2px;
+}
+.selected 
+{
+  	color: black;
+  	font-style: italic;
+  	font-weight: bold;
+  	text-decoration: none;
+}
+.unselected 
+{
+  	color: black;
+  	font-style: normal;
+  	font-weight: normal;
+  	text-decoration: none;
+}
+.tree-control IMG 
+{
+	border: 0px;
+}
+ 
+BODY.tree_body {  
+	background-color: #ffffff; 
+	margin-top: 2px; 
+	margin-right: 0px; 
+	margin-bottom: 0px; 
+	margin-left: 0px;
+}
+
+TABLE.main_table1 {  
+	width: 100%; 
+	border-width: 0px; 
+}
+TABLE.main_table1 TD {
+	padding-top: 0px; 
+	padding-right: 0px; 
+	padding-bottom: 0px; 
+	padding-left: 0px; 
+}
+
+.text_title {  
+	font-size: 10pt; 
+	font-weight: bold;
+	color: #000000; 
+	height: 25px;
+	vertical-align:middle;	
+}
+
+TABLE.main_table3 {  
+	border: 1px #848284 solid; 
+	width: 100%; 
+	background-color: #ffffff
+}
+TABLE.main_table3 TH {  
+	background-image: url(images/manage/main_table3_th.gif); 
+	background-repeat: repeat; 
+	height: 22px; 
+	border-color: black #e8e8e8 #e8e8e8 black; 
+	border: solid; 
+	border-width: 0px 1px 1px 0px;
+	font-size: 9pt;
+	text-align:left;
+	padding-top: 2px; 
+	padding-right: 0px; 
+	padding-bottom: 0px; 
+	padding-left: 2px; 
+}
+TABLE.main_table3 TD {  
+	height: 22px; 
+	padding-top: 2px; 
+	padding-right: 0px; 
+	padding-bottom: 0px; 
+	padding-left: 2px; 
+	padding-right: 2px; 
+	border: 1px #84B6D4 solid; 
+	border-width: 0px 1px 1px 0px;
+	font-size: 9pt;
+}
+
+TABLE.main_table3 TH.right { 
+	border-width: 0px 0px 1px 0px
+	height: 20px; 
+	text-align: right;
+}
+
+INPUT.checkbox {  
+	height: 13px; 
+	width: 13px; 
+	border-style: none; 
+    margin-top: 0px; 
+    margin-right: 0px; 
+    margin-bottom: 1px; 
+    margin-left: 0px; 
+    padding-top: 0px; 
+    padding-right: 0px; 
+    padding-bottom: 0px; 
+    padding-left: 0px; 
+    border-top-width: 0px; 
+    border-right-width: 0px; 
+    border-bottom-width: 0px; 
+    border-left-width: 0px
+}
+
+INPUT.thin {
+    border-top: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+}
+
+INPUT.button1 {  
+	background-image: url(images/manage/button1.gif); 
+	background-repeat: no-repeat; 
+	height: 24px; 
+	width: 80px; 
+	padding-top: 2px; 
+	border-style: none; 
+	padding-left: 1px
+}
+
+INPUT.button2 {  
+	background-image: url(images/manage/button2.gif); 
+	background-repeat: no-repeat; 
+	height: 24px; 
+	width: 80px; 
+	padding-top: 2px; 
+	border-style: none; 
+	padding-left: 1px
+}
+
+/* login page style */
+TABLE.login_table 
+{
+  	border: 1px #848284 solid; 
+}
+TD.login_table_td 
+{
+	background-color: #e9e9e9;
+	border-color: #e8e8e8;
+	border-style: solid; 
+	border-width: 0px 1px 1px 0px; 
+}
+TD.login_table_th 
+{ 
+	background-image: url(images/manage/main_table3_th.gif); 
+	background-repeat: repeat-x; 
+	height: 24px; 
+	padding-left: 5px; 
+	border-color: black #848284 #848284 black; 
+	border-width: 0px 0px 1px 0px 
+}
+
+TABLE.search_table1 { 
+	border: 1px #848284 solid; 
+	padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px 
+}
+
+TR.even		{background-color:#f7f7f7;}
+TR.odd		{background-color:#ffffff;}
+TR.indicateRow 	{background-color: #ffff00;}
+
+DIV.detail {
+	background: #fcfcfc;		
+	scrollbar-face-color:#D7EFFF; 
+	scrollbar-shadow-color:#ffffff; 
+	scrollbar-highlight-color:#E7EFFF; 
+	scrollbar-3dlight-color:#E7EFFF; 
+	scrollbar-darkshadow-color:#ffffff; 
+	scrollbar-track-color:#ffffff; 
+	scrollbar-arrow-color:#ffffff;
+	
+	BORDER-LEFT: black 1px solid;
+	BORDER-RIGHT: black 1px solid; 
+	BORDER-TOP: black 1px solid;  
+	BORDER-BOTTOM: black 1px solid; 
+
+	position: absolute; 
+}
+
+/*  menu */
+.menuskin {
+	BORDER-RIGHT: #666666 1px solid; 
+	BORDER-TOP: #666666 1px solid; 
+	BACKGROUND-IMAGE: url(images/manage/dvmenubg3.gif); 
+	VISIBILITY: hidden; 
+	FONT: 12px Verdana; 
+	BORDER-LEFT: #666666 1px solid; 
+	BORDER-BOTTOM: #666666 1px solid; 
+	BACKGROUND-REPEAT: repeat-y; 
+	POSITION: absolute; 
+	BACKGROUND-COLOR: #efefef
+}
+.menuskin A {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 25px; COLOR: black; TEXT-DECORATION: none
+}
+.menuleaf {
+
+}
+.menuleaf A {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 1px; COLOR: right; TEXT-DECORATION: none
+}
+.menuitems {
+	PADDING-RIGHT: 1px; PADDING-LEFT: 1px; PADDING-BOTTOM: 1px; MARGIN: 2px; WORD-BREAK: keep-all; PADDING-TOP: 1px
+}
+.menupopup {
+	DISPLAY: none
+}
+#mouseoverstyle {
+	BORDER-RIGHT: #597db5 1px solid; 
+	BORDER-LEFT: #597db5 1px solid; 
+	BORDER-TOP: #597db5 1px solid; 
+	BORDER-BOTTOM: #597db5 1px solid; 
+	PADDING-RIGHT: 0px; 
+	PADDING-LEFT: 0px; 
+	PADDING-BOTTOM: 0px; 
+	PADDING-TOP: 0px; 
+	MARGIN: 2px; 
+	BACKGROUND-COLOR: #c9d5e7
+}
+#mouseoverstyle A {
+	COLOR: black
+}
+TABLE.tableBorder1 {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; BORDER-LEFT: 1px; WIDTH: 100%; BORDER-BOTTOM: 1px; BACKGROUND-COLOR: #009600
+}
+TD.TopLighNav1 {
+	BACKGROUND-IMAGE: url(images/manage/tabs_m_tile.gif)
+}
+
+.dwpagecontrol 		{
+
+}
+
+.clsFillin{
+	color:#ff0000;
+	FONT: 15px; 	
+}
+
+span.clsopenquery
+{
+	font:2pt;
+	height:15px;
+	width:15px;
+	background-image: url(images/page/openquery.gif);
+	cursor:hand;
+}
+span.clsclosequery
+{
+	font:2pt;
+	height:15px;
+	width:15px;
+	background-image: url(images/page/closequery.gif);
+	cursor:hand;
+}
+
+.clsListHead{
+	height:22px;
+	font-size: 11pt;
+	font-weight: bold;
+	background-color :#EEF1F6;
+}
+
+.clsprompt {  
+	font-size: 10pt; 
+	font-weight: bold;
+	color: #ff0000; 
+	height: 25px;
+	vertical-align:middle;	
+}
+
+input.clsInput	{
+	font-size:11pt;
+	FONT-FAMILY: "宋体";
+	border-top: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	border-bottom: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa;
+}
+
+textarea.clstext{
+	font-size:11pt;
+	FONT-FAMILY: "宋体";
+	border-top: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	border-bottom: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa;
+}

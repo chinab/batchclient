@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query name="MsEmployee" class="com.mindstatus.bean.vo.MsEmployee">
+	<property index="0"  name="name" obj="name" operator="like" match="anywhere"/>
+	<property index="1"  name="sex" obj="sex" operator="eq"/>
+    <property index="2"  name="birthdayBegin" obj="birthday" operator="ge"/>
+    <property index="3"  name="birthdayEnd" obj="birthday" operator="le"/>
+	<property index="4"  name="eduQualification" obj="eduQualification" operator="eq"/>
+    <property index="5"  name="politicalAppearance" obj="politicalAppearance" operator="eq"/>
+    <property index="6"  name="category" obj="category" operator="eq"/>
+    <property index="7"  name="station" obj="station" operator="eq"/>
+    <property index="8" name="kidney" obj="kidney" operator="eq"/>
+    <property index="9" name="interest" obj="interest" operator="eq"/>
+    <property index="10" name="associateRelation" obj="associateRelation" operator="eq"/>
+    <property index="11" name="familyRelation" obj="familyRelation" operator="eq"/>
+    <property index="12" name="community" obj="community" operator="eq"/>
+    <property index="13" name="award" obj="award" operator="eq"/>
+    <property index="14" name="studyAttitude" obj="studyAttitude" operator="eq"/>
+    <property index="15" name="responsibility" obj="responsibility" operator="eq"/>
+    <property index="16" name="campaign" obj="campaign" operator="eq"/>
+    <property index="17" name="economy" obj="economy" operator="eq"/>
+    <property index="18" name="afterHoursBusiness" obj="afterHoursBusiness" operator="eq"/>
+    <property index="19" name="morality" obj="morality" operator="eq"/>
+    <property index="20" name="security" obj="security" operator="eq"/>
+    <property index="21" name="serviceAttitude" obj="serviceAttitude" operator="eq"/>
+    <property index="22" name="skill" obj="skill" operator="eq"/>
+    <property index="23" name="performance" obj="performance" operator="eq"/>
+    <property index="24" name="modelEffect" obj="modelEffect" operator="eq"/>
+    <property index="25" name="enlighten" obj="enlighten" operator="eq"/>
+    <property index="26" name="mindPattern" obj="mindPattern" operator="eq"/>
+    <property index="27" name="jobResult" obj="jobResult" operator="eq"/>
+	<property index="28" name="promise" obj="promise" operator="eq"/>
+	<property index="29" name="rule" obj="rule" operator="eq"/>
+	<property index="30" name="honesty" obj="honesty" operator="eq"/>
+	<property index="31" name="faith" obj="faith" operator="eq"/>
+	<property index="32" name="duty" obj="duty" operator="eq"/>  
+	<property index="33" name="technology" obj="technology" operator="eq"/>
+	<property index="34" name="management" obj="management" operator="eq"/>
+	<property index="35" name="art" obj="art" operator="eq"/>
+	<property index="36" name="sports" obj="sports" operator="eq"/>                
+</query>              

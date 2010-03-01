@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean name="/processLogon"
+		class="com.mindstatus.component.logon.ProcessLogonAction">
+		<property name="msUserBo">
+			<ref bean="msUserBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/processPropTypeSearch"
+		class="com.mindstatus.component.dictionary.ProcessSearchAction">
+		<property name="optionBo">
+			<ref bean="optionBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/preparePropListEdit"
+		class="com.mindstatus.component.dictionary.PrepareEditAction">
+		<property name="optionBo">
+			<ref bean="optionBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/processPropListEdit"
+		class="com.mindstatus.component.dictionary.ProcessEditAction">
+		<property name="optionBo">
+			<ref bean="optionBoProxy" />
+		</property>
+		<property name="eventPublisher">
+			<ref bean="eventPublisher" />
+		</property>
+	</bean>
+	
+	
+	<bean name="/prepareUserInsert"
+		class="com.mindstatus.component.user.PrepareInsertAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+	</bean>
+	
+	<bean name="/processUserInsert"
+		class="com.mindstatus.component.user.ProcessInsertAction">
+		<property name="msUserBo">
+			<ref bean="msUserBoProxy" />
+		</property>
+	</bean>	
+	
+	<bean name="/prepareUserSearch"
+		class="com.mindstatus.component.user.PrepareSearchAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+		<property name="msUserBo">
+			<ref bean="msUserBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/processUserSearch"
+		class="com.mindstatus.component.user.ProcessSearchAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+		<property name="msUserBo">
+			<ref bean="msUserBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/processUserDelete"
+		class="com.mindstatus.component.user.ProcessDeleteAction">
+		<property name="msUserBo">
+			<ref bean="msUserBoProxy" />
+		</property>
+	</bean>	
+	
+	<bean name="/processPasswordModify"
+		class="com.mindstatus.component.user.ProcessModifyAction">
+		<property name="msUserBo">
+			<ref bean="msUserBoProxy" />
+		</property>
+	</bean>	
+	
+	<bean name="/prepareEmployeeMore"
+		class="com.mindstatus.component.employee.PrepareEditAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/preparePhysiologyCycle"
+		class="com.mindstatus.component.employee.PreparePhysiologyCycleAction">
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/prepareEmployeeInsert"
+		class="com.mindstatus.component.employee.PrepareInsertAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+	</bean>
+	
+	<bean name="/processEmployeeInsert"
+		class="com.mindstatus.component.employee.ProcessEditAction">
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/prepareEmployeeEdit"
+		class="com.mindstatus.component.employee.PrepareEditAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/processEmployeeEdit"
+		class="com.mindstatus.component.employee.ProcessEditAction">
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/processEmployeeDelete"
+		class="com.mindstatus.component.employee.ProcessDeleteAction">
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+	</bean>
+	
+	<bean name="/prepareEmployeeSearch"
+		class="com.mindstatus.component.employee.PrepareSearchAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+	</bean>
+	
+	<bean name="/prepareComputePhy"
+		class="com.mindstatus.component.employee.PrepareComputePhyAction">
+	</bean>
+	
+	<bean name="/processComputePhy"
+		class="com.mindstatus.component.employee.ProcessComputePhyAction">
+	</bean>
+	
+	<bean name="/processEmployeeSearch"
+		class="com.mindstatus.component.employee.ProcessSearchAction">
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+	</bean>
+	
+	<bean name="/prepareEmployeeModify"
+		class="com.mindstatus.component.employee.PrepareSearchAction">
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+	</bean>
+	
+	<bean name="/processEmployeeModify"
+		class="com.mindstatus.component.employee.ProcessSearchAction">
+		<property name="msEmployeeBo">
+			<ref bean="msEmployeeBoProxy" />
+		</property>
+		<property name="cacheManager">
+			<ref bean="cacheManager" />
+		</property>
+	</bean>
+
+</beans>

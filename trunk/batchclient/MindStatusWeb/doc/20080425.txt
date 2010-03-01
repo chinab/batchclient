@@ -1,0 +1,5 @@
+1.完善日志功能，日志配置文件为config/log-config.xml
+2.所有applicationContext配置文件都迁移至content/resource/ctx下，在该文件夹下可以再建立多个模块
+3.所有hbm.xml文件都迁移至content/resource/orm下，在该文件夹下可以再建立多个模块
+4.更改使用GenericDaoSupport的方式，所有Dao不再注入GenericDaoSupport实例，而是继承GenericDaoSupport，并注入sessionFactory实例；对数据库的操作都采用this.getHibernateTemplate()来获取HibernateTemplate进行。
+5.如果需要多个数据库连接池，首先在proxool-config里配置，然后配置另外一个sessionFactory和transactionManager。
