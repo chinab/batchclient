@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<something-else-entirely>
+	<proxool>
+		<alias>core</alias>
+		<driver-url>jdbc:mysql://127.0.0.1:3306/mindstatus</driver-url>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		<driver-properties>
+			<property name="user" value="root" />
+			<property name="password" value="root" />
+		</driver-properties>
+		<house-keeping-sleep-time>90000</house-keeping-sleep-time>
+		<maximum-connection-count>5</maximum-connection-count>
+	</proxool>
+</something-else-entirely>

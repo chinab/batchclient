@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="employeeEditForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="sex" type="java.lang.Integer" />
+			<form-property name="age" type="java.lang.Integer" />
+			<form-property name="birthday" type="java.sql.Date" />
+			<form-property name="eduQualification" type="java.lang.Integer" />
+			<form-property name="politicalAppearance" type="java.lang.Integer" />
+			<form-property name="category" type="java.lang.Integer" />
+			<form-property name="station" type="java.lang.Integer" />
+			<form-property name="kidney" type="java.lang.Integer" />
+			<form-property name="interest" type="java.lang.Integer" />
+			<form-property name="associateRelation" type="java.lang.Integer" />
+			<form-property name="familyRelation" type="java.lang.Integer" />
+			<form-property name="community" type="java.lang.Integer" />
+			<form-property name="award" type="java.lang.Integer" />
+			<form-property name="studyAttitude" type="java.lang.Integer" />
+			<form-property name="responsibility" type="java.lang.Integer" />
+			<form-property name="discipline" type="java.lang.Integer" />
+			<form-property name="campaign" type="java.lang.Integer" />
+			<form-property name="economy" type="java.lang.Integer" />
+			<form-property name="afterHoursBusiness" type="java.lang.Integer" />
+			<form-property name="workAdvice" type="java.lang.Integer" />
+			<form-property name="morality" type="java.lang.Integer" />
+			<form-property name="security" type="java.lang.Integer" />
+			<form-property name="serviceAttitude" type="java.lang.Integer" />
+			<form-property name="skill" type="java.lang.Integer" />
+			<form-property name="performance" type="java.lang.Integer" />
+			<form-property name="modelEffect" type="java.lang.Integer" />
+			<form-property name="enlighten" type="java.lang.Integer" />
+			<form-property name="mindPattern" type="java.lang.Integer" />
+			<form-property name="jobResult" type="java.lang.Integer" />
+
+			<form-property name="promise" type="java.lang.Integer" />
+			<form-property name="rule" type="java.lang.Integer" />
+			<form-property name="honesty" type="java.lang.Integer" />
+			<form-property name="faith" type="java.lang.Integer" />
+			<form-property name="duty" type="java.lang.Integer" />
+			
+			<form-property name="technology" type="java.lang.Integer" />
+			<form-property name="management" type="java.lang.Integer" />
+			<form-property name="art" type="java.lang.Integer" />
+			<form-property name="sports" type="java.lang.Integer" />
+
+			<form-property name="memo" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="employeeSearchForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="sex" type="java.lang.Integer" />
+			<form-property name="birthdayBegin" type="java.sql.Date" />
+			<form-property name="birthdayEnd" type="java.sql.Date" />
+			<form-property name="eduQualification" type="java.lang.Integer" />
+			<form-property name="politicalAppearance" type="java.lang.Integer" />
+			<form-property name="category" type="java.lang.Integer" />
+			<form-property name="station" type="java.lang.Integer" />
+			<form-property name="kidney" type="java.lang.Integer" />
+			<form-property name="interest" type="java.lang.Integer" />
+			<form-property name="associateRelation" type="java.lang.Integer" />
+			<form-property name="familyRelation" type="java.lang.Integer" />
+			<form-property name="community" type="java.lang.Integer" />
+			<form-property name="award" type="java.lang.Integer" />
+			<form-property name="studyAttitude" type="java.lang.Integer" />
+			<form-property name="responsibility" type="java.lang.Integer" />
+			<form-property name="discipline" type="java.lang.Integer" />
+			<form-property name="campaign" type="java.lang.Integer" />
+			<form-property name="economy" type="java.lang.Integer" />
+			<form-property name="afterHoursBusiness" type="java.lang.Integer" />
+			<form-property name="workAdvice" type="java.lang.Integer" />
+			<form-property name="morality" type="java.lang.Integer" />
+			<form-property name="security" type="java.lang.Integer" />
+			<form-property name="serviceAttitude" type="java.lang.Integer" />
+			<form-property name="skill" type="java.lang.Integer" />
+			<form-property name="performance" type="java.lang.Integer" />
+			<form-property name="modelEffect" type="java.lang.Integer" />
+			<form-property name="enlighten" type="java.lang.Integer" />
+			<form-property name="mindPattern" type="java.lang.Integer" />
+			<form-property name="jobResult" type="java.lang.Integer" />
+
+			<form-property name="promise" type="java.lang.Integer" />
+			<form-property name="rule" type="java.lang.Integer" />
+			<form-property name="honesty" type="java.lang.Integer" />
+			<form-property name="faith" type="java.lang.Integer" />
+			<form-property name="duty" type="java.lang.Integer" />
+			
+			<form-property name="technology" type="java.lang.Integer" />
+			<form-property name="management" type="java.lang.Integer" />
+			<form-property name="art" type="java.lang.Integer" />
+			<form-property name="sports" type="java.lang.Integer" />
+
+			<form-property name="pageSize" type="java.lang.Integer" />
+			<form-property name="startIndex" type="java.lang.Integer" />
+		</form-bean>
+
+		<form-bean name="physiologyCycleForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="age" type="java.lang.Integer" />
+			<form-property name="birthday" type="java.sql.Date" />
+			<form-property name="lifeDays" type="java.lang.Long" />
+			<form-property name="physical" type="java.lang.Integer" />
+			<form-property name="feeling" type="java.lang.Integer" />
+			<form-property name="intelligence" type="java.lang.Integer" />
+			<form-property name="average" type="java.lang.Integer" />
+		</form-bean>
+		
+		<form-bean name="physiologyCycleComputeForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="birthday" type="java.sql.Date" />
+			<form-property name="nowDay" type="java.sql.Date" />
+			<form-property name="age" type="java.lang.Integer" />
+			<form-property name="lifeDays" type="java.lang.Long" />
+			<form-property name="physical" type="java.lang.Integer" />
+			<form-property name="feeling" type="java.lang.Integer" />
+			<form-property name="intelligence" type="java.lang.Integer" />
+			<form-property name="average" type="java.lang.Integer" />
+		</form-bean>
+		
+		<form-bean name="logonForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="userName" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="errorCode" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="userEditForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="userName" type="java.lang.String" />
+			<form-property name="realName" type="java.lang.String" />
+			<form-property name="sex" type="java.lang.Integer" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="confirmPassword" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="userDeleteForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="pageSize" type="java.lang.Integer" />
+			<form-property name="startIndex" type="java.lang.Integer" />
+		</form-bean>
+		<form-bean name="pwdModifyForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="oldPwd" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="confirmPwd" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="propListEditForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="propListId" type="java.lang.Integer" />
+			<form-property name="propListName" type="java.lang.String" />
+			<form-property name="propTypeId" type="java.lang.Integer" />
+		</form-bean>
+	</form-beans>
+
+	<global-exceptions>
+	</global-exceptions>
+
+	<global-forwards>
+		<forward name="welcome" path="/Welcome.do" />
+	</global-forwards>
+
+	<action-mappings>
+		<action path="/Welcome" name="logonForm" forward="/static/logon/logon.jsp" />
+
+		<action path="/processPropTypeSearch"
+			type="org.springframework.web.struts.DelegatingActionProxy" scope="request">
+			<forward name="success" path="/static/component/dictionary/search.jsp" />
+		</action>
+
+		<action path="/preparePropListEdit"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="propListEditForm"
+			scope="request">
+			<forward name="success" path="/static/component/dictionary/edit.jsp" />
+		</action>
+
+		<action path="/processPropListEdit"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="propListEditForm"
+			scope="request" input="/preparePropListEdit.do" validate="false">
+			<forward name="success" path="/preparePropListEdit.do" />
+		</action>
+
+		<action path="/processLogon"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="logonForm"
+			input="/Welcome.do" scope="request" validate="false">
+			<forward name="success" path="/static/framework/main.jsp" />
+		</action>
+
+		<action path="/processLogoff"
+			type="com.mindstatus.component.logon.ProcessLogoffAction" scope="request"
+			validate="false">
+			<forward name="success" path="/Welcome.do" />
+		</action>
+
+		<action path="/prepareUserInsert"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="userEditForm"
+			scope="request">
+			<forward name="success" path="/static/component/user/insert.jsp" />
+		</action>
+
+		<action path="/processUserInsert"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="userEditForm"
+			scope="request" input="/prepareUserInsert.do" validate="false">
+			<forward name="success" path="/prepareUserInsert.do" />
+		</action>
+
+		<action path="/prepareUserSearch"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="userDeleteForm"
+			scope="request">
+			<forward name="success" path="/static/component/user/delete.jsp" />
+		</action>
+
+		<action path="/processUserSearch"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="userDeleteForm"
+			scope="request" input="/static/component/user/delete.jsp" validate="false">
+			<forward name="success" path="/static/component/user/delete.jsp" />
+		</action>
+
+		<action path="/processUserDelete"
+			type="org.springframework.web.struts.DelegatingActionProxy" scope="request"
+			input="/prepareUserDelete.do" validate="false">
+			<forward name="success" path="/prepareUserDelete.do" />
+		</action>
+
+		<action path="/preparePasswordModify"
+			type="com.mindstatus.component.user.PrepareModifyAction" name="pwdModifyForm"
+			scope="request">
+			<forward name="success" path="/static/component/user/pwdmodify.jsp" />
+		</action>
+
+		<action path="/processPasswordModify"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="pwdModifyForm"
+			scope="request" input="/preparePasswordModify.do" validate="false">
+			<forward name="success" path="/preparePasswordModify.do" />
+		</action>
+
+		<action path="/refesh" scope="request"
+			type="com.mindstatus.component.refresh.RefreshAction" validate="false" />
+
+		<action path="/processEmployeeDelete" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy" validate="false" />
+
+		<action path="/prepareEmployeeMore"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeEditForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/more.jsp" />
+		</action>
+
+		<action path="/prepareEmployeeEdit"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeEditForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/edit.jsp" />
+		</action>
+		
+		<action path="/preparePhysiologyCycle"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="physiologyCycleForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/physiologyCycle.jsp" />
+		</action>
+
+		<action path="/prepareComputePhy"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="physiologyCycleComputeForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/computePhy.jsp" />
+		</action>
+		
+		<action path="/processComputePhy"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="physiologyCycleComputeForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/computePhy.jsp" />
+		</action>
+		
+		<action path="/processEmployeeEdit"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeEditForm"
+			scope="request" input="/prepareEmployeeEdit.do" validate="false">
+			<forward name="success" path="/prepareEmployeeEdit.do" />
+		</action>
+
+		<action path="/prepareEmployeeInsert"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeEditForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/insert.jsp" />
+		</action>
+
+		<action path="/processEmployeeInsert"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeEditForm"
+			scope="request" input="/prepareEmployeeInsert.do" validate="false">
+			<forward name="success" path="/prepareEmployeeInsert.do" />
+		</action>
+
+		<action path="/prepareEmployeeSearch"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeSearchForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/search.jsp" />
+		</action>
+
+		<action path="/processEmployeeSearch"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeSearchForm"
+			scope="request" input="/prepareEmployeeSearch.do" validate="false">
+			<forward name="success" path="/prepareEmployeeSearch.do" />
+		</action>
+
+		<action path="/prepareEmployeeModify"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeSearchForm"
+			scope="request">
+			<forward name="success" path="/static/component/employee/modify.jsp" />
+		</action>
+
+		<action path="/processEmployeeModify"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="employeeSearchForm"
+			scope="request" input="/prepareEmployeeModify.do" validate="false">
+			<forward name="success" path="/prepareEmployeeModify.do" />
+		</action>
+	</action-mappings>
+
+	<message-resources parameter="MessageResources" />
+
+	<plug-in className="com.vicutu.web.plugin.struts.NullableConverterRegistPlugIn" />
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property property="pathnames"
+			value="/org/apache/struts/validator/validator-rules.xml,
+               /WEB-INF/validation.xml" />
+	</plug-in>
+
+
+</struts-config>
+

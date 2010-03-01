@@ -1,0 +1,413 @@
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=gb2312'>
+<style>
+    *{font-size: 12px; font-family: 宋体}
+    .bg{  color: #ffffff; cursor: default; background-color: #9CB2DE;}
+    table#tableMain{ width: 270; height: 150;}
+    table#tableWeek td{ color: #3434ff;}
+    table#tableDay  td{ font-weight: bold;}
+    td#meizzYearHead, td#meizzYearMonth{color: #DCDCDC}
+    .out { text-align: center; border-top: 0px solid #D4D0C8; border-left: 0px solid #D4D0C8; border-right: 0px solid #ffffff; border-bottom: 0px solid #ffffff;}
+    .over{ text-align: center; border-top: 0px solid #FFFFFF; border-left: 0px solid #FFFFFF; border-bottom: 0px solid #D4D0C8; border-right: 0px solid #D4D0C8}
+    input{ border: 1px solid #9CB2DE; padding-top: 1px; height: 18; cursor: hand; color:#000000; background-color: #ffffff}
+</style>
+</head>
+
+<body onselectstart='return false' style='margin: 0px' oncontextmenu='return false'>
+
+    <table name=tableMain class=bg border=0 cellspacing=0 cellpadding=0>
+    	<tr>
+    		<td width=268 height=19 bgcolor='#9CB2DE'>
+        	<table width=268 id=tableHead border=0 cellspacing=0 cellpadding=0>
+        		<tr align=center>
+        			<td width=15 height=19 class=bg title='向前翻 1 月' style='cursor: hand' onclick='prevM()'><b>&lt;</b></td>
+        			<td width=123 id=meizzYearHead style='color:black'></td>
+        			<td width=115 id=meizzYearMonth style='color:black'></td>
+        			<td width=15 class=bg title='向后翻 1 月' onclick='nextM()' style='cursor: hand'><b>&gt;</b></td>
+        		</tr>
+        	</table>
+        	</td>
+        </tr>
+        <tr>
+        	<td height=18>
+        	<table name=tableWeek border=0 width=268 cellpadding=0 cellspacing=0 style='background-color:#ffffff' borderColorLight='#9CB2DE' borderColorDark='#ffffff'>
+        		<tr align=center>
+        			<td height=18>星期日</td>
+        			<td>星期一</td>
+        			<td>星期二</td>
+        			<td>星期三</td>
+        			<td>星期四</td>
+        			<td>星期五</td>
+        			<td>星期六</td>
+        		</tr>
+        	</table>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td valign=top width=268 bgcolor='#ffffff'>
+        	<table id=tableDay height=100 width=268 border=0 cellspacing=0 cellpadding=0>
+        		<tr>
+					<td class=out id='day0'></td><td class=out id='day1'></td><td class=out id='day2'></td><td class=out id='day3'></td><td class=out id='day4'></td><td class=out id='day5'></td><td class=out id='day6'></td>
+				</tr>
+				<tr>
+					<td class=out id='day7'></td><td class=out id='day8'></td><td class=out id='day9'></td><td class=out id='day10'></td><td class=out id='day11'></td><td class=out id='day12'></td><td class=out id='day13'></td>
+				</tr>
+				<tr>
+					<td class=out id='day14'></td><td class=out id='day15'></td><td class=out id='day16'></td><td class=out id='day17'></td><td class=out id='day18'></td><td class=out id='day19'></td><td class=out id='day20'></td>
+				</tr>
+				<tr>
+					<td class=out id='day21'></td><td class=out id='day22'></td><td class=out id='day23'></td><td class=out id='day24'></td><td class=out id='day25'></td><td class=out id='day26'></td><td class=out id='day27'></td>
+				</tr>
+				<tr>
+					<td class=out id='day28'></td><td class=out id='day29'></td><td class=out id='day30'></td><td class=out id='day31'></td><td class=out id='day32'></td><td class=out id='day33'></td><td class=out id='day34'></td>
+				</tr>
+				<tr>
+					<td class=out id='day35'></td><td class=out id='day36'></td><td class=out id='day37'></td><td class=out id='day38'></td>
+					<td colspan=3 class=out title='点击确定按钮或双击关闭'>
+						<input style=' background-color:#ffffff ;cursor: hand; padding-top: 4px; width: 100%; height: 100%; border: 0' onfocus='this.blur()' type=button value='&nbsp; &nbsp; 确定' onclick='hiddenCalendar()'>
+					</td>
+				</tr>
+			</table>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td height=18 width=268 bgcolor='#ffffff'>
+        	<table border=0 cellpadding=0 cellspacing=0 width=268>
+        		<tr>
+        			<td>
+        				<input name=prevYear title='向前翻 1 年' onclick='prevY()' type=button value='&lt;&lt;' onfocus='this.blur()' style='meizz:expression(this.disabled=WebCalendar.thisYear==1000)'>
+        				<input onfocus='this.blur()' name=prevMonth title='向前翻 1 月' onclick='prevM()' type=button value='&lt;&nbsp;'>
+        			</td>
+        			<td align=center>
+						<span id="spanTime" style="display:none">	
+							<span style='width:37px'>
+								<input id='selHour' size='2' style='height:18' readonly><div id='HourDiv' style=' width:18px; height:18px; overflow-x:hidden; overflow-y:scroll; display:inline; padding:0px; margin:-5px 0px 0px -10px;' flag=false min=0 max=23 onscroll='changeTimeValue(this)'>
+									<div style='height:1000000px;'></div>
+								</div>
+							</span>
+							<span style='width:37px'>
+								<input id='selMinute' size='2' style='height:18' readonly><div id='MinuteDiv' style=' width:18px; height:18px; overflow-x:hidden; overflow-y:scroll; display:inline; padding:0px; margin:-5px 0px 0px -10px;' flag=false min=0 max=59 onscroll='changeTimeValue(this)'>
+									<div style='height:1000000px;'></div>
+								</div>
+							</span>
+							<span style='width:37px'>
+								<input id='selSecond' size='2' style='height:18' readonly><div id='SecondDiv' style=' width:18px; height:18px; overflow-x:hidden; overflow-y:scroll; display:inline; padding:0px; margin:-5px 0px 0px -10px;' flag=false min=0 max=59 onscroll='changeTimeValue(this)'>
+									<div style='height:1000000px;'></div>
+								</div>
+							</span>  
+						</span>
+					</td>
+					<td align=right>
+						<input title='向后翻 1 月' name=nextMonth onclick='nextM()' type=button value='&nbsp;&gt;' onfocus='this.blur()'>
+						<input name=nextYear title='向后翻 1 年' onclick='nextY()' type=button value='&gt;&gt;' onfocus='this.blur()' style='meizz:expression(this.disabled=WebCalendar.thisYear==9999)'>
+					</td>
+				</tr>
+			</table>
+    		</td>
+    	</tr>
+    <table>
+
+<script language="javascript">
+	
+function WebCalendar() //初始化日历的设置
+{
+    this.regInfo    = "点‘确定’按钮或双击关闭";
+    this.daysMonth  = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    this.day        = new Array(39);            //定义日历展示用的数组
+    this.dayObj     = new Array(39);            //定义日期展示控件数组
+    this.dateStyle  = null;                     //保存格式化后日期数组
+    this.objExport  = null;                     //日历回传的显示控件
+    this.eventSrc   = null;                     //日历显示的触发控件
+    this.inputDate  = null;                     //转化外的输入的日期(d/m/yyyy)
+    var now = new Date();
+    this.thisYear   = now.getFullYear(); //定义年的变量的初始值
+    this.thisMonth  = now.getMonth()+ 1; //定义月的变量的初始值
+    this.thisDay    = now.getDate();     //定义日的变量的初始值
+    this.thisHour   = now.getHours()<10?'0'+now.getHours():now.getHours(); //定义时的变量的初始值
+    this.thisMinute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes(); //定义分的变量的初始值
+    this.thisSecond = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();     //定义秒的变量的初始值
+    this.today      = this.thisDay +"/"+ this.thisMonth +"/"+ this.thisYear;   //今天(d/m/yyyy)
+    this.dateReg    = "";           //日历格式验证的正则式
+
+    this.minYear = 2006; //起始年
+    this.maxYear = 2056; //结束年
+    this.format     = "yyyy-mm-dd"; //回传日期的格式
+    this.timeShow   = true;        //是否返回时间
+    this.drag       = false;         //是否允许拖动
+    this.darkColor  = "#9CB2DE";    //控件的暗色
+    this.lightColor = "#ffffff";    //控件的亮色
+    this.btnBgColor = "#ffffff";    //控件的按钮背景色
+    this.wordColor  = "#000000";    //控件的文字颜色
+    this.wordDark   = "#DCDCDC";    //控件的暗文字颜色
+    this.weekColor   = "#3434ff";    //星期文字颜色
+    this.dayBgColor = "#ffffff";    //日期数字背景色
+    this.todayColor = "#FF0000";    //今天在日历上的标示背景色
+    this.DarkBorder = "#D4D0C8";    //日期显示的立体表达色
+}
+var WebCalendar = new WebCalendar();
+for(var i=0; i<39; i++) {
+    WebCalendar.dayObj[i] = document.all("day"+ i);
+    WebCalendar.dayObj[i].onmouseover = dayMouseOver;
+    WebCalendar.dayObj[i].onmouseout = dayMouseOut;
+    WebCalendar.dayObj[i].onclick = setDate;
+    WebCalendar.dayObj[i].ondblclick = hiddenCalendar;
+}
+		
+function initCalendar(e, ifShowTime) {
+	WebCalendar.objExport = e;
+	WebCalendar.timeShow = ifShowTime;
+	
+	var v = WebCalendar.objExport.value.trim();
+    if (v == ""){
+        WebCalendar.objExport.value = currentDate(WebCalendar.timeShow);
+        v = WebCalendar.objExport.value;
+    }
+        
+    if (WebCalendar.timeShow) {
+    	document.all("spanTime").style.display = "";
+    	WebCalendar.dateReg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
+    } else {
+    	document.all("spanTime").style.display = "none";
+    	WebCalendar.dateReg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/;
+    	if(v.length > 10) {
+        	v = v.substring(0, 10);
+        }
+	}
+	
+    try{
+        WebCalendar.dateStyle = v.match(WebCalendar.dateReg);
+        if (WebCalendar.dateStyle == null)
+        {
+            WebCalendar.thisYear   = new Date().getFullYear();
+            WebCalendar.thisMonth  = new Date().getMonth()+ 1;
+            WebCalendar.thisDay    = new Date().getDate();
+            alert("原文本框里的日期有错误！\n可能与你定义的显示时分秒有冲突！");
+            writeCalendar(); return false;
+        }
+        else
+        {
+            WebCalendar.thisYear   = parseInt(WebCalendar.dateStyle[1], 10);
+            WebCalendar.thisMonth  = parseInt(WebCalendar.dateStyle[3], 10);
+            WebCalendar.thisDay    = parseInt(WebCalendar.dateStyle[4], 10);
+            
+            if (WebCalendar.timeShow) {
+            	WebCalendar.thisHour = WebCalendar.dateStyle[5];
+            	WebCalendar.thisMinute = WebCalendar.dateStyle[6];
+            	WebCalendar.thisSecond = WebCalendar.dateStyle[7];
+            }
+            
+            WebCalendar.inputDate  = parseInt(WebCalendar.thisDay, 10) +"/"+ parseInt(WebCalendar.thisMonth, 10) +"/"+ 
+            parseInt(WebCalendar.thisYear, 10); writeCalendar();
+        }
+    }  catch(e){writeCalendar();}
+    
+    if (WebCalendar.timeShow) {
+	    selHour.value = WebCalendar.thisHour;
+		selMinute.value = WebCalendar.thisMinute;
+		selSecond.value = WebCalendar.thisSecond;
+		
+		HourDiv.scrollTop = 50000;
+    	MinuteDiv.scrollTop = 50000;
+    	SecondDiv.scrollTop = 50000;
+	}
+}
+
+function prevM()  //往前翻月份
+{
+    WebCalendar.thisDay = 1;
+    if (WebCalendar.thisMonth==1)
+    {
+        WebCalendar.thisYear--;
+        WebCalendar.thisMonth=13;
+    }
+    WebCalendar.thisMonth--; writeCalendar();
+}
+function nextM()  //往后翻月份
+{
+    WebCalendar.thisDay = 1;
+    if (WebCalendar.thisMonth==12)
+    {
+        WebCalendar.thisYear++;
+        WebCalendar.thisMonth=0;
+    }
+    WebCalendar.thisMonth++; writeCalendar();
+}
+
+function prevY(){WebCalendar.thisDay = 1; WebCalendar.thisYear--; writeCalendar();}//往前翻 Year
+function nextY(){WebCalendar.thisDay = 1; WebCalendar.thisYear++; writeCalendar();}//往后翻 Year
+function hiddenSelect(e){for(var i=e.options.length; i>-1; i--)e.options.remove(i); e.style.display="none";}
+function getObjectById(id){if(document.all) return(eval("document.all."+ id)); return(eval(id)); }
+function hiddenCalendar(){parent.hideCalendar();};
+function appendZero(n){return(("00"+ n).substr(("00"+ n).length-2));}//日期自动补零程序
+function String.prototype.trim(){return this.replace(/(^\s*)|(\s*$)/g,"");}
+function dayMouseOver()
+{
+    this.className = "over";
+    this.style.backgroundColor = WebCalendar.darkColor;
+    if(WebCalendar.day[this.id.substr(3)].split("/")[1] == WebCalendar.thisMonth)
+    	this.style.color = WebCalendar.lightColor;
+}
+function dayMouseOut()
+{
+    this.className = "out"; var d = WebCalendar.day[this.id.substr(3)], a = d.split("/");
+    this.style.removeAttribute('backgroundColor');
+    if(a[1] == WebCalendar.thisMonth && d != WebCalendar.today)
+    {
+        if(WebCalendar.dateStyle && a[0] == parseInt(WebCalendar.dateStyle[4], 10))
+        this.style.color = WebCalendar.lightColor;
+        this.style.color = WebCalendar.wordColor;
+    }
+}
+
+function writeCalendar() //对日历显示的数据的处理程序
+{
+    var y = WebCalendar.thisYear;
+    var m = WebCalendar.thisMonth; 
+    var d = WebCalendar.thisDay;
+    WebCalendar.daysMonth[1] = (0==y%4 && (y%100!=0 || y%400==0)) ? 29 : 28;
+    if (!(y<=9999 && y >= 1000 && parseInt(m, 10)>0 && parseInt(m, 10)<13 && parseInt(d, 10)>0)){
+        alert("对不起，你输入了错误的日期！");
+        WebCalendar.thisYear   = new Date().getFullYear();
+        WebCalendar.thisMonth  = new Date().getMonth()+ 1;
+        WebCalendar.thisDay    = new Date().getDate(); }
+    y = WebCalendar.thisYear;
+    m = WebCalendar.thisMonth;
+    d = WebCalendar.thisDay;
+    
+    document.all("meizzYearHead").innerText  = y +" 年";
+    document.all("meizzYearMonth").innerText = parseInt(m, 10) +" 月";
+    WebCalendar.daysMonth[1] = (0==y%4 && (y%100!=0 || y%400==0)) ? 29 : 28; //闰年二月为29天
+    var w = new Date(y, m-1, 1).getDay();
+    var prevDays = m==1  ? WebCalendar.daysMonth[11] : WebCalendar.daysMonth[m-2];
+    for(var i=(w-1); i>=0; i--) //这三个 for 循环为日历赋数据源（数组 WebCalendar.day）格式是 d/m/yyyy
+    {
+        WebCalendar.day[i] = prevDays +"/"+ (parseInt(m, 10)-1) +"/"+ y;
+        if(m==1) WebCalendar.day[i] = prevDays +"/"+ 12 +"/"+ (parseInt(y, 10)-1);
+        prevDays--;
+    }
+    for(var i=1; i<=WebCalendar.daysMonth[m-1]; i++) WebCalendar.day[i+w-1] = i +"/"+ m +"/"+ y;
+    for(var i=1; i<39-w-WebCalendar.daysMonth[m-1]+1; i++)
+    {
+        WebCalendar.day[WebCalendar.daysMonth[m-1]+w-1+i] = i +"/"+ (parseInt(m, 10)+1) +"/"+ y;
+        if(m==12) WebCalendar.day[WebCalendar.daysMonth[m-1]+w-1+i] = i +"/"+ 1 +"/"+ (parseInt(y, 10)+1);
+    }
+    
+    for(var i=0; i<39; i++)    //这个循环是根据源数组写到日历里显示
+    {
+        var a = WebCalendar.day[i].split("/");
+        WebCalendar.dayObj[i].innerText    = a[0];
+        WebCalendar.dayObj[i].title        = a[2] +"-"+ appendZero(a[1]) +"-"+ appendZero(a[0]);
+        WebCalendar.dayObj[i].bgColor      = WebCalendar.dayBgColor;
+        WebCalendar.dayObj[i].style.color  = WebCalendar.wordColor;
+
+        if ((i<10 && parseInt(WebCalendar.day[i], 10)>20) || (i>27 && parseInt(WebCalendar.day[i], 10)<12))
+            WebCalendar.dayObj[i].style.color = WebCalendar.wordDark;
+        if (WebCalendar.inputDate==WebCalendar.day[i])    //设置输入框里的日期在日历上的颜色
+        {WebCalendar.dayObj[i].bgColor = WebCalendar.darkColor; WebCalendar.dayObj[i].style.color = WebCalendar.lightColor;}
+        if (WebCalendar.day[i] == WebCalendar.today)      //设置今天在日历上反应出来的颜色
+        {WebCalendar.dayObj[i].bgColor = WebCalendar.todayColor; WebCalendar.dayObj[i].style.color = WebCalendar.lightColor;}
+    }
+}
+
+function setDate() {
+    if(WebCalendar.objExport) {
+        var returnValue;
+        var a = (arguments.length==0) ? WebCalendar.day[this.id.substr(3)].split("/") : arguments[0].split("/");
+        var d = WebCalendar.format.match(/^(\w{4})(-|\/)(\w{1,2})\2(\w{1,2})$/);
+        if(d==null){alert("你设定的日期输出格式不对！\r\n\r\n请重新定义 WebCalendar.format ！"); return false;}
+        var flag = d[3].length==2 || d[4].length==2; //判断返回的日期格式是否要补零
+        returnValue = flag ? a[2] +d[2]+ appendZero(a[1]) +d[2]+ appendZero(a[0]) : a[2] +d[2]+ a[1] +d[2]+ a[0];
+        
+        var s = WebCalendar.objExport.value;
+        if(WebCalendar.timeShow) {
+        	WebCalendar.objExport.value = returnValue + s.substring(10);
+        } else {
+    		WebCalendar.objExport.value = returnValue;
+    	}
+    }
+}
+function setTime() {
+    if(WebCalendar.objExport) {
+        var returnValue;
+        var h = WebCalendar.thisHour, m = WebCalendar.thisMinute, s = WebCalendar.thisSecond;
+        returnValue = " "+  h  +":"+ m +":"+ s;
+
+		var s = WebCalendar.objExport.value;
+        WebCalendar.objExport.value = s.substring(0, 10) + returnValue;
+    }
+}
+
+function changeTimeValue(obj){
+	if(typeof obj.oldscrollHeight == "undefined") {
+	   	obj.oldscrollHeight = 50000;
+	   	return ;
+	}
+
+	if(obj.flag + "" == "false") {  
+		obj.flag = true;  
+		return;
+	}
+	
+	var min = parseInt(obj.min);
+	var max = parseInt(obj.max);
+	var v = obj.previousSibling.value;
+  	if(v.indexOf("0") == 0) {
+  	   	v = v.substring(1);
+  	}
+  	v = parseInt(v);
+  	
+	if(parseInt(obj.oldscrollHeight) < parseInt(obj.scrollTop)) {	
+		if(v == max) {
+			obj.oldscrollHeight = 49999;
+	        obj.scrollTop = 50000;
+			obj.flag = false;
+			return;
+		} else {
+			v = v + 1;
+		}
+	} else {
+	    if(v == min) {
+			obj.scrollTop = 50000;
+		} else{
+			v = v - 1;
+		}
+	}
+	
+	if(v < 10) {
+		v = "0" + v;
+	}
+	obj.previousSibling.value = v;
+	obj.oldscrollHeight = obj.scrollTop;
+	obj.flag = false;
+	
+	if(obj.id == "HourDiv") {
+		WebCalendar.thisHour = v;
+	} else if(obj.id == "MinuteDiv") {
+		WebCalendar.thisMinute = v;
+	} else if(obj.id == "SecondDiv") {
+		WebCalendar.thisSecond = v;
+	}
+	setTime();
+}
+
+function currentDate(ifShowTime) {
+	var dt = new Date();
+	
+	var sDate, iYear, iMonth, iDay;
+	iYear = dt.getFullYear();
+	iMonth = dt.getMonth() + 1;
+	iDay = dt.getDate();
+	iHour = dt.getHours();
+	iMinute = dt.getMinutes();
+	iSecond = dt.getSeconds();
+		
+	sDate = iYear + "-" + (iMonth<10?"0"+iMonth:iMonth) + "-" + (iDay<10?"0"+iDay:iDay);
+	if(ifShowTime) {
+		sDate += " " + (iHour<10?"0"+iHour:iHour) + ":" + (iMinute<10?"0"+iMinute:iMinute) + ":" + (iSecond<10?"0"+iSecond:iSecond);
+	}
+	return sDate;
+}
+</script>
+</body>
+</html>

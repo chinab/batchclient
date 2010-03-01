@@ -1,0 +1,116 @@
+/* for ep/basetree	*/
+/*树的容器*/
+.basetree {
+	padding:4px 5px; 
+	font-size:9pt;
+}
+.basetree SPAN {
+	cursor:default; 
+	height:17px; 
+	margin:0px;
+	background:no-repeat;
+	CURSOR: hand;
+}
+.basetree IMG {
+}
+.basetree A {
+	cursor:hand; text-decoration: none;
+}
+
+/*叶子节点的容器*/
+.basetree DIV.hide,DIV.hideLast {
+	display: none;
+	padding-left:18px;
+}
+.basetree DIV.shownLast {
+	display: block;
+	padding-left:18px;
+	padding-bottom:1px;
+}
+.basetree DIV.shown {
+	display: block;
+	padding-left:18px;
+	padding-bottom:1px;
+	background:repeat-y url(images/basetree/toggle_space_ud1_white.gif);
+}
+
+/*Toggle*/
+.basetree SPAN.clsCollapse {
+	background:url(images/basetree/toggle_add_udr1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsExpand {
+	background:url(images/basetree/toggle_minus_udr1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsLeaf {
+	background:url(images/basetree/toggle_leaf_udr1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsCollapseFirst {
+	background:url(images/basetree/toggle_add_dr1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsExpandFirst {
+	background:url(images/basetree/toggle_minus_dr1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsLeafFirst {
+	background:url(images/basetree/toggle_leaf_dr1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsCollapseLast {
+	background:url(images/basetree/toggle_add_ur1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsExpandLast {
+	background:url(images/basetree/toggle_minus_ur1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsLeafLast {
+	background:url(images/basetree/toggle_leaf_ur1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsCollapseOnlyOne {
+	background:url(images/basetree/toggle_add_r1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsExpandOnlyOne {
+	background:url(images/basetree/toggle_minus_r1_white.gif);
+	width:20px;
+}
+.basetree SPAN.clsLeafOnlyOne {
+	background:url(images/basetree/toggle_leaf_r1_white.gif);
+	width:20px;
+}
+
+/*Image*/
+.basetree IMG.clsImg {
+	width:16px;	height:16px; margin-right:2px; vertical-align:top; position:relative; top:-1px;
+}
+
+/*Checkbox*/
+.basetree input.clsCheckbox {
+	height:14px; width:14px; position:relative; top:-2px;
+}
+
+/*Label*/
+.basetree SPAN.clsCurrentHasFocus {
+	color:#ff6600;
+}
+.basetree SPAN A {
+	position:relative; top:2px;
+}
+.basetree SPAN.clsLabel A{
+	color:black;
+}
+.basetree SPAN.clsCurrentHasFocus A{
+	color:#ff6600;
+}
+.basetree A.clsMouseOver {
+	text-decoration: underline;
+}
+
+.clsprompt{
+	color:#0066cc
+}

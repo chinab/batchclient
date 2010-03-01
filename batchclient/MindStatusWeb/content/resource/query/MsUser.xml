@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query name="MsUser" class="com.mindstatus.bean.vo.MsUser">
+	<property index="0"  name="userName" obj="userName" operator="like" match="anywhere"/>
+	<property index="1"  name="sex" obj="sex" operator="eq"/>
+	<property index="2"  name="realName" obj="realName" operator="like" match="anywhere"/>
+    <property index="3"  name="regTimeBegin" obj="regTime" operator="ge"/>
+    <property index="4"  name="regTimeEnd" obj="regTime" operator="le"/>
+    <property index="5"  name="loginTimesUp" obj="loginTimes" operator="le"/>
+	<property index="6"  name="loginTimesDown" obj="loginTimes" operator="ge"/>    	                 
+</query>              
