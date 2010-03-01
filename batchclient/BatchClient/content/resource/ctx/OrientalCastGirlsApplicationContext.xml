@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	
+	<bean id="com.vicutu.download.descriptor.AuthenticationDescriptor.OrientalCastGirls"
+		class="com.vicutu.download.descriptor.AuthenticationDescriptor">
+		<property name="authUserName" value="pengfei" />
+		<property name="authPassword" value="di@#1" />
+	</bean>
+
+	<bean id="com.vicutu.download.descriptor.ProxyDescriptor" class="com.vicutu.download.descriptor.ProxyDescriptor">
+		<property name="useProxy" value="false" />
+		<property name="proxyHost" value="dl-proxyall.neusoft.com" />
+		<property name="porxyPort" value="8080" />
+		<property name="proxyUserName" value="dipengfei" />
+		<property name="proxyPassword" value="VicutU19*@" />
+	</bean>
+
+	<bean id="com.vicutu.download.http.HttpClientProvider" class="com.vicutu.download.http.impl.DefaultHttpClientProvider"
+		init-method="initialize">
+		<property name="proxyDescriptor">
+			<ref bean="com.vicutu.download.descriptor.ProxyDescriptor" />
+		</property>
+	</bean>
+	
+	<bean id="com.vicutu.download.descriptor.TaskDescriptor.OrientalCastGirls" class="com.vicutu.download.descriptor.TaskDescriptor">
+		<property name="savePath" value="J:/sec/cast/oriental/picture/new/bandage/" />
+		<property name="urlTemplate" value="http://www.orientalcastgirls.com/new/bandage%20201002.htm" />
+	</bean>
+	
+	<bean id="com.vicutu.download.seek.Seeker.OrientalCastGirls" class="com.vicutu.download.seek.impl.OrientalCastGirlsSeeker"
+		init-method="initialize">
+		<property name="queueLength" value="10" />
+		<property name="authenticationDescriptor">
+			<ref bean="com.vicutu.download.descriptor.AuthenticationDescriptor.OrientalCastGirls" />
+		</property>
+		<property name="httpClientProvider">
+			<ref bean="com.vicutu.download.http.HttpClientProvider" />
+		</property>
+		<property name="taskDescriptor">
+			<ref bean="com.vicutu.download.descriptor.TaskDescriptor.OrientalCastGirls" />
+		</property>
+	</bean>
+
+	<bean id="com.vicutu.download.engine.DownloadManager" class="com.vicutu.download.engine.impl.AutoDownloadManager"
+		init-method="initialize">
+		<property name="threadCount" value="3" />
+		<property name="timeout" value="20" />
+		<property name="interval" value="-1" />
+		<property name="authenticationDescriptor">
+			<ref bean="com.vicutu.download.descriptor.AuthenticationDescriptor.OrientalCastGirls" />
+		</property>
+		<property name="httpClientProvider">
+			<ref bean="com.vicutu.download.http.HttpClientProvider" />
+		</property>
+		<property name="seeker">
+			<ref bean="com.vicutu.download.seek.Seeker.OrientalCastGirls" />
+		</property>
+	</bean>
+
+</beans>

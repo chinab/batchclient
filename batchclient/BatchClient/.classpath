@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src-project"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/log4j-1.2.11.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/spring.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/htmlparser.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-digester.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-cli.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/vicutu-lib.jar" sourcepath="/VicutuLibrary/src-library"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/httpcore-4.0.1.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/httpcore-nio-4.0.1.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/httpclient-4.0.1.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/httpmime-4.0.1.jar"/>
+	<classpathentry kind="output" path="content/WEB-INF/classes"/>
+</classpath>
