@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	
+	<bean id="msPropTypeDaoTarget" class="com.mindstatus.module.impl.MsPropTypeDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="org.springframework.orm.hibernate3.LocalSessionFactoryBean" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.module.IMsPropTypeDao"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msPropTypeDaoTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="msPropListDaoTarget" class="com.mindstatus.module.impl.MsPropListDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="org.springframework.orm.hibernate3.LocalSessionFactoryBean" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.module.IMsPropListDao"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msPropListDaoTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="msEmployeeDaoTarget" class="com.mindstatus.module.impl.MsEmployeeDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="org.springframework.orm.hibernate3.LocalSessionFactoryBean" />
+		</property>
+		<property name="queryTemplateManager">
+			<ref bean="com.vicutu.services.query.QueryTemplateService" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.module.IMsEmployeeDao"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msEmployeeDaoTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="query*">PROPAGATION_SUPPORTS</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="msUserDaoTarget" class="com.mindstatus.module.impl.MsUserDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="org.springframework.orm.hibernate3.LocalSessionFactoryBean" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.module.IMsUserDao"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msUserDaoTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="msMenuDaoTarget" class="com.mindstatus.module.impl.MsMenuDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="org.springframework.orm.hibernate3.LocalSessionFactoryBean" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.module.IMsMenuDao"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+   			<value>true</value>
+  		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="msMenuDaoTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

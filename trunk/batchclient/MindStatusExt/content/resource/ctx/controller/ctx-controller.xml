@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	
+	<bean name="com.mindstatus.controller.menu.MenuController" class="com.mindstatus.controller.menu.MenuController">
+		<property name="menu">
+			<ref bean="com.mindstatus.business.IMenu" />
+		</property>
+	</bean>
+    
+	<bean name="com.mindstatus.controller.employee.EmployeeController" class="com.mindstatus.controller.employee.EmployeeController">
+		<property name="employee">
+			<ref bean="com.mindstatus.business.IEmployee" />
+		</property>
+	</bean>
+    
+	<bean name="com.mindstatus.controller.dictionary.DictionaryController" class="com.mindstatus.controller.dictionary.DictionaryController">
+		<property name="dictionaryService">
+			<ref bean="com.vicutu.services.dictionary.DictionaryService" />
+		</property>
+	</bean>
+	
+</beans>

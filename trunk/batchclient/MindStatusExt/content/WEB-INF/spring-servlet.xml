@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/static/view/"></property>
+		<property name="suffix" value=".jsp"></property>
+		<property name="order" value="2"></property>     
+	</bean>
+    
+	<bean name="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="order" value="1"></property>
+		<property name="location" value="/WEB-INF/views.xml"></property>
+	</bean>
+    
+	<bean id="simpleUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/menu/*">com.mindstatus.controller.menu.MenuController</prop>
+				<prop key="/employee/*">com.mindstatus.controller.employee.EmployeeController</prop>
+				<prop key="/dictionary/*">com.mindstatus.controller.dictionary.DictionaryController</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>
