@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="dictionaryTarget" class="com.mindstatus.business.impl.DictionaryImpl">
+		<property name="msPropTypeDao">
+			<ref bean="com.mindstatus.module.IMsPropTypeDao" />
+		</property>
+		<property name="msPropListDao">
+			<ref bean="com.mindstatus.module.IMsPropListDao" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.business.IDictionary" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="dictionaryTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="get*">PROPAGATION_SUPPORTS</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="com.vicutu.services.dictionary.DictionaryOperator" class="com.mindstatus.business.impl.DefaultDictionaryOperatorImpl">
+		<property name="dictionary">
+			<ref bean="com.mindstatus.business.IDictionary" />
+		</property>
+	</bean>
+	
+	<bean id="menuTarget" class="com.mindstatus.business.impl.MenuImpl">
+		<property name="msMenuDao">
+			<ref bean="com.mindstatus.module.IMsMenuDao" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.business.IMenu" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="menuTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="get*">PROPAGATION_SUPPORTS</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="employeeTarget" class="com.mindstatus.business.impl.EmployeeImpl">
+		<property name="msEmployeeDao">
+			<ref bean="com.mindstatus.module.IMsEmployeeDao" />
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.business.IEmployee" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+		<property name="transactionManager">
+			<ref bean="org.springframework.orm.hibernate3.HibernateTransactionManager" />
+		</property>
+		<property name="target">
+			<ref local="employeeTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_SUPPORTS</prop>
+				<prop key="query*">PROPAGATION_SUPPORTS</prop>
+				<prop key="get*">PROPAGATION_SUPPORTS</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

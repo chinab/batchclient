@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	
+	<bean id="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+				<prop key="hibernate.jdbc.batch_size">25</prop>
+				<prop key="hibernate.jdbc.fetch_size">50</prop>
+				<prop key="hibernate.connection.release_mode">after_transaction</prop>
+				<prop key="hibernate.proxool.xml">file:${webapp.root}config/proxool-config.xml</prop>
+				<prop key="hibernate.proxool.pool_alias">core</prop>
+			</props>
+		</property>
+		<property name="mappingLocations">
+			<list>
+				<value>file:${webapp.root}resource/hbm/**/*.hbm.xml
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="org.springframework.orm.hibernate3.HibernateTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="org.springframework.orm.hibernate3.LocalSessionFactoryBean" />
+		</property>
+	</bean>
+
+	<bean id="com.vicutu.services.dictionary.DictionaryService" class="com.vicutu.services.dictionary.DictionaryService">
+		<property name="serviceName">
+			<value>DictionaryService</value>
+		</property>
+		<property name="cache">
+			<ref bean="com.mindstatus.dictionary.Cache" />
+		</property>
+		<property name="dictionaryOperator">
+			<ref bean="com.vicutu.services.dictionary.DictionaryOperator" />
+		</property>
+	</bean>
+	
+	<bean id="com.vicutu.services.query.QueryTemplateService" class="com.vicutu.services.query.QueryTemplateService">
+		<property name="serviceName">
+			<value>QueryTemplateService</value>
+		</property>
+		<property name="cache">
+			<ref bean="com.mindstatus.query.Cache" />
+		</property>
+	</bean>
+
+	<bean id="com.vicutu.services.ServiceManager" class="com.vicutu.services.ServiceManager"
+		init-method="initialize">
+		<property name="services">
+			<list>
+				<ref bean="com.vicutu.services.dictionary.DictionaryService" />
+				<ref bean="com.vicutu.services.query.QueryTemplateService" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="org.springframework.cache.ehcache.CacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>file:${webapp.root}config/ehcache-config.xml</value>
+		</property>
+	</bean>
+
+	<bean id="com.mindstatus.dictionary.Cache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager">
+			<ref local="org.springframework.cache.ehcache.CacheManager" />
+		</property>
+		<property name="cacheName">
+			<value>com.mindstatus.dictionary.Cache</value>
+		</property>
+	</bean>
+	
+	<bean id="com.mindstatus.query.Cache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager">
+			<ref local="org.springframework.cache.ehcache.CacheManager" />
+		</property>
+		<property name="cacheName">
+			<value>com.mindstatus.query.Cache</value>
+		</property>
+	</bean>
+	
+</beans>
