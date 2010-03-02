@@ -28,12 +28,12 @@ import com.vicutu.download.descriptor.TaskDescriptor;
 import com.vicutu.download.http.HttpClientProvider;
 import com.vicutu.download.task.AtomicTask;
 
-public abstract class AbstractSeeker implements Seeker<Integer>
-{
+public abstract class AbstractSeeker implements Seeker<Integer> {
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected boolean done;
-	
+
 	protected HttpClient httpClient;
 
 	protected HttpClientProvider httpClientProvider;
@@ -47,49 +47,38 @@ public abstract class AbstractSeeker implements Seeker<Integer>
 	protected String category;
 
 	protected int queueLength;
-	
+
 	protected boolean replaceExistFile;
 
 	protected Set<String> contentTypes;
 
-	public void initialize()
-	{
+	public void initialize() {
 
 		httpClient = httpClientProvider.getHttpClient();
 
-		if (queueLength <= 0)
-		{
+		if (queueLength <= 0) {
 			taskQueue = new LinkedBlockingQueue<AtomicTask>();
-		}
-		else
-		{
+		} else {
 			taskQueue = new LinkedBlockingQueue<AtomicTask>(queueLength);
 		}
 	}
-	
-	protected String getHtmlString(String linkUrl)
-	{
+
+	protected String getHtmlString(String linkUrl) {
 		HttpContext localContext = new BasicHttpContext();
 		HttpGet httpget = new HttpGet(linkUrl);
 		boolean trying = true;
 		HttpResponse response = null;
 		String htmlStr = null;
 		HttpEntity entity = null;
-		while (trying)
-		{
-			try
-			{
+		while (trying) {
+			try {
 				response = httpClient.execute(httpget, localContext);
 				entity = response.getEntity();
-				if (entity != null)
-				{
+				if (entity != null) {
 
-					if (response.getStatusLine().getStatusCode() != HttpStatus.SC_UNAUTHORIZED)
-					{
+					if (response.getStatusLine().getStatusCode() != HttpStatus.SC_UNAUTHORIZED) {
 						htmlStr = EntityUtils.toString(entity);
-					}
-					else
-					{
+					} else {
 						entity.consumeContent();
 					}
 				}
@@ -97,98 +86,76 @@ public abstract class AbstractSeeker implements Seeker<Integer>
 				int sc = response.getStatusLine().getStatusCode();
 
 				AuthState authState = null;
-				if (sc == HttpStatus.SC_UNAUTHORIZED)
-				{
+				if (sc == HttpStatus.SC_UNAUTHORIZED) {
 					authState = (AuthState) localContext.getAttribute(ClientContext.TARGET_AUTH_STATE);
 				}
-				if (sc == HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED)
-				{
+				if (sc == HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED) {
 					authState = (AuthState) localContext.getAttribute(ClientContext.PROXY_AUTH_STATE);
 				}
 
-				if (authState != null)
-				{
+				if (authState != null) {
 					AuthScope authScope = authState.getAuthScope();
 					String authUserName = authenticationDescriptor.getAuthUserName();
-					if (authUserName != null && authUserName.length() > 0)
-					{
-						Credentials creds = new UsernamePasswordCredentials(authUserName, authenticationDescriptor.getAuthPassword());
+					if (authUserName != null && authUserName.length() > 0) {
+						Credentials creds = new UsernamePasswordCredentials(authUserName, authenticationDescriptor
+								.getAuthPassword());
 						((DefaultHttpClient) httpClient).getCredentialsProvider().setCredentials(authScope, creds);
 						trying = true;
 					}
-				}
-				else
-				{
+				} else {
 					trying = false;
 				}
-			}
-			catch (Exception e2)
-			{
+			} catch (Exception e2) {
 				logger.error("occur error when get url: {}", linkUrl, e2);
-				try
-				{
-					if (entity != null)
-					{
+				try {
+					if (entity != null) {
 						entity.consumeContent();
 					}
-				}
-				catch (IOException e1)
-				{
+				} catch (IOException e1) {
 				}
 				httpget.abort();
 			}
 		}
 		return htmlStr;
 	}
-	
-	
-	public void setCategory(String category)
-	{
+
+	public void setCategory(String category) {
 		this.category = category;
 	}
 
-	public void setQueueLength(int queueLength)
-	{
+	public void setQueueLength(int queueLength) {
 		this.queueLength = queueLength;
 	}
 
-	public void setAuthenticationDescriptor(AuthenticationDescriptor authenticationDescriptor)
-	{
+	public void setAuthenticationDescriptor(AuthenticationDescriptor authenticationDescriptor) {
 		this.authenticationDescriptor = authenticationDescriptor;
 	}
 
-	public void setTaskDescriptor(TaskDescriptor taskDescriptor)
-	{
+	public void setTaskDescriptor(TaskDescriptor taskDescriptor) {
 		this.taskDescriptor = taskDescriptor;
 	}
 
-	public void setHttpClientProvider(HttpClientProvider httpClientProvider)
-	{
+	public void setHttpClientProvider(HttpClientProvider httpClientProvider) {
 		this.httpClientProvider = httpClientProvider;
 	}
 
-	public boolean isDone()
-	{
+	public boolean isDone() {
 		return done;
 	}
 
-	public Queue<AtomicTask> getTaskQueue()
-	{
+	public Queue<AtomicTask> getTaskQueue() {
 		return taskQueue;
 	}
-	
-	public Set<String> getContentTypes()
-	{
+
+	public Set<String> getContentTypes() {
 		return contentTypes;
 	}
-	
-	public void setContentTypes(Set<String> contentTypes)
-	{
+
+	public void setContentTypes(Set<String> contentTypes) {
 		this.contentTypes = contentTypes;
 	}
 
-	public void setReplaceExistFile(boolean replaceExistFile)
-	{
+	public void setReplaceExistFile(boolean replaceExistFile) {
 		this.replaceExistFile = replaceExistFile;
 	}
 }
