@@ -21,8 +21,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.vicutu.commons.lang.FileUtils;
 
-public class Deviantart
-{
+public class Deviantart {
 	private static final String BASE_URL = "http://excilion.deviantart.com/gallery/#_featured";
 
 	private static final int FROM = 1;
@@ -34,19 +33,14 @@ public class Deviantart
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		String linkUrl = null;
 
-		for (int i = FROM; i <= TO; i++)
-		{
-			if (i == 1)
-			{
+		for (int i = FROM; i <= TO; i++) {
+			if (i == 1) {
 				linkUrl = BASE_URL;
-			}
-			else
-			{
+			} else {
 				linkUrl = BASE_URL + "--" + i;
 			}
 
@@ -59,34 +53,28 @@ public class Deviantart
 
 	}
 
-	private static String getHtmlStr(DefaultHttpClient httpclient, String linkUrl, String encoding) throws Exception
-	{
+	private static String getHtmlStr(DefaultHttpClient httpclient, String linkUrl, String encoding) throws Exception {
 		HttpGet httpget = new HttpGet(linkUrl);
 		HttpResponse response = httpclient.execute(httpget);
 		HttpEntity entity = response.getEntity();
-		if (entity != null)
-		{
+		if (entity != null) {
 			return EntityUtils.toString(entity, encoding);
 		}
 		return null;
 	}
 
-	private static List<String> getImageUrl(String htmlStr) throws Exception
-	{
+	private static List<String> getImageUrl(String htmlStr) throws Exception {
 		List<String> imageUrls = new ArrayList<String>();
 		Parser parser = new Parser();
 		parser.setInputHTML(htmlStr);
 		NodeList nla = parser.extractAllNodesThatMatch(new TagNameFilter("img"));
 		String imageUrl = null;
-		for (int i = 0; i < nla.size(); i++)
-		{
+		for (int i = 0; i < nla.size(); i++) {
 			Node node = nla.elementAt(i);
-			if (node instanceof ImageTag)
-			{
+			if (node instanceof ImageTag) {
 				ImageTag it = (ImageTag) node;
 				String linkUrl0 = it.getImageURL();
-				if (linkUrl0.startsWith("http://th"))
-				{
+				if (linkUrl0.startsWith("http://th")) {
 					imageUrl = StringUtils.replaceOnce(StringUtils.remove(linkUrl0, "150/"), "th", "fc");
 					imageUrls.add(imageUrl);
 				}
@@ -95,48 +83,36 @@ public class Deviantart
 		return imageUrls;
 	}
 
-	private static void download(DefaultHttpClient httpclient, List<String> imageUrls)
-	{
+	private static void download(DefaultHttpClient httpclient, List<String> imageUrls) {
 		FileOutputStream fos = null;
 		HttpGet httpget = null;
 		HttpEntity entity = null;
 		HttpResponse response = null;
-		for (int i = 0; i < imageUrls.size(); i++)
-		{
+		for (int i = 0; i < imageUrls.size(); i++) {
 			String imageUrl = imageUrls.get(i);
 			String fileName = StringUtils.substringAfterLast(imageUrl, "/");
-			try
-			{
+			try {
 				File file = new File(SAVE_PATH, fileName);
-				if (file.exists())
-				{
+				if (file.exists()) {
 					System.out.println("file exist : " + file.getName());
 					continue;
 				}
-				
+
 				fos = FileUtils.openOutputStream(file);
 				httpget = new HttpGet(imageUrl);
 				response = httpclient.execute(httpget);
 				entity = response.getEntity();
 				IOUtils.copy(entity.getContent(), fos);
 				System.out.println("download file : " + file.getName());
-			}
-			catch (IOException e)
-			{
-				if (entity != null)
-				{
-					try
-					{
+			} catch (IOException e) {
+				if (entity != null) {
+					try {
 						entity.consumeContent();
-					}
-					catch (IOException e1)
-					{
+					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
 				}
-			}
-			finally
-			{
+			} finally {
 				IOUtils.closeQuietly(fos);
 			}
 		}

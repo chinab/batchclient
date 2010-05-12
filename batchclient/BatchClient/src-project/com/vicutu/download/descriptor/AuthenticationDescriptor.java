@@ -1,28 +1,23 @@
 package com.vicutu.download.descriptor;
 
-public class AuthenticationDescriptor
-{
+public class AuthenticationDescriptor {
 	private String authUserName;
 
 	private String authPassword;
 
-	public String getAuthUserName()
-	{
+	public String getAuthUserName() {
 		return authUserName;
 	}
 
-	public void setAuthUserName(String authUserName)
-	{
+	public void setAuthUserName(String authUserName) {
 		this.authUserName = authUserName;
 	}
 
-	public String getAuthPassword()
-	{
+	public String getAuthPassword() {
 		return authPassword;
 	}
 
-	public void setAuthPassword(String authPassword)
-	{
+	public void setAuthPassword(String authPassword) {
 		this.authPassword = authPassword;
 	}
 }
