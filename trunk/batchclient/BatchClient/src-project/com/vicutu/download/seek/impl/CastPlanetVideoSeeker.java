@@ -16,65 +16,50 @@ import org.htmlparser.util.ParserException;
 
 import com.vicutu.download.task.AtomicTask;
 
-public class CastPlanetVideoSeeker extends CastPlanetSeeker
-{
+public class CastPlanetVideoSeeker extends CastPlanetSeeker {
 
 	private Set<String> visitNode = new TreeSet<String>();
 
-	public Integer call() throws Exception
-	{
+	public Integer call() throws Exception {
 		seek(taskDescriptor.getUrlTemplate());
 		done = true;
 		logger.info("seek over...task count : {}", Integer.valueOf(taskCount));
 		return Integer.valueOf(taskCount);
 	}
 
-	private void seek(String url)
-	{
+	private void seek(String url) {
 		logger.info("Current linkUrl : {}", url);
-		try
-		{
+		try {
 			visitNode.add(url);
 			String htmlStr = this.getHtmlString(url);
-			if (htmlStr != null)
-			{
+			if (htmlStr != null) {
 				Parser parser = new Parser();
 				parser.setInputHTML(htmlStr);
 				NodeList nla = parser.extractAllNodesThatMatch(new TagNameFilter("a"));
 				LinkedList<String> filtedUrls = new LinkedList<String>();
-				for (int i = 0; i < nla.size(); i++)
-				{
+				for (int i = 0; i < nla.size(); i++) {
 					Node node = nla.elementAt(i);
 
-					if (node instanceof LinkTag)
-					{
+					if (node instanceof LinkTag) {
 						LinkTag lt = (LinkTag) node;
 						String linkUrl0 = lt.getLink();
-						if (linkUrl0.endsWith(".wmv"))
-						{
+						if (linkUrl0.endsWith(".wmv")) {
 							AtomicTask atomicTask = this.buildAtomicTask(linkUrl0);
-							if (atomicTask.getSavePath().exists())
-							{
+							if (atomicTask.getSavePath().exists()) {
 								logger.info("File exists : {}", atomicTask.getSavePath().getName());
-							}
-							else
-							{
+							} else {
 								logger.info("AtomicTask-Url : " + atomicTask.getUrl());
 								taskQueue.put(atomicTask);
 								taskCount++;
 								logger.info("current task queue : {}", Integer.valueOf(taskQueue.size()));
 							}
-						}
-						else
-						{
-							if (linkUrl0.startsWith("http://") && (linkUrl0.contains("VIDEOS-") || linkUrl0.contains("VIDEO-")) && !linkUrl0.endsWith(PAGE_ONE_SUFFIX) && !visitNode.contains(linkUrl0))
-							{
-								if (linkUrl0.contains("?"))
-								{
+						} else {
+							if (linkUrl0.startsWith("http://")
+									&& (linkUrl0.contains("VIDEOS-") || linkUrl0.contains("VIDEO-"))
+									&& !linkUrl0.endsWith(PAGE_ONE_SUFFIX) && !visitNode.contains(linkUrl0)) {
+								if (linkUrl0.contains("?")) {
 									filtedUrls.addLast(linkUrl0);
-								}
-								else
-								{
+								} else {
 									filtedUrls.addFirst(linkUrl0);
 								}
 							}
@@ -82,24 +67,18 @@ public class CastPlanetVideoSeeker extends CastPlanetSeeker
 					}
 				}
 				Iterator<String> it = filtedUrls.iterator();
-				while (it.hasNext())
-				{
+				while (it.hasNext()) {
 					this.seek(it.next());
 				}
 			}
-		}
-		catch (ParserException e)
-		{
+		} catch (ParserException e) {
 			logger.error("occur error when parsing html", e);
-		}
-		catch (InterruptedException e)
-		{
+		} catch (InterruptedException e) {
 			logger.error("occur error when building AtomicTask", e);
 		}
 	}
 
-	private AtomicTask buildAtomicTask(String url)
-	{
+	private AtomicTask buildAtomicTask(String url) {
 		AtomicTask atomicTask = new AtomicTask();
 		atomicTask.setUrl(url);
 		atomicTask.setSavePath(new File(taskDescriptor.getSavePath(), StringUtils.substringAfterLast(url, "/")));

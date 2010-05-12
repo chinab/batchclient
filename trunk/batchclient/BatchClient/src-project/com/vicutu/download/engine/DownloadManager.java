@@ -1,6 +1,5 @@
 package com.vicutu.download.engine;
 
-public interface DownloadManager
-{
+public interface DownloadManager {
 	void startDownload();
 }

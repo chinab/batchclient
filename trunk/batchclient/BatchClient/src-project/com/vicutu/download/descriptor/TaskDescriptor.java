@@ -2,9 +2,7 @@ package com.vicutu.download.descriptor;
 
 import java.util.List;
 
-
-public class TaskDescriptor
-{
+public class TaskDescriptor {
 	private String name;
 
 	private int rangeFrom = -1;
@@ -16,88 +14,72 @@ public class TaskDescriptor
 	private String savePath;
 
 	private String urlTemplate;
-	
+
 	private List<String> urls;
 
-	public List<String> getUrls()
-	{
+	public List<String> getUrls() {
 		return urls;
 	}
 
-	public void setUrls(List<String> urls)
-	{
+	public void setUrls(List<String> urls) {
 		this.urls = urls;
 	}
 
 	private String excludes;
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public int getRangeFrom()
-	{
+	public int getRangeFrom() {
 		return rangeFrom;
 	}
 
-	public void setRangeFrom(int rangeFrom)
-	{
+	public void setRangeFrom(int rangeFrom) {
 		this.rangeFrom = rangeFrom;
 	}
 
-	public int getRangeTo()
-	{
+	public int getRangeTo() {
 		return rangeTo;
 	}
 
-	public void setRangeTo(int rangeTo)
-	{
+	public void setRangeTo(int rangeTo) {
 		this.rangeTo = rangeTo;
 	}
 
-	public int getPatternLength()
-	{
+	public int getPatternLength() {
 		return patternLength;
 	}
 
-	public void setPatternLength(int patternLength)
-	{
+	public void setPatternLength(int patternLength) {
 		this.patternLength = patternLength;
 	}
 
-	public String getSavePath()
-	{
+	public String getSavePath() {
 		return savePath;
 	}
 
-	public void setSavePath(String savePath)
-	{
+	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}
 
-	public String getUrlTemplate()
-	{
+	public String getUrlTemplate() {
 		return urlTemplate;
 	}
 
-	public void setUrlTemplate(String urlTemplate)
-	{
+	public void setUrlTemplate(String urlTemplate) {
 		this.urlTemplate = urlTemplate;
 	}
 
-	public String getExcludes()
-	{
+	public String getExcludes() {
 		return excludes;
 	}
 
-	public void setExcludes(String excludes)
-	{
+	public void setExcludes(String excludes) {
 		this.excludes = excludes;
 	}
 }

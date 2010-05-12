@@ -38,10 +38,10 @@ public class HtmlUtils {
 		return urlList;
 	}
 
-	public static ListOrderedMap getAllLinkUrlWithLabel(String html)  throws ParserException {
+	public static ListOrderedMap getAllLinkUrlWithLabel(String html) throws ParserException {
 		ListOrderedMap listOrderedMap = new ListOrderedMap();
 		if (html != null) {
-			
+
 			Parser parser = new Parser();
 			parser.setInputHTML(html);
 			NodeList nla = parser.extractAllNodesThatMatch(new TagNameFilter("a"));
@@ -51,7 +51,7 @@ public class HtmlUtils {
 					LinkTag lt = (LinkTag) node;
 					String linkUrl0 = lt.getLink();
 					String linkName = lt.getLinkText();
-					listOrderedMap.put(i, linkUrl0, linkName);	
+					listOrderedMap.put(i, linkUrl0, linkName);
 				}
 			}
 		}

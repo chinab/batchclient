@@ -1,7 +1,6 @@
 package com.vicutu.download.descriptor;
 
-public class ProxyDescriptor
-{
+public class ProxyDescriptor {
 	private boolean useProxy;
 
 	private String proxyHost;
@@ -12,53 +11,43 @@ public class ProxyDescriptor
 
 	private String proxyPassword;
 
-	public boolean isUseProxy()
-	{
+	public boolean isUseProxy() {
 		return useProxy;
 	}
 
-	public void setUseProxy(boolean useProxy)
-	{
+	public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
 	}
 
-	public String getProxyHost()
-	{
+	public String getProxyHost() {
 		return proxyHost;
 	}
 
-	public void setProxyHost(String proxyHost)
-	{
+	public void setProxyHost(String proxyHost) {
 		this.proxyHost = proxyHost;
 	}
 
-	public int getPorxyPort()
-	{
+	public int getPorxyPort() {
 		return porxyPort;
 	}
 
-	public void setPorxyPort(int porxyPort)
-	{
+	public void setPorxyPort(int porxyPort) {
 		this.porxyPort = porxyPort;
 	}
 
-	public String getProxyUserName()
-	{
+	public String getProxyUserName() {
 		return proxyUserName;
 	}
 
-	public void setProxyUserName(String proxyUserName)
-	{
+	public void setProxyUserName(String proxyUserName) {
 		this.proxyUserName = proxyUserName;
 	}
 
-	public String getProxyPassword()
-	{
+	public String getProxyPassword() {
 		return proxyPassword;
 	}
 
-	public void setProxyPassword(String proxyPassword)
-	{
+	public void setProxyPassword(String proxyPassword) {
 		this.proxyPassword = proxyPassword;
 	}
 }

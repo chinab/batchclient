@@ -7,8 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.vicutu.download.filter.URLFilter;
 
-public class SuffixFilter implements URLFilter
-{
+public class SuffixFilter implements URLFilter {
 	private String restricts;
 
 	private String excludes;
@@ -17,62 +16,45 @@ public class SuffixFilter implements URLFilter
 
 	private Set<String> excludeSuffixs;
 
-	public void setExcludes(String excludes)
-	{
+	public void setExcludes(String excludes) {
 		this.excludes = excludes;
 	}
 
-	public void setExcludeSuffixs(Set<String> excludeSuffixs)
-	{
+	public void setExcludeSuffixs(Set<String> excludeSuffixs) {
 		this.excludeSuffixs = excludeSuffixs;
 	}
 
-	public void initialize()
-	{
-		if (restricts != null)
-		{
+	public void initialize() {
+		if (restricts != null) {
 			restrictSuffixs = new HashSet<String>();
 			String[] restrictArray = restricts.split(",");
-			for (int i = 0; i < restrictArray.length; i++)
-			{
+			for (int i = 0; i < restrictArray.length; i++) {
 				restrictSuffixs.add(restrictArray[i].toLowerCase());
 			}
 		}
-		if (excludes != null)
-		{
+		if (excludes != null) {
 			excludeSuffixs = new HashSet<String>();
 			String[] excludeArray = excludes.split(",");
-			for (int i = 0; i < excludeArray.length; i++)
-			{
+			for (int i = 0; i < excludeArray.length; i++) {
 				excludeSuffixs.add(excludeArray[i].toLowerCase());
 			}
 		}
 	}
 
-	public boolean filt(String url)
-	{
+	public boolean filt(String url) {
 
 		String suffix = StringUtils.substringAfterLast(url, ".");
 
-		if (restrictSuffixs != null)
-		{
-			if (restrictSuffixs.contains(suffix.toLowerCase()))
-			{
+		if (restrictSuffixs != null) {
+			if (restrictSuffixs.contains(suffix.toLowerCase())) {
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
-			if (excludeSuffixs != null && excludeSuffixs.contains(suffix.toLowerCase()))
-			{
+		} else {
+			if (excludeSuffixs != null && excludeSuffixs.contains(suffix.toLowerCase())) {
 				return false;
-			}
-			else
-			{
+			} else {
 				return true;
 			}
 		}
