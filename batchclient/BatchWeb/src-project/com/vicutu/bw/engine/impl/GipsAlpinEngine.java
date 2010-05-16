@@ -3,6 +3,8 @@ package com.vicutu.bw.engine.impl;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -12,15 +14,18 @@ import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import com.vicutu.bw.engine.AbstractEngine;
+import com.vicutu.bw.engine.AbstractSeeker;
+import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.event.Event;
 
-public class GipsAlpinEngine extends AbstractEngine {
+@Component
+public class GipsAlpinEngine extends AbstractSeeker {
 
 	private static final String BASE_URL = "http://www.gips-alpin.com/src/en/";
 
@@ -32,8 +37,8 @@ public class GipsAlpinEngine extends AbstractEngine {
 	}
 
 	@Override
-	@Scheduled(fixedRate = 60000)
-	public void search() {
+	@Scheduled(fixedRate = 600000)
+	public void run() {
 		AccessDetail accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
 		SearchStatus searchStatus = searchStatusService.findSearchStatusByName(this.getAccessDetailName());
 		DefaultHttpClient httpClient = null;
@@ -53,9 +58,9 @@ public class GipsAlpinEngine extends AbstractEngine {
 			}
 			for (String firstUrl : firstList) {
 				searchStatus.setLastSearchUrl(firstUrl);
-				Event<SearchStatus> event = new Event<SearchStatus>(this.getClass(), EVENT_TYPE_SEARCH_STATUS, searchStatus);
+				Event event = new Event(this.getClass(), EVENT_TYPE_SEARCH_STATUS, searchStatus);
 				applicationContext.publishEvent(event);
-				
+
 				Map<String, String> parameters = HtmlUtils.getParametersFromUrl(firstUrl);
 				String firstUrl0 = BASE_URL + firstUrl;
 				String secondHtmlStr = downloadService.downloadHtml(httpClient, firstUrl0, accessDetail
@@ -88,15 +93,10 @@ public class GipsAlpinEngine extends AbstractEngine {
 
 	private void parseImagePage(String year, String month, String label, String html, AccessDetail accessDetail,
 			DefaultHttpClient httpClient) throws Exception {
-		String label0 = StringUtils.remove(label, '\\');
-		label0 = StringUtils.remove(label0, '/');
-		label0 = StringUtils.remove(label0, ':');
-		label0 = StringUtils.remove(label0, '|');
-		label0 = StringUtils.remove(label0, '>');
-		label0 = StringUtils.remove(label0, '<');
-		label0 = StringUtils.remove(label0, '?');
-		label0 = StringUtils.remove(label0, '*');
-		String folderName = accessDetail.getSavePath() + year + "/" + month + "/" + label0 + "/";
+		Pattern pattern = Pattern.compile("[^a-zA-Z]");
+		Matcher matcher = pattern.matcher(label);
+		String label0 = matcher.replaceAll("").trim();
+		String folderName = accessDetail.getSavePath() + year + "/" + month + "/" + label0;
 		File folder = new File(folderName);
 		if (!folder.exists()) {
 			folder.mkdirs();
@@ -108,12 +108,14 @@ public class GipsAlpinEngine extends AbstractEngine {
 
 			DownloadDetail downloadDetail = new DownloadDetail();
 			downloadDetail.setRealUrl(imageUrl0);
-			downloadDetail.setRealPath(folderName + fileName);
+			downloadDetail.setRealPath(folderName + "/" + fileName);
 			downloadDetail.setFileName(fileName);
 			logger.info("DownloadDetail-Url : {}", imageUrl0);
-			Event<DownloadDetail> event = new Event<DownloadDetail>(this.getClass(), EVENT_TYPE_DOWNLOAD_DETAIL, downloadDetail);
+			Event event = new Event(this.getClass(), EVENT_TYPE_DOWNLOAD_DETAIL, downloadDetail);
 			applicationContext.publishEvent(event);
-			this.download(accessDetail, downloadDetail, httpClient);
+			Engine defaultDownloader = new DefaultDownloader(accessDetail, downloadDetail, httpClient, downloadService,
+					applicationContext);
+			defaultDownloader.run();
 		}
 	}
 }

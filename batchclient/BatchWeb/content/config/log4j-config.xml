@@ -42,14 +42,8 @@
 		<level value="error"/>
 		<appender-ref ref="consoleOut"/>
 	</logger>
-
-	<logger name="com.vicutu" additivity="false">
-		<level value="info"/>
-		<appender-ref ref="consoleOut"/>
-		<appender-ref ref="mainLogFile"/>
-	</logger>
 	
-	<logger name="com.powervote" additivity="false">
+	<logger name="com.vicutu.bw" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="consoleOut"/>
 		<appender-ref ref="mainLogFile"/>
