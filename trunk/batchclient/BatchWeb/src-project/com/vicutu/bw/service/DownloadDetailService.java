@@ -1,5 +1,7 @@
 package com.vicutu.bw.service;
 
-public interface DownloadDetailService {
+import com.vicutu.bw.vo.DownloadDetail;
 
+public interface DownloadDetailService {
+	void saveOrUpdateDownloadDetail(DownloadDetail downloadDetail);
 }

@@ -12,12 +12,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.vicutu.bw.service.HttpClientService;
 import com.vicutu.bw.vo.AccessDetail;
 
-@Component("gipsAlpinHttpClientService")
+@Repository("gipsAlpinHttpClientService")
 public class GipsAlpinHttpClientServiceImpl extends DefaultHttpClientServiceImpl implements HttpClientService {
 
 	@Override
