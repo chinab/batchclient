@@ -9,6 +9,6 @@ public interface AccessDetailDao {
 	List<AccessDetail> findAllAccessDetail();
 
 	AccessDetail findAccessDetailByName(String name);
-	
+
 	void saveOrUpdateAccessDetail(AccessDetail accessDetail);
 }

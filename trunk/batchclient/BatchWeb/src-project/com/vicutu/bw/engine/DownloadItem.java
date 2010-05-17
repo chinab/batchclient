@@ -1,0 +1,47 @@
+package com.vicutu.bw.engine;
+
+import com.vicutu.bw.vo.AccessDetail;
+import com.vicutu.bw.vo.DownloadDetail;
+import com.vicutu.bw.vo.SearchStatus;
+
+public class DownloadItem {
+
+	private AccessDetail accessDetail;
+
+	private DownloadDetail downloadDetail;
+
+	private SearchStatus searchStatus;
+
+	public DownloadItem(AccessDetail accessDetail, DownloadDetail downloadDetail, SearchStatus searchStatus) {
+		this.accessDetail = accessDetail;
+		this.downloadDetail = downloadDetail;
+		this.searchStatus = searchStatus;
+	}
+
+	public DownloadItem() {
+	}
+
+	public AccessDetail getAccessDetail() {
+		return accessDetail;
+	}
+
+	public void setAccessDetail(AccessDetail accessDetail) {
+		this.accessDetail = accessDetail;
+	}
+
+	public DownloadDetail getDownloadDetail() {
+		return downloadDetail;
+	}
+
+	public void setDownloadDetail(DownloadDetail downloadDetail) {
+		this.downloadDetail = downloadDetail;
+	}
+
+	public SearchStatus getSearchStatus() {
+		return searchStatus;
+	}
+
+	public void setSearchStatus(SearchStatus searchStatus) {
+		this.searchStatus = searchStatus;
+	}
+}
