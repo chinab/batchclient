@@ -1,6 +1,5 @@
 package com.vicutu.bw.engine;
 
-
 public interface Engine {
 
 	public static final String EVENT_TYPE_DOWNLOAD_DETAIL = "event_type_download_detail";
