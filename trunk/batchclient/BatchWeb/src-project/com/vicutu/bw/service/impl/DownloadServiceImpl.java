@@ -90,6 +90,7 @@ public class DownloadServiceImpl implements DownloadService {
 				} catch (IOException e1) {
 				}
 				httpget.abort();
+				throw e2;
 			}
 		}
 		return byteCount;
@@ -147,6 +148,7 @@ public class DownloadServiceImpl implements DownloadService {
 				} catch (IOException e1) {
 				}
 				httpget.abort();
+				throw e2;
 			}
 		}
 		return htmlStr;
