@@ -126,5 +126,4 @@ public abstract class AbstractEngine implements Engine {
 			applicationContext.publishEvent(event);
 		}
 	}
-
 }
