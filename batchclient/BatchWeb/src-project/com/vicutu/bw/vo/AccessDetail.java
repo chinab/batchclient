@@ -36,6 +36,9 @@ public class AccessDetail implements Serializable, IReadable {
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "availble")
+	private boolean availble;
+
 	@Column(name = "home_page")
 	private String homePage;
 
@@ -90,6 +93,9 @@ public class AccessDetail implements Serializable, IReadable {
 	@Column(name = "queue_length")
 	private int queueLength;
 
+	@Column(name = "single_http_client")
+	private boolean singleHttpClient;
+
 	@Column(name = "timeout")
 	private long timeout;
 
@@ -98,14 +104,6 @@ public class AccessDetail implements Serializable, IReadable {
 
 	@Column(name = "replace_exist")
 	private boolean replaceExist;
-
-	public boolean isReplaceExist() {
-		return replaceExist;
-	}
-
-	public void setReplaceExist(boolean replaceExist) {
-		this.replaceExist = replaceExist;
-	}
 
 	public long getId() {
 		return id;
@@ -121,6 +119,14 @@ public class AccessDetail implements Serializable, IReadable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isAvailble() {
+		return availble;
+	}
+
+	public void setAvailble(boolean availble) {
+		this.availble = availble;
 	}
 
 	public String getHomePage() {
@@ -267,6 +273,14 @@ public class AccessDetail implements Serializable, IReadable {
 		this.queueLength = queueLength;
 	}
 
+	public boolean isSingleHttpClient() {
+		return singleHttpClient;
+	}
+
+	public void setSingleHttpClient(boolean singleHttpClient) {
+		this.singleHttpClient = singleHttpClient;
+	}
+
 	public long getTimeout() {
 		return timeout;
 	}
@@ -281,6 +295,14 @@ public class AccessDetail implements Serializable, IReadable {
 
 	public void setInterval(long interval) {
 		this.interval = interval;
+	}
+
+	public boolean isReplaceExist() {
+		return replaceExist;
+	}
+
+	public void setReplaceExist(boolean replaceExist) {
+		this.replaceExist = replaceExist;
 	}
 
 	@Override

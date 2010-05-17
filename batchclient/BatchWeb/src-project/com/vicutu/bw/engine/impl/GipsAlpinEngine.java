@@ -17,6 +17,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.engine.AbstractEngine;
+import com.vicutu.bw.engine.DownloadItem;
+import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
@@ -24,7 +26,7 @@ import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.event.Event;
 
 @Component
-public class GipsAlpinEngine extends AbstractEngine {
+public class GipsAlpinEngine extends AbstractEngine implements Engine {
 
 	private static final String BASE_URL = "http://www.gips-alpin.com/src/en/";
 
@@ -38,15 +40,22 @@ public class GipsAlpinEngine extends AbstractEngine {
 	@Override
 	@Scheduled(fixedRate = 600000)
 	public void search() {
-		SearchStatus searchStatus = searchStatusService.findSearchStatusByName(this.getAccessDetailName());
-		DefaultHttpClient httpClient = null;
-		String linkUrl = accessDetail.getSearchUrl();
-		String lastSearchUrl = searchStatus.getLastSearchUrl();
 		try {
-			httpClient = (DefaultHttpClient) httpClientService.getHttpClient(accessDetail.getName(), true);
+			AccessDetail accessDetail = this.refresh();
+			if (!accessDetail.isAvailble()) {
+				logger.info("Engine [{}] is not avaible now", this.getAccessDetailName());
+				return;
+			}
+
+			String linkUrl = accessDetail.getSearchUrl();
+			DefaultHttpClient httpClient = this.currentHttpClient();
 			String htmlStr = downloadService.downloadHtml(httpClient, linkUrl, accessDetail.getAuthorizationUsername(),
 					accessDetail.getAuthorizationPassword());
+
 			List<String> firstList = HtmlUtils.getAllLinkUrl(htmlStr);
+
+			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(this.getAccessDetailName());
+			String lastSearchUrl = searchStatus.getLastSearchUrl();
 
 			if (lastSearchUrl != null) {
 				int index = firstList.indexOf(lastSearchUrl);
@@ -64,7 +73,7 @@ public class GipsAlpinEngine extends AbstractEngine {
 				String secondHtmlStr = downloadService.downloadHtml(httpClient, firstUrl0, accessDetail
 						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
 				this.parseSecondPage(parameters.get("aktJahr"), parameters.get("txtMonat"), secondHtmlStr, httpClient,
-						accessDetail);
+						accessDetail, searchStatus);
 			}
 		} catch (Exception e) {
 			logger.error("occur error when parsing html", e);
@@ -72,7 +81,7 @@ public class GipsAlpinEngine extends AbstractEngine {
 	}
 
 	private void parseSecondPage(String year, String month, String html, DefaultHttpClient httpClient,
-			AccessDetail accessDetail) throws Exception {
+			AccessDetail accessDetail, SearchStatus searchStatus) throws Exception {
 		Parser parser = new Parser();
 		parser.setInputHTML(html);
 		NodeList nla = parser.extractAllNodesThatMatch(new TagNameFilter("a"));
@@ -84,13 +93,13 @@ public class GipsAlpinEngine extends AbstractEngine {
 				String linkName = lt.getLinkText();
 				String htmlStr = downloadService.downloadHtml(httpClient, linkUrl0, accessDetail
 						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
-				this.parseImagePage(year, month, linkName, htmlStr, accessDetail, httpClient);
+				this.parseImagePage(year, month, linkName, htmlStr, accessDetail, searchStatus, httpClient);
 			}
 		}
 	}
 
 	private void parseImagePage(String year, String month, String label, String html, AccessDetail accessDetail,
-			DefaultHttpClient httpClient) throws Exception {
+			SearchStatus searchStatus, DefaultHttpClient httpClient) throws Exception {
 		Pattern pattern = Pattern.compile("[^a-zA-Z]");
 		Matcher matcher = pattern.matcher(label);
 		String label0 = matcher.replaceAll("").trim();
@@ -111,7 +120,8 @@ public class GipsAlpinEngine extends AbstractEngine {
 			logger.info("DownloadDetail-Url : {}", imageUrl0);
 			Event event = new Event(this.getClass(), EVENT_TYPE_DOWNLOAD_DETAIL, downloadDetail);
 			applicationContext.publishEvent(event);
-			queue.put(downloadDetail);
+			DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus);
+			queue.put(downloadItem);
 			this.download();
 		}
 	}

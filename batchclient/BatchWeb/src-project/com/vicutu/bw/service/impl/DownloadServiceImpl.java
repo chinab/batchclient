@@ -21,9 +21,13 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import com.vicutu.bw.service.DownloadService;
+import com.vicutu.commons.logging.Logger;
+import com.vicutu.commons.logging.LoggerFactory;
 
 @Service
 public class DownloadServiceImpl implements DownloadService {
+
+	private final Logger logger = LoggerFactory.getLogger(DownloadServiceImpl.class);
 
 	@Override
 	public long download(HttpClient httpClient, String linkUrl, OutputStream outputStream,
@@ -33,46 +37,59 @@ public class DownloadServiceImpl implements DownloadService {
 		HttpResponse response = null;
 		boolean trying = true;
 		int byteCount = 0;
+		HttpEntity entity = null;
 		while (trying) {
-			response = httpClient.execute(httpget, localContext);
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				if (entity.getContentLength() > 0) {
-					try {
-						byteCount = IOUtils.copy(entity.getContent(), outputStream);
-					} catch (Exception e) {
+			try {
+				response = httpClient.execute(httpget, localContext);
+				entity = response.getEntity();
+				if (entity != null) {
+					if (entity.getContentLength() > 0) {
+						try {
+							byteCount = IOUtils.copy(entity.getContent(), outputStream);
+						} catch (Exception e) {
+							entity.consumeContent();
+							throw e;
+						}
+					} else {
 						entity.consumeContent();
-						throw e;
-					} 
-				} else {
-					entity.consumeContent();
+					}
 				}
-			}
 
-			int sc = response.getStatusLine().getStatusCode();
+				int sc = response.getStatusLine().getStatusCode();
 
-			AuthState authState = null;
-			if (sc == HttpStatus.SC_UNAUTHORIZED) {
-				// Target host authentication required
-				authState = (AuthState) localContext.getAttribute(ClientContext.TARGET_AUTH_STATE);
-			}
-			if (sc == HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED) {
-				// Proxy authentication required
-				authState = (AuthState) localContext.getAttribute(ClientContext.PROXY_AUTH_STATE);
-			}
+				AuthState authState = null;
+				if (sc == HttpStatus.SC_UNAUTHORIZED) {
+					// Target host authentication required
+					authState = (AuthState) localContext.getAttribute(ClientContext.TARGET_AUTH_STATE);
+				}
+				if (sc == HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED) {
+					// Proxy authentication required
+					authState = (AuthState) localContext.getAttribute(ClientContext.PROXY_AUTH_STATE);
+				}
 
-			if (authState != null) {
-				AuthScope authScope = authState.getAuthScope();
+				if (authState != null) {
+					AuthScope authScope = authState.getAuthScope();
 
-				if (authorizationUsername != null && authorizationUsername.length() > 0) {
-					Credentials creds = new UsernamePasswordCredentials(authorizationUsername, authorizationPassword);
-					((DefaultHttpClient) httpClient).getCredentialsProvider().setCredentials(authScope, creds);
-					trying = true;
+					if (authorizationUsername != null && authorizationUsername.length() > 0) {
+						Credentials creds = new UsernamePasswordCredentials(authorizationUsername,
+								authorizationPassword);
+						((DefaultHttpClient) httpClient).getCredentialsProvider().setCredentials(authScope, creds);
+						trying = true;
+					} else {
+						trying = false;
+					}
 				} else {
 					trying = false;
 				}
-			} else {
-				trying = false;
+			} catch (Exception e2) {
+				logger.error("occur error when get url: {}", linkUrl, e2);
+				try {
+					if (entity != null) {
+						entity.consumeContent();
+					}
+				} catch (IOException e1) {
+				}
+				httpget.abort();
 			}
 		}
 		return byteCount;
@@ -129,6 +146,7 @@ public class DownloadServiceImpl implements DownloadService {
 					}
 				} catch (IOException e1) {
 				}
+				httpget.abort();
 			}
 		}
 		return htmlStr;

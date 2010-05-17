@@ -1,9 +1,11 @@
 package com.vicutu.bw.engine;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,11 +39,9 @@ public abstract class AbstractEngine implements Engine {
 
 	protected ApplicationContext applicationContext;
 
-	protected AccessDetail accessDetail;
+	protected BlockingQueue<DownloadItem> queue;
 
-	protected BlockingQueue<DownloadDetail> queue;
-
-	protected DefaultHttpClient httpClient;
+	private DefaultHttpClient httpClient;
 
 	@Autowired
 	public void setSearchStatusService(SearchStatusService searchStatusService) {
@@ -69,10 +69,20 @@ public abstract class AbstractEngine implements Engine {
 		this.httpClientService = httpClientService;
 	}
 
-	public void initialize() throws Exception {
-		accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
-		queue = new ArrayBlockingQueue<DownloadDetail>(accessDetail.getQueueLength());
-		httpClient = (DefaultHttpClient) httpClientService.getHttpClient(accessDetail.getName(), true);
+	protected synchronized AccessDetail refresh() throws Exception {
+		AccessDetail accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
+		if (queue == null) {
+			queue = new ArrayBlockingQueue<DownloadItem>(accessDetail.getQueueLength());
+		}
+		if (httpClient == null) {
+			httpClient = (DefaultHttpClient) httpClientService.getHttpClient(accessDetail.getName(), accessDetail
+					.isSingleHttpClient());
+		}
+		return accessDetail;
+	}
+
+	protected DefaultHttpClient currentHttpClient() {
+		return httpClient;
 	}
 
 	protected abstract String getAccessDetailName();
@@ -81,14 +91,23 @@ public abstract class AbstractEngine implements Engine {
 	@Override
 	public void download() {
 		DownloadDetail downloadDetail = null;
+		OutputStream os = null;
+		DefaultHttpClient httpClient = null;
 		try {
-			downloadDetail = queue.take();
+			DownloadItem downloadItem = queue.take();
+			downloadDetail = downloadItem.getDownloadDetail();
+			AccessDetail accessDetail = downloadItem.getAccessDetail();
+			if (accessDetail.isSingleHttpClient()) {
+				httpClient = this.currentHttpClient();
+			} else {
+				httpClient = (DefaultHttpClient) httpClientService.getHttpClient(accessDetail.getName(), false);
+			}
 			File savePath = new File(downloadDetail.getRealPath());
+			os = FileUtils.openOutputStream(savePath);
 			if (savePath.exists()) {
 				if (accessDetail.isReplaceExist()) {
-					long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), FileUtils
-							.openOutputStream(savePath), accessDetail.getAuthorizationUsername(), accessDetail
-							.getAuthorizationPassword());
+					long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), os,
+							accessDetail.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
 					downloadDetail.setFileLength(fileLength);
 					String lengthInfo = FileUtils.byteCountToDisplaySize(fileLength);
 					downloadDetail.setLenghtInfo(lengthInfo);
@@ -104,9 +123,8 @@ public abstract class AbstractEngine implements Engine {
 					logger.info("ignore exist : {}", downloadDetail.getRealUrl());
 				}
 			} else {
-				long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), FileUtils
-						.openOutputStream(savePath), accessDetail.getAuthorizationUsername(), accessDetail
-						.getAuthorizationPassword());
+				long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), os, accessDetail
+						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
 				downloadDetail.setFileLength(fileLength);
 				String lengthInfo = FileUtils.byteCountToDisplaySize(fileLength);
 				downloadDetail.setLenghtInfo(lengthInfo);
@@ -120,8 +138,9 @@ public abstract class AbstractEngine implements Engine {
 			}
 		} catch (Exception e) {
 			downloadDetail.setLastState(DownloadDetail.LAST_STATE_FAILED);
-			logger.info("occur error when downloading {}", downloadDetail.getRealUrl(), e);
+			logger.info("occur error when downloading [{}]", downloadDetail.getRealUrl(), e);
 		} finally {
+			IOUtils.closeQuietly(os);
 			Event event = new Event(this.getClass(), EVENT_TYPE_DOWNLOAD_DETAIL, downloadDetail);
 			applicationContext.publishEvent(event);
 		}

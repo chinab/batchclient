@@ -36,7 +36,7 @@ public class DownloadDetail implements Serializable, IReadable {
 	public static final int LAST_STATE_FAILED = 3;
 
 	public static final int LAST_STATE_RELOADED = 4;
-	
+
 	public static final int LAST_STATE_IGNORED = 5;
 
 	private static final long serialVersionUID = -7311886635868456532L;
