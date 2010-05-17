@@ -10,7 +10,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.service.AccessDetailService;
@@ -87,7 +86,6 @@ public abstract class AbstractEngine implements Engine {
 
 	protected abstract String getAccessDetailName();
 
-	@Async
 	@Override
 	public void download() {
 		DownloadDetail downloadDetail = null;
@@ -103,9 +101,9 @@ public abstract class AbstractEngine implements Engine {
 				httpClient = (DefaultHttpClient) httpClientService.getHttpClient(accessDetail.getName(), false);
 			}
 			File savePath = new File(downloadDetail.getRealPath());
-			os = FileUtils.openOutputStream(savePath);
 			if (savePath.exists()) {
 				if (accessDetail.isReplaceExist()) {
+					os = FileUtils.openOutputStream(savePath);
 					long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), os,
 							accessDetail.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
 					downloadDetail.setFileLength(fileLength);
@@ -123,6 +121,7 @@ public abstract class AbstractEngine implements Engine {
 					logger.info("ignore exist : {}", downloadDetail.getRealUrl());
 				}
 			} else {
+				os = FileUtils.openOutputStream(savePath);
 				long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), os, accessDetail
 						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
 				downloadDetail.setFileLength(fileLength);
