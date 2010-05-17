@@ -1,13 +1,20 @@
-package com.vicutu.bw.engine.impl;
+package com.vicutu.bw.engine;
 
 import java.io.File;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
-import com.vicutu.bw.engine.Engine;
+import com.vicutu.bw.service.AccessDetailService;
 import com.vicutu.bw.service.DownloadService;
+import com.vicutu.bw.service.HttpClientService;
+import com.vicutu.bw.service.SearchStatusService;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.commons.lang.FileUtils;
@@ -15,33 +22,67 @@ import com.vicutu.commons.logging.Logger;
 import com.vicutu.commons.logging.LoggerFactory;
 import com.vicutu.event.Event;
 
-public class DefaultDownloader implements Engine {
+@Component
+public abstract class AbstractEngine implements Engine {
 
-	private final Logger logger = LoggerFactory.getLogger(DefaultDownloader.class);
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private AccessDetail accessDetail;
+	protected HttpClientService httpClientService;
 
-	private DownloadDetail downloadDetail;
+	protected AccessDetailService accessDetailService;
 
-	private DefaultHttpClient httpClient;
+	protected DownloadService downloadService;
 
-	private DownloadService downloadService;
+	protected SearchStatusService searchStatusService;
 
-	private ApplicationContext applicationContext;
+	protected ApplicationContext applicationContext;
 
-	public DefaultDownloader(AccessDetail accessDetail, DownloadDetail downloadDetail, DefaultHttpClient httpClient,
-			DownloadService downloadService, ApplicationContext applicationContext) {
-		this.accessDetail = accessDetail;
-		this.downloadDetail = downloadDetail;
-		this.httpClient = httpClient;
-		this.downloadService = downloadService;
+	protected AccessDetail accessDetail;
+
+	protected BlockingQueue<DownloadDetail> queue;
+
+	protected DefaultHttpClient httpClient;
+
+	@Autowired
+	public void setSearchStatusService(SearchStatusService searchStatusService) {
+		this.searchStatusService = searchStatusService;
+	}
+
+	@Autowired
+	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
+	@Autowired
+	public void setDownloadService(DownloadService downloadService) {
+		this.downloadService = downloadService;
+	}
+
+	@Autowired
+	public void setAccessDetailService(AccessDetailService accessDetailService) {
+		this.accessDetailService = accessDetailService;
+	}
+
+	@Autowired
+	@Qualifier("gipsAlpinHttpClientService")
+	public void setHttpClientService(HttpClientService httpClientService) {
+		this.httpClientService = httpClientService;
+	}
+
+	public void initialize() throws Exception {
+		accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
+		queue = new ArrayBlockingQueue<DownloadDetail>(accessDetail.getQueueLength());
+		httpClient = (DefaultHttpClient) httpClientService.getHttpClient(accessDetail.getName(), true);
+	}
+
+	protected abstract String getAccessDetailName();
+
 	@Async
 	@Override
-	public void run() {
+	public void download() {
+		DownloadDetail downloadDetail = null;
 		try {
+			downloadDetail = queue.take();
 			File savePath = new File(downloadDetail.getRealPath());
 			if (savePath.exists()) {
 				if (accessDetail.isReplaceExist()) {
@@ -85,4 +126,5 @@ public class DefaultDownloader implements Engine {
 			applicationContext.publishEvent(event);
 		}
 	}
+
 }
