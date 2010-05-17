@@ -7,6 +7,7 @@ public interface Engine {
 
 	public static final String EVENT_TYPE_SEARCH_STATUS = "event_type_search_status";
 
-	void run();
-
+	void search();
+	
+	void download();
 }

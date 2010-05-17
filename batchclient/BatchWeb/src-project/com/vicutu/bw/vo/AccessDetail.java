@@ -87,6 +87,9 @@ public class AccessDetail implements Serializable, IReadable {
 	@Column(name = "save_path")
 	private String savePath;
 
+	@Column(name = "queue_length")
+	private int queueLength;
+
 	@Column(name = "timeout")
 	private long timeout;
 
@@ -254,6 +257,14 @@ public class AccessDetail implements Serializable, IReadable {
 
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
+	}
+
+	public int getQueueLength() {
+		return queueLength;
+	}
+
+	public void setQueueLength(int queueLength) {
+		this.queueLength = queueLength;
 	}
 
 	public long getTimeout() {

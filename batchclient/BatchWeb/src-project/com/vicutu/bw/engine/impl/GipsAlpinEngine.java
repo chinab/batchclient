@@ -16,8 +16,7 @@ import org.htmlparser.util.NodeList;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.vicutu.bw.engine.AbstractSeeker;
-import com.vicutu.bw.engine.Engine;
+import com.vicutu.bw.engine.AbstractEngine;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
@@ -25,7 +24,7 @@ import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.event.Event;
 
 @Component
-public class GipsAlpinEngine extends AbstractSeeker {
+public class GipsAlpinEngine extends AbstractEngine {
 
 	private static final String BASE_URL = "http://www.gips-alpin.com/src/en/";
 
@@ -38,8 +37,7 @@ public class GipsAlpinEngine extends AbstractSeeker {
 
 	@Override
 	@Scheduled(fixedRate = 600000)
-	public void run() {
-		AccessDetail accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
+	public void search() {
 		SearchStatus searchStatus = searchStatusService.findSearchStatusByName(this.getAccessDetailName());
 		DefaultHttpClient httpClient = null;
 		String linkUrl = accessDetail.getSearchUrl();
@@ -113,9 +111,8 @@ public class GipsAlpinEngine extends AbstractSeeker {
 			logger.info("DownloadDetail-Url : {}", imageUrl0);
 			Event event = new Event(this.getClass(), EVENT_TYPE_DOWNLOAD_DETAIL, downloadDetail);
 			applicationContext.publishEvent(event);
-			Engine defaultDownloader = new DefaultDownloader(accessDetail, downloadDetail, httpClient, downloadService,
-					applicationContext);
-			defaultDownloader.run();
+			queue.put(downloadDetail);
+			this.download();
 		}
 	}
 }
