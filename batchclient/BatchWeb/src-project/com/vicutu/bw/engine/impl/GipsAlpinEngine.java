@@ -13,6 +13,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -124,5 +125,11 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			queue.put(downloadItem);
 			this.download();
 		}
+	}
+	
+	@Async
+	@Override
+	public void download(){
+		super.download();
 	}
 }
