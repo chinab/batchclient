@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.service.SearchStatusService;
 import com.vicutu.bw.vo.SearchStatus;
-import com.vicutu.event.Event;
 
 @Component
-public class SearchStatusListener implements ApplicationListener<Event> {
+public class UpdateSearchStatusListener implements ApplicationListener<UpdateSearchStatusEvent> {
 
 	private SearchStatusService searchStatusService;
 
@@ -20,10 +18,8 @@ public class SearchStatusListener implements ApplicationListener<Event> {
 	}
 
 	@Override
-	public void onApplicationEvent(Event event) {
-		if (Engine.EVENT_TYPE_SEARCH_STATUS.equals(event.getType())) {
-			SearchStatus searchStatus = (SearchStatus) event.getData();
-			searchStatusService.saveOrUpdateSearchStatus(searchStatus);
-		}
+	public void onApplicationEvent(UpdateSearchStatusEvent event) {
+		SearchStatus searchStatus = event.getSearchStatus();
+		searchStatusService.saveOrUpdateSearchStatus(searchStatus);
 	}
 }
