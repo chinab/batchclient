@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.service.DownloadDetailService;
 import com.vicutu.bw.vo.DownloadDetail;
-import com.vicutu.event.Event;
 
 @Component
-public class DownloadDetailListener implements ApplicationListener<Event> {
+public class UpdateDownloadDetailListener implements ApplicationListener<UpdateDownloadDetailEvent> {
 
 	private DownloadDetailService downloadDetailService;
 
@@ -20,10 +18,8 @@ public class DownloadDetailListener implements ApplicationListener<Event> {
 	}
 
 	@Override
-	public void onApplicationEvent(Event event) {
-		if (Engine.EVENT_TYPE_DOWNLOAD_DETAIL.equals(event.getType())) {
-			DownloadDetail downloadDetail = (DownloadDetail) event.getData();
-			downloadDetailService.saveOrUpdateDownloadDetail(downloadDetail);
-		}
+	public void onApplicationEvent(UpdateDownloadDetailEvent event) {
+		DownloadDetail downloadDetail = event.getDownloadDetail();
+		downloadDetailService.saveOrUpdateDownloadDetail(downloadDetail);
 	}
 }
