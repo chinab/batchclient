@@ -18,7 +18,6 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/ehcache-core-2.0.1.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/google-collect-1.0.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/hibernate3.jar"/>
@@ -52,5 +51,6 @@
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/ehcache-core-2.1.0.jar"/>
 	<classpathentry kind="output" path="content/WEB-INF/classes"/>
 </classpath>

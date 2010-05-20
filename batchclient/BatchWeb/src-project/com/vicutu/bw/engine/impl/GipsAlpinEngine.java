@@ -50,7 +50,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	}
 
 	@Override
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
 			AccessDetail accessDetail = this.refresh();
@@ -88,6 +88,8 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			}
 		} catch (Exception e) {
 			logger.error("occur error when parsing html", e);
+		}finally{
+			logger.error("search finish...");
 		}
 	}
 
@@ -121,19 +123,28 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		}
 		List<String> imageUrlList = HtmlUtils.getAllImageUrl(html);
 		for (String imageUrl : imageUrlList) {
-			String fileName = StringUtils.substringAfterLast(imageUrl, "/");
 			String imageUrl0 = IMAGE_ROOT_URL + StringUtils.substringAfterLast(imageUrl, "thumbs/");
-
-			DownloadDetail downloadDetail = new DownloadDetail();
-			downloadDetail.setRealUrl(imageUrl0);
-			downloadDetail.setRealPath(folderName + "/" + fileName);
-			downloadDetail.setFileName(fileName);
-			logger.info("DownloadDetail-Url : {}", imageUrl0);
-			UpdateDownloadDetailEvent event = new UpdateDownloadDetailEvent(this, downloadDetail);
-			applicationContext.publishEvent(event);
-			DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
-			AddDownloadItemEvent addDownloadItemEvent = new AddDownloadItemEvent(this, downloadItem);
-			applicationContext.publishEvent(addDownloadItemEvent);
+			String fileName = StringUtils.substringAfterLast(imageUrl, "/");
+			File downloadFile = new File(folder, fileName);
+			if (downloadFile.exists() && !accessDetail.isReplaceExist()) {
+				logger.info("ignore exist : {}", imageUrl0);
+			} else {
+				fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(), imageUrl0);
+			}
 		}
+	}
+
+	private void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String fileName,
+			String realPath, String imageUrl0) {
+		DownloadDetail downloadDetail = new DownloadDetail();
+		downloadDetail.setRealUrl(imageUrl0);
+		downloadDetail.setRealPath(realPath);
+		downloadDetail.setFileName(fileName);
+		logger.info("DownloadDetail-Url : {}", imageUrl0);
+		UpdateDownloadDetailEvent event = new UpdateDownloadDetailEvent(this, downloadDetail);
+		applicationContext.publishEvent(event);
+		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
+		AddDownloadItemEvent addDownloadItemEvent = new AddDownloadItemEvent(this, downloadItem);
+		applicationContext.publishEvent(addDownloadItemEvent);
 	}
 }
