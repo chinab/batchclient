@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import com.vicutu.bw.service.AccessDetailService;
-import com.vicutu.bw.service.DownloadService;
 import com.vicutu.bw.service.SearchStatusService;
 import com.vicutu.commons.logging.Logger;
 import com.vicutu.commons.logging.LoggerFactory;
@@ -17,8 +16,6 @@ public abstract class AbstractEngine implements Engine {
 	protected HttpClient httpClient;
 
 	protected AccessDetailService accessDetailService;
-
-	protected DownloadService downloadService;
 
 	protected SearchStatusService searchStatusService;
 
@@ -32,11 +29,6 @@ public abstract class AbstractEngine implements Engine {
 	@Autowired
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-	}
-
-	@Autowired
-	public void setDownloadService(DownloadService downloadService) {
-		this.downloadService = downloadService;
 	}
 
 	@Autowired

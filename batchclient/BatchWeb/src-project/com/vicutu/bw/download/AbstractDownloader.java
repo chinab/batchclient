@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
-import com.vicutu.bw.service.DownloadService;
+import com.vicutu.bw.http.utils.DownloadUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.commons.lang.FileUtils;
@@ -21,10 +21,8 @@ public abstract class AbstractDownloader implements Downloader {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected DownloadService downloadService;
-
 	protected ApplicationContext applicationContext;
-	
+
 	protected HttpClient httpClient;
 
 	public void setHttpClient(HttpClient httpClient) {
@@ -32,15 +30,10 @@ public abstract class AbstractDownloader implements Downloader {
 	}
 
 	@Autowired
-	public void setDownloadService(DownloadService downloadService) {
-		this.downloadService = downloadService;
-	}
-
-	@Autowired
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
-	
+
 	@Override
 	public void download(DownloadItem downloadItem) {
 		DownloadDetail downloadDetail = null;
@@ -52,8 +45,7 @@ public abstract class AbstractDownloader implements Downloader {
 			if (savePath.exists()) {
 				if (accessDetail.isReplaceExist()) {
 					os = FileUtils.openOutputStream(savePath);
-					long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), os,
-							accessDetail.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
+					long fileLength = DownloadUtils.download(httpClient, downloadDetail.getRealUrl(), os);
 					downloadDetail.setFileLength(fileLength);
 					String lengthInfo = FileUtils.byteCountToDisplaySize(fileLength);
 					downloadDetail.setLenghtInfo(lengthInfo);
@@ -70,8 +62,7 @@ public abstract class AbstractDownloader implements Downloader {
 				}
 			} else {
 				os = FileUtils.openOutputStream(savePath);
-				long fileLength = downloadService.download(httpClient, downloadDetail.getRealUrl(), os, accessDetail
-						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
+				long fileLength = DownloadUtils.download(httpClient, downloadDetail.getRealUrl(), os);
 				downloadDetail.setFileLength(fileLength);
 				String lengthInfo = FileUtils.byteCountToDisplaySize(fileLength);
 				downloadDetail.setLenghtInfo(lengthInfo);
