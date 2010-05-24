@@ -7,7 +7,6 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-
 public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 
 	protected List<HttpRequestInterceptor> httpRequestInterceptors;

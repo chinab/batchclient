@@ -1,5 +1,7 @@
 package com.vicutu.bw.engine;
 
+import javax.annotation.PreDestroy;
+
 import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -35,9 +37,16 @@ public abstract class AbstractEngine implements Engine {
 	public void setAccessDetailService(AccessDetailService accessDetailService) {
 		this.accessDetailService = accessDetailService;
 	}
-	
+
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
+	}
+
+	@PreDestroy
+	protected void cleanUp() {
+		if (httpClient != null) {
+			httpClient.getConnectionManager().shutdown();
+		}
 	}
 
 	protected abstract String getAccessDetailName();
