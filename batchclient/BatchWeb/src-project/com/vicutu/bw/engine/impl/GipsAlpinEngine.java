@@ -1,13 +1,23 @@
 package com.vicutu.bw.engine.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
@@ -24,11 +34,11 @@ import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.event.AddDownloadItemEvent;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
 import com.vicutu.bw.event.UpdateSearchStatusEvent;
-import com.vicutu.bw.service.HttpClientService;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
+import com.vicutu.commons.exception.BaseRuntimeException;
 
 @Component
 public class GipsAlpinEngine extends AbstractEngine implements Engine {
@@ -44,16 +54,17 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 
 	@Override
 	@Autowired
-	@Qualifier("gipsAlpinHttpClientService")
-	public void setHttpClientService(HttpClientService httpClientService) {
-		this.httpClientService = httpClientService;
+	@Qualifier("gipsAlpinHttpClient")
+	public void setHttpClient(HttpClient httpClient) {
+		this.httpClient = httpClient;
 	}
 
 	@Override
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = this.refresh();
+			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
+			this.login(httpClient, accessDetail);
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", this.getAccessDetailName());
 				return;
@@ -83,18 +94,18 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				String firstUrl0 = BASE_URL + firstUrl;
 				String secondHtmlStr = downloadService.downloadHtml(httpClient, firstUrl0, accessDetail
 						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
-				this.parseSecondPage(parameters.get("aktJahr"), parameters.get("txtMonat"), secondHtmlStr, httpClient,
+				this.parseSecondPage(parameters.get("aktJahr"), parameters.get("txtMonat"), secondHtmlStr,
 						accessDetail, searchStatus);
 			}
 		} catch (Exception e) {
 			logger.error("occur error when parsing html", e);
-		}finally{
+		} finally {
 			logger.error("search finish...");
 		}
 	}
 
-	private void parseSecondPage(String year, String month, String html, DefaultHttpClient httpClient,
-			AccessDetail accessDetail, SearchStatus searchStatus) throws Exception {
+	private void parseSecondPage(String year, String month, String html, AccessDetail accessDetail,
+			SearchStatus searchStatus) throws Exception {
 		Parser parser = new Parser();
 		parser.setInputHTML(html);
 		NodeList nla = parser.extractAllNodesThatMatch(new TagNameFilter("a"));
@@ -106,13 +117,13 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				String linkName = lt.getLinkText();
 				String htmlStr = downloadService.downloadHtml(httpClient, linkUrl0, accessDetail
 						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
-				this.parseImagePage(year, month, linkName, htmlStr, accessDetail, searchStatus, httpClient);
+				this.parseImagePage(year, month, linkName, htmlStr, accessDetail, searchStatus);
 			}
 		}
 	}
 
 	private void parseImagePage(String year, String month, String label, String html, AccessDetail accessDetail,
-			SearchStatus searchStatus, DefaultHttpClient httpClient) throws Exception {
+			SearchStatus searchStatus) throws Exception {
 		Pattern pattern = Pattern.compile("[^a-zA-Z]");
 		Matcher matcher = pattern.matcher(label);
 		String label0 = matcher.replaceAll("").trim();
@@ -146,5 +157,30 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
 		AddDownloadItemEvent addDownloadItemEvent = new AddDownloadItemEvent(this, downloadItem);
 		applicationContext.publishEvent(addDownloadItemEvent);
+	}
+
+	private void login(HttpClient httpClient, AccessDetail accessDetail) throws Exception {
+		HttpPost httpost = new HttpPost(accessDetail.getLoginUrl());
+		HttpGet httpget = new HttpGet(accessDetail.getLoginRefreshUrl());
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+
+		nvps.add(new BasicNameValuePair("flduser", accessDetail.getLoginUsername()));
+		nvps.add(new BasicNameValuePair("fldpwd", accessDetail.getLoginPassword()));
+
+		httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+		HttpResponse response = httpClient.execute(httpost);
+
+		response.getEntity().consumeContent();
+
+		response = httpClient.execute(httpget);
+
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			String html = EntityUtils.toString(response.getEntity());
+			if (html.length() > 0) {
+
+			}
+		} else {
+			throw new BaseRuntimeException("login failed");
+		}
 	}
 }
