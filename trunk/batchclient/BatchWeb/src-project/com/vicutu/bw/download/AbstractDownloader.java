@@ -23,12 +23,6 @@ public abstract class AbstractDownloader implements Downloader {
 
 	protected ApplicationContext applicationContext;
 
-	protected HttpClient httpClient;
-
-	public void setHttpClient(HttpClient httpClient) {
-		this.httpClient = httpClient;
-	}
-
 	@Autowired
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
@@ -38,8 +32,10 @@ public abstract class AbstractDownloader implements Downloader {
 	public void download(DownloadItem downloadItem) {
 		DownloadDetail downloadDetail = null;
 		OutputStream os = null;
+		HttpClient httpClient = null;
 		try {
 			downloadDetail = downloadItem.getDownloadDetail();
+			httpClient = downloadItem.getHttpClient();
 			AccessDetail accessDetail = downloadItem.getAccessDetail();
 			File savePath = new File(downloadDetail.getRealPath());
 			if (savePath.exists()) {
