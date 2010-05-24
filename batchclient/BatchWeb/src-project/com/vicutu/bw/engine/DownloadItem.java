@@ -14,11 +14,14 @@ public class DownloadItem {
 
 	private SearchStatus searchStatus;
 
+	private HttpClient httpClient;
+
 	public DownloadItem(AccessDetail accessDetail, DownloadDetail downloadDetail, SearchStatus searchStatus,
 			HttpClient httpClient) {
 		this.accessDetail = accessDetail;
 		this.downloadDetail = downloadDetail;
 		this.searchStatus = searchStatus;
+		this.httpClient = httpClient;
 	}
 
 	public DownloadItem() {
@@ -46,5 +49,13 @@ public class DownloadItem {
 
 	public void setSearchStatus(SearchStatus searchStatus) {
 		this.searchStatus = searchStatus;
+	}
+
+	public HttpClient getHttpClient() {
+		return httpClient;
+	}
+
+	public void setHttpClient(HttpClient httpClient) {
+		this.httpClient = httpClient;
 	}
 }
