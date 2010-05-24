@@ -1,4 +1,4 @@
-package com.vicutu.bw.utils;
+package com.vicutu.bw.http.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

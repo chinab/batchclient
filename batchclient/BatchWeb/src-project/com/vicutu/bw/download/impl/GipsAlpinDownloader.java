@@ -19,10 +19,10 @@ public class GipsAlpinDownloader extends AbstractDownloader implements Downloade
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
 	}
-	
+
 	@Async
 	@Override
-	public void download(DownloadItem downloadItem){
+	public void download(DownloadItem downloadItem) {
 		super.download(downloadItem);
 	}
 }

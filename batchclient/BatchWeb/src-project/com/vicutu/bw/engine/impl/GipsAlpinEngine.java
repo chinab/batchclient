@@ -35,7 +35,7 @@ import com.vicutu.bw.event.AddDownloadItemEvent;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
 import com.vicutu.bw.event.UpdateSearchStatusEvent;
 import com.vicutu.bw.http.utils.DownloadUtils;
-import com.vicutu.bw.utils.HtmlUtils;
+import com.vicutu.bw.http.utils.HtmlUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
@@ -99,7 +99,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		} catch (Exception e) {
 			logger.error("occur error when parsing html", e);
 		} finally {
-			logger.error("search finish...");
+			logger.info("search finish...");
 		}
 	}
 

@@ -21,7 +21,7 @@ public class ThreadSafeHttpClientFactory extends AbstractHttpClientFactory imple
 	private int maxTotalConnections = -1;
 
 	private int maxConnectionsPerRoute = -1;
-	
+
 	private long timeout = -1;
 
 	public void setTimeout(long timeout) {
@@ -46,10 +46,9 @@ public class ThreadSafeHttpClientFactory extends AbstractHttpClientFactory imple
 		if (maxConnectionsPerRoute > 0) {
 			ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRouteBean(maxConnectionsPerRoute));
 		}
-		if(timeout>0){
+		if (timeout > 0) {
 			ConnManagerParams.setTimeout(params, timeout);
 		}
-		
 
 		// Create and initialize scheme registry 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
