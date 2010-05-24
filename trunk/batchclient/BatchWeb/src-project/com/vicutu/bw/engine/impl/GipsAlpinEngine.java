@@ -34,6 +34,7 @@ import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.event.AddDownloadItemEvent;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
 import com.vicutu.bw.event.UpdateSearchStatusEvent;
+import com.vicutu.bw.http.utils.DownloadUtils;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
@@ -71,8 +72,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			}
 
 			String linkUrl = accessDetail.getSearchUrl();
-			String htmlStr = downloadService.downloadHtml(httpClient, linkUrl, accessDetail.getAuthorizationUsername(),
-					accessDetail.getAuthorizationPassword());
+			String htmlStr = DownloadUtils.downloadHtml(httpClient, linkUrl);
 
 			List<String> firstList = HtmlUtils.getAllLinkUrl(htmlStr);
 
@@ -92,8 +92,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 
 				Map<String, String> parameters = HtmlUtils.getParametersFromUrl(firstUrl);
 				String firstUrl0 = BASE_URL + firstUrl;
-				String secondHtmlStr = downloadService.downloadHtml(httpClient, firstUrl0, accessDetail
-						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
+				String secondHtmlStr = DownloadUtils.downloadHtml(httpClient, firstUrl0);
 				this.parseSecondPage(parameters.get("aktJahr"), parameters.get("txtMonat"), secondHtmlStr,
 						accessDetail, searchStatus);
 			}
@@ -115,8 +114,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				LinkTag lt = (LinkTag) node;
 				String linkUrl0 = BASE_URL + lt.getLink();
 				String linkName = lt.getLinkText();
-				String htmlStr = downloadService.downloadHtml(httpClient, linkUrl0, accessDetail
-						.getAuthorizationUsername(), accessDetail.getAuthorizationPassword());
+				String htmlStr = DownloadUtils.downloadHtml(httpClient, linkUrl0);
 				this.parseImagePage(year, month, linkName, htmlStr, accessDetail, searchStatus);
 			}
 		}
@@ -177,7 +175,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			String html = EntityUtils.toString(response.getEntity());
 			if (html.length() > 0) {
-
+				// TODO
 			}
 		} else {
 			throw new BaseRuntimeException("login failed");
