@@ -43,7 +43,7 @@ public abstract class AbstractEngine implements Engine {
 	}
 
 	@PreDestroy
-	protected void cleanUp() {
+	public void cleanUp() {
 		if (httpClient != null) {
 			httpClient.getConnectionManager().shutdown();
 		}
