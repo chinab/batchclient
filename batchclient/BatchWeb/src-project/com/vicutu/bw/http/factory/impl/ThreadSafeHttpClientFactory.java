@@ -52,13 +52,17 @@ public class ThreadSafeHttpClientFactory extends AbstractHttpClientFactory imple
 
 		// Create and initialize scheme registry 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-		schemeRegistry.register(new Scheme("https", PlainSocketFactory.getSocketFactory(), 443));
+		initScheme(schemeRegistry);
 		// Create an HttpClient with the ThreadSafeClientConnManager.
 		// This connection manager must be used if more than one thread will
 		// be using the HttpClient.
 		ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
 		DefaultHttpClient httpClient = new DefaultHttpClient(cm, params);
 		return httpClient;
+	}
+	
+	protected void initScheme(SchemeRegistry schemeRegistry){
+		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+		schemeRegistry.register(new Scheme("https", PlainSocketFactory.getSocketFactory(), 443));
 	}
 }
