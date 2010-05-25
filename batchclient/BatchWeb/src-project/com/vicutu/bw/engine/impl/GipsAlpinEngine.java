@@ -18,11 +18,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.htmlparser.Node;
-import org.htmlparser.Parser;
-import org.htmlparser.filters.TagNameFilter;
-import org.htmlparser.tags.LinkTag;
-import org.htmlparser.util.NodeList;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,8 +31,8 @@ import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.event.AddDownloadItemEvent;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
 import com.vicutu.bw.event.UpdateSearchStatusEvent;
-import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.bw.http.utils.HtmlUtils;
+import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
@@ -74,7 +71,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
 
-			List<String> firstList = HtmlUtils.getAllLinkUrl(htmlStr);
+			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
 
 			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(this.getAccessDetailName());
 			String lastSearchUrl = searchStatus.getLastSearchUrl();
@@ -105,32 +102,28 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 
 	private void parseSecondPage(String year, String month, String html, AccessDetail accessDetail,
 			SearchStatus searchStatus) throws Exception {
-		Parser parser = new Parser();
-		parser.setInputHTML(html);
-		NodeList nla = parser.extractAllNodesThatMatch(new TagNameFilter("a"));
-		for (int i = 0; i < nla.size(); i++) {
-			Node node = nla.elementAt(i);
-			if (node instanceof LinkTag) {
-				LinkTag lt = (LinkTag) node;
-				String linkUrl0 = BASE_URL + lt.getLink();
-				String linkName = lt.getLinkText();
-				String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl0);
-				this.parseImagePage(year, month, linkName, htmlStr, accessDetail, searchStatus);
-			}
+
+		Elements elements = HtmlUtils.seletctAsElement(html, BASE_URL, "a[href]");
+
+		for (Element element : elements) {
+			String linkUrl0 = element.attr("abs:href");
+			String linkName = element.text();
+			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl0);
+			this.parseImagePage(year, month, linkName, htmlStr, accessDetail, searchStatus);
 		}
 	}
 
 	private void parseImagePage(String year, String month, String label, String html, AccessDetail accessDetail,
-			SearchStatus searchStatus) throws Exception {
+			SearchStatus searchStatus) {
 		Pattern pattern = Pattern.compile("[^a-zA-Z]");
 		Matcher matcher = pattern.matcher(label);
 		String label0 = matcher.replaceAll("").trim();
 		String folderName = accessDetail.getSavePath() + year + "/" + month + "/" + label0;
 		File folder = new File(folderName);
-		if (!folder.exists()) {
-			folder.mkdirs();
+		if (!folder.exists() && folder.mkdirs()) {
+			logger.info("create new folder : {}", folder.getAbsolutePath());
 		}
-		List<String> imageUrlList = HtmlUtils.getAllImageUrl(html);
+		List<String> imageUrlList = HtmlUtils.selectAllImage(html);
 		for (String imageUrl : imageUrlList) {
 			String imageUrl0 = IMAGE_ROOT_URL + StringUtils.substringAfterLast(imageUrl, "thumbs/");
 			String fileName = StringUtils.substringAfterLast(imageUrl, "/");

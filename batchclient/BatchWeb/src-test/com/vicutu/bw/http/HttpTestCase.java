@@ -62,6 +62,15 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		}
 	}
 
+	@Test
+	public void test_abs() throws Exception {
+		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
+		List<String> hrefs = HtmlUtils.selectAsString(html, TEST_URL, "a[href]", "abs:href");
+		for (String href : hrefs) {
+			logger.info(href);
+		}
+	}
+
 	@After
 	public void clean_up() {
 		if (httpClient != null) {
