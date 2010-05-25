@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.vicutu.bw.http.utils.DownloadUtils;
+import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.bw.http.utils.HtmlUtils;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
@@ -31,13 +31,13 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void test_html() throws Exception {
-		logger.info(DownloadUtils.downloadHtml(httpClient, TEST_URL));
+		logger.info(HttpUtils.downloadHtml(httpClient, TEST_URL));
 
 	}
 
 	@Test
 	public void test_images() throws Exception {
-		String html = DownloadUtils.downloadHtml(httpClient, TEST_URL);
+		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> images = HtmlUtils.selectAllImage(html);
 		for (String image : images) {
 			logger.info(image);
@@ -46,7 +46,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void test_hrefs() throws Exception {
-		String html = DownloadUtils.downloadHtml(httpClient, TEST_URL);
+		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> hrefs = HtmlUtils.selectAllHREF(html);
 		for (String href : hrefs) {
 			logger.info(href);
@@ -55,7 +55,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void test_jpgs() throws Exception {
-		String html = DownloadUtils.downloadHtml(httpClient, TEST_URL);
+		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> jpgs = HtmlUtils.selectAllJPG(html);
 		for (String jpg : jpgs) {
 			logger.info(jpg);

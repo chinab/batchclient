@@ -12,8 +12,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
-public class DownloadUtils {
-	private DownloadUtils() {
+public class HttpUtils {
+	private HttpUtils() {
 	}
 
 	public static String downloadHtml(HttpClient httpClient, String linkUrl) throws Exception {
@@ -22,7 +22,6 @@ public class DownloadUtils {
 		HttpResponse response = null;
 		String htmlStr = null;
 		HttpEntity entity = null;
-
 		try {
 			response = httpClient.execute(httpget, localContext);
 			entity = response.getEntity();

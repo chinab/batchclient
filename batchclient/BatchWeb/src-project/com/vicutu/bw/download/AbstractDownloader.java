@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
-import com.vicutu.bw.http.utils.DownloadUtils;
+import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.commons.lang.FileUtils;
@@ -41,7 +41,7 @@ public abstract class AbstractDownloader implements Downloader {
 			if (savePath.exists()) {
 				if (accessDetail.isReplaceExist()) {
 					os = FileUtils.openOutputStream(savePath);
-					long fileLength = DownloadUtils.download(httpClient, downloadDetail.getRealUrl(), os);
+					long fileLength = HttpUtils.download(httpClient, downloadDetail.getRealUrl(), os);
 					downloadDetail.setFileLength(fileLength);
 					String lengthInfo = FileUtils.byteCountToDisplaySize(fileLength);
 					downloadDetail.setLenghtInfo(lengthInfo);
@@ -58,7 +58,7 @@ public abstract class AbstractDownloader implements Downloader {
 				}
 			} else {
 				os = FileUtils.openOutputStream(savePath);
-				long fileLength = DownloadUtils.download(httpClient, downloadDetail.getRealUrl(), os);
+				long fileLength = HttpUtils.download(httpClient, downloadDetail.getRealUrl(), os);
 				downloadDetail.setFileLength(fileLength);
 				String lengthInfo = FileUtils.byteCountToDisplaySize(fileLength);
 				downloadDetail.setLenghtInfo(lengthInfo);
