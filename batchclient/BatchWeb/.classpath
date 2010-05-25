@@ -47,6 +47,7 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/httpmime-4.0.1.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/htmlparser.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/apache-mime4j-0.6.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/jsoup-0.3.1.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
