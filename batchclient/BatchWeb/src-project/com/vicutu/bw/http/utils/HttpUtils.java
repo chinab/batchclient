@@ -5,9 +5,12 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -65,5 +68,10 @@ public class HttpUtils {
 			throw e2;
 		}
 		return byteCount;
+	}
+	
+	public static void registerHttpProxy(HttpClient httpClient,String scheme,String host,int port, String username,String password){
+		HttpHost proxy = new HttpHost(host, port, scheme);
+		((DefaultHttpClient)httpClient).getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 	}
 }
