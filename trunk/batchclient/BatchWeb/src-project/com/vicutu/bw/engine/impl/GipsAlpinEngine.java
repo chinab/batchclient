@@ -1,7 +1,7 @@
 package com.vicutu.bw.engine.impl;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -10,13 +10,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -152,26 +149,35 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 
 	private void login(HttpClient httpClient, AccessDetail accessDetail) throws Exception {
 		HttpPost httpost = new HttpPost(accessDetail.getLoginUrl());
-		HttpGet httpget = new HttpGet(accessDetail.getLoginRefreshUrl());
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("flduser", accessDetail.getLoginUsername());
+		parameters.put("fldpwd", accessDetail.getLoginPassword());
+		boolean loginResult = HttpUtils.executeLogin(httpClient, httpost, parameters, new ResponseHandler<Boolean>() {
+			public Boolean handleResponse(HttpResponse response) {
+				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 
-		nvps.add(new BasicNameValuePair("flduser", accessDetail.getLoginUsername()));
-		nvps.add(new BasicNameValuePair("fldpwd", accessDetail.getLoginPassword()));
-
-		httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-		HttpResponse response = httpClient.execute(httpost);
-
-		response.getEntity().consumeContent();
-
-		response = httpClient.execute(httpget);
-
-		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-			String html = EntityUtils.toString(response.getEntity());
-			if (html.length() > 0) {
-				// TODO
+					try {
+						String html = EntityUtils.toString(response.getEntity());
+						if (html.length() > 0) {
+							// TODO
+							return Boolean.TRUE;
+						} else {
+							return Boolean.FALSE;
+						}
+					} catch (Exception e) {
+						return Boolean.FALSE;
+					}
+				} else {
+					return Boolean.FALSE;
+				}
 			}
+		});
+		if (loginResult) {
+			HttpGet httpget = new HttpGet(accessDetail.getLoginRefreshUrl());
+			HttpResponse response = httpClient.execute(httpget);
+			response.getEntity().consumeContent();
 		} else {
-			throw new BaseRuntimeException("login failed");
+			throw new BaseRuntimeException("log in failed");
 		}
 	}
 }
