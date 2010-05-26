@@ -4,8 +4,6 @@ import org.apache.http.HttpVersion;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.params.ConnPerRouteBean;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -59,10 +57,5 @@ public class ThreadSafeHttpClientFactory extends AbstractHttpClientFactory imple
 		ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
 		DefaultHttpClient httpClient = new DefaultHttpClient(cm, params);
 		return httpClient;
-	}
-	
-	protected void initScheme(SchemeRegistry schemeRegistry){
-		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-		schemeRegistry.register(new Scheme("https", PlainSocketFactory.getSocketFactory(), 443));
 	}
 }
