@@ -37,7 +37,7 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.orm-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.test-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.transaction-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web-3.0.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web-3.0.2.RELEASE.jar" sourcepath="jar-src/org.springframework.web-sources-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web.servlet-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/slf4j-api-1.5.11.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/slf4j-log4j12-1.5.11.jar"/>
