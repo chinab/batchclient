@@ -41,7 +41,6 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void test_html() throws Exception {
 		logger.info(HttpUtils.downloadHtml(httpClient, TEST_URL));
-
 	}
 
 	@Test

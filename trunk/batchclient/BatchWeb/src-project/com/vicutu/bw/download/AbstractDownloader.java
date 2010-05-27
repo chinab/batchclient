@@ -75,8 +75,7 @@ public abstract class AbstractDownloader implements Downloader {
 			logger.info("occur error when downloading [{}]", downloadDetail.getRealUrl(), e);
 		} finally {
 			IOUtils.closeQuietly(os);
-			UpdateDownloadDetailEvent updateDownloadDetailEvent = new UpdateDownloadDetailEvent(this, downloadDetail);
-			applicationContext.publishEvent(updateDownloadDetailEvent);
+			applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
 		}
 	}
 }
