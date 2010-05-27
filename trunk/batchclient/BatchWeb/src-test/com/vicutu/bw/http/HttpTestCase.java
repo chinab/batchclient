@@ -1,8 +1,16 @@
 package com.vicutu.bw.http;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.util.EntityUtils;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +21,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.bw.http.utils.HtmlUtils;
+import com.vicutu.commons.exception.BaseRuntimeException;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations = { "ctx-http-test.xml" })
@@ -69,6 +78,46 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		for (String href : hrefs) {
 			logger.info(href);
 		}
+	}
+	
+	@Test
+	public void test_login()throws Exception {
+		final String loginUrl = "http://www.gips-alpin.com/src/en/checkpwd.php";
+		final String loginRefreshUrl = "http://www.gips-alpin.com/src/en/members/start.php?userid=9741";
+		HttpPost httpost = new HttpPost(loginUrl);
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("flduser", "dipengfei1982@gmail.com");
+		parameters.put("fldpwd", "Vicutu1982");
+		boolean loginResult = HttpUtils.executeLogin(httpClient, httpost, parameters, new ResponseHandler<Boolean>() {
+			@Override
+			public Boolean handleResponse(HttpResponse response) {
+				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+					try {
+						String html = EntityUtils.toString(response.getEntity());
+						logger.info(html);
+						if (html.length() > 0) {
+							// TODO
+							return Boolean.TRUE;
+						} else {
+							return Boolean.FALSE;
+						}
+					} catch (Exception e) {
+						return Boolean.FALSE;
+					}
+				} else {
+					return Boolean.FALSE;
+				}
+			}
+		});
+		if (loginResult) {
+			HttpGet httpget = new HttpGet(loginRefreshUrl);
+			HttpResponse response = httpClient.execute(httpget);
+			response.getEntity().consumeContent();
+		} else {
+			throw new BaseRuntimeException("log in failed");
+		}
+		logger.info(HttpUtils.downloadHtml(httpClient, "http://www.gips-alpin.com/src/en/listshootings.php"));
 	}
 
 	@After
