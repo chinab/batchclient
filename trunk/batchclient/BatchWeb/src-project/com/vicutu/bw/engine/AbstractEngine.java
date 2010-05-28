@@ -48,6 +48,4 @@ public abstract class AbstractEngine implements Engine {
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
-
-	protected abstract String getAccessDetailName();
 }

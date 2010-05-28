@@ -41,11 +41,8 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	private static final String BASE_URL = "http://www.gips-alpin.com/src/en/";
 
 	private static final String IMAGE_ROOT_URL = "http://www.gips-alpin.com/shoots/pix/";
-
-	@Override
-	protected String getAccessDetailName() {
-		return "GipsAlpin";
-	}
+	
+	private static final String ACCESS_DETAIL_NAME = "GipsAlpin";
 
 	@Override
 	@Autowired
@@ -58,19 +55,17 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(this.getAccessDetailName());
-			this.login(httpClient, accessDetail);
+			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(ACCESS_DETAIL_NAME);
 			if (!accessDetail.isAvailble()) {
-				logger.info("Engine [{}] is not avaible now", this.getAccessDetailName());
+				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
-
+			this.login(httpClient, accessDetail);
+			
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
-
 			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
-
-			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(this.getAccessDetailName());
+			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(ACCESS_DETAIL_NAME);
 			String lastSearchUrl = searchStatus.getLastSearchUrl();
 
 			if (lastSearchUrl != null) {
@@ -81,27 +76,23 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			}
 			for (String firstUrl : firstList) {
 				searchStatus.setLastSearchUrl(firstUrl);
-				UpdateSearchStatusEvent updateSearchStatusEvent = new UpdateSearchStatusEvent(this, searchStatus);
-				applicationContext.publishEvent(updateSearchStatusEvent);
+				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
 
 				Map<String, String> parameters = HtmlUtils.getParametersFromUrl(firstUrl);
 				String firstUrl0 = BASE_URL + firstUrl;
 				String secondHtmlStr = HttpUtils.downloadHtml(httpClient, firstUrl0);
 				this.parseSecondPage(parameters.get("aktJahr"), parameters.get("txtMonat"), secondHtmlStr,
 						accessDetail, searchStatus);
+				logger.info("search finished...");
 			}
 		} catch (Exception e) {
 			logger.error("occur error when parsing html", e);
-		} finally {
-			logger.info("search finish...");
 		}
 	}
 
 	private void parseSecondPage(String year, String month, String html, AccessDetail accessDetail,
 			SearchStatus searchStatus) throws Exception {
-
 		Elements elements = HtmlUtils.seletctAsElement(html, BASE_URL, "a[href]");
-
 		for (Element element : elements) {
 			String linkUrl0 = element.attr("abs:href");
 			String linkName = element.text();
@@ -140,11 +131,9 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		downloadDetail.setRealPath(realPath);
 		downloadDetail.setFileName(fileName);
 		logger.info("DownloadDetail-Url : {}", imageUrl0);
-		UpdateDownloadDetailEvent event = new UpdateDownloadDetailEvent(this, downloadDetail);
-		applicationContext.publishEvent(event);
+		applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
 		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
-		AddDownloadItemEvent addDownloadItemEvent = new AddDownloadItemEvent(this, downloadItem);
-		applicationContext.publishEvent(addDownloadItemEvent);
+		applicationContext.publishEvent(new AddDownloadItemEvent(this, downloadItem));
 	}
 
 	private void login(HttpClient httpClient, AccessDetail accessDetail) throws Exception {
@@ -156,7 +145,6 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			@Override
 			public Boolean handleResponse(HttpResponse response) {
 				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
 					try {
 						String html = EntityUtils.toString(response.getEntity());
 						if (html.length() > 0) {
