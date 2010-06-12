@@ -86,7 +86,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				logger.info("search finished...");
 			}
 		} catch (Exception e) {
-			logger.error("occur error when parsing html", e);
+			logger.error("occur error when searching", e);
 		}
 	}
 
