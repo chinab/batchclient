@@ -141,7 +141,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("flduser", accessDetail.getLoginUsername());
 		parameters.put("fldpwd", accessDetail.getLoginPassword());
-		boolean loginResult = HttpUtils.executeLogin(httpClient, httpost, parameters, new ResponseHandler<Boolean>() {
+		Boolean loginResult = HttpUtils.executeLogin(httpClient, httpost, parameters, new ResponseHandler<Boolean>() {
 			@Override
 			public Boolean handleResponse(HttpResponse response) {
 				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -161,7 +161,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				}
 			}
 		});
-		if (loginResult) {
+		if (loginResult.booleanValue()) {
 			HttpGet httpget = new HttpGet(accessDetail.getLoginRefreshUrl());
 			HttpResponse response = httpClient.execute(httpget);
 			response.getEntity().consumeContent();
