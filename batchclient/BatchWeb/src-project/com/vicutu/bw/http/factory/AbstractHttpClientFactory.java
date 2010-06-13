@@ -68,7 +68,6 @@ public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 					throw new BaseRuntimeException("unknown protocol : " + protocol);
 				}
 			}
-
 		} else {
 			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 			schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
