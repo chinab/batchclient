@@ -17,8 +17,8 @@
 		</layout>
 	</appender>
 	
-	<appender name="spingLogFile" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${webapp.root}log/sping.log"/>
+	<appender name="springLogFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${webapp.root}log/spring.log"/>
 		<param name="Append" value="true"/>
 		<param name="MaxFileSize" value="1024KB"/>
 		<param name="MaxBackupIndex" value="10"/>
@@ -52,7 +52,7 @@
 	<logger name="org.springframework" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="consoleOut"/>
-		<appender-ref ref="spingLogFile"/>
+		<appender-ref ref="springLogFile"/>
 	</logger>
 	<logger name="org.hibernate" additivity="false">
 		<level value="info"/>
