@@ -28,7 +28,7 @@
 	</appender>
 	
 	<appender name="apacheLogFile" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${webapp.root}log/hibernate.log"/>
+		<param name="File" value="${webapp.root}log/apache.log"/>
 		<param name="Append" value="true"/>
 		<param name="MaxFileSize" value="1024KB"/>
 		<param name="MaxBackupIndex" value="10"/>
