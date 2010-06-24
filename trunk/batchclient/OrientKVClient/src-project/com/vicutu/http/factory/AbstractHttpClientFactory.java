@@ -1,9 +1,10 @@
 package com.vicutu.http.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponseInterceptor;
@@ -23,6 +24,8 @@ public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 	protected List<HttpResponseInterceptor> httpResponseInterceptors;
 
 	protected Map<Integer, String> schemes;
+
+	protected List<DefaultHttpClient> httpClients = new ArrayList<DefaultHttpClient>();
 
 	public void setSchemes(Map<Integer, String> schemes) {
 		this.schemes = schemes;
@@ -51,6 +54,7 @@ public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 				httpClient.addResponseInterceptor(httpResponseInterceptors.get(i), i);
 			}
 		}
+		httpClients.add(httpClient);
 		return httpClient;
 	}
 
@@ -71,6 +75,16 @@ public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 		} else {
 			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 			schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+		}
+	}
+
+	public void init() throws Throwable {
+
+	}
+
+	public void cleanup() throws Throwable {
+		for (DefaultHttpClient httpClient : httpClients) {
+			httpClient.getConnectionManager().shutdown();
 		}
 	}
 }
