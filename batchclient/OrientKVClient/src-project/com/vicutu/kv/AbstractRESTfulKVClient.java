@@ -50,8 +50,9 @@ public abstract class AbstractRESTfulKVClient implements RESTfulKVClient {
 					requestHttpEntity);
 			return httpResponse.getStatusLine().getStatusCode();
 		} catch (Exception e) {
-			consumeContentQuietly(httpResponse);
 			throw new BaseRuntimeException(e);
+		} finally {
+			consumeContentQuietly(httpResponse);
 		}
 	}
 
@@ -64,8 +65,9 @@ public abstract class AbstractRESTfulKVClient implements RESTfulKVClient {
 					requestHttpEntity);
 			return httpResponse.getStatusLine().getStatusCode();
 		} catch (Exception e) {
-			consumeContentQuietly(httpResponse);
 			throw new BaseRuntimeException(e);
+		} finally {
+			consumeContentQuietly(httpResponse);
 		}
 	}
 
@@ -76,17 +78,20 @@ public abstract class AbstractRESTfulKVClient implements RESTfulKVClient {
 			httpResponse = HttpUtils.excuteRequest(httpClient, new HttpDelete(uri), new BasicHttpContext());
 			return httpResponse.getStatusLine().getStatusCode();
 		} catch (Exception e) {
-			consumeContentQuietly(httpResponse);
 			throw new BaseRuntimeException(e);
+		} finally {
+			consumeContentQuietly(httpResponse);
 		}
 	}
 
 	private static void consumeContentQuietly(HttpResponse httpResponse) {
 		if (httpResponse != null) {
 			HttpEntity httpEntity = httpResponse.getEntity();
-			try {
-				httpEntity.consumeContent();
-			} catch (IOException e1) {
+			if (httpEntity != null) {
+				try {
+					httpEntity.consumeContent();
+				} catch (IOException e1) {
+				}
 			}
 		}
 	}
