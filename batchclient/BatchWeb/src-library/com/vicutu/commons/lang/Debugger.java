@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public class Debugger {
 	private boolean enable = true;
 
@@ -93,9 +92,9 @@ public class Debugger {
 				if (object instanceof Object[]) {
 					println((Object[]) object);
 				} else if (object instanceof List) {
-					println((List) object);
+					println((List<?>) object);
 				} else if (object instanceof Map) {
-					println((Map) object);
+					println((Map<?,?>) object);
 				} else {
 					println(object.toString());
 				}
@@ -103,7 +102,7 @@ public class Debugger {
 		}
 	}
 
-	public void println(List list) {
+	public void println(List<?> list) {
 		if (enable) {
 			if (list.size() > 0) {
 				for (int i = 0, size = list.size(); i < size; i++) {
@@ -115,10 +114,10 @@ public class Debugger {
 		}
 	}
 
-	public void println(Map map) {
+	public void println(Map<?,?> map) {
 		if (enable) {
 			if (!map.isEmpty()) {
-				Iterator iter = map.keySet().iterator();
+				Iterator<?> iter = map.keySet().iterator();
 				while (iter.hasNext()) {
 					Object key = iter.next();
 					Object value = map.get(key);
