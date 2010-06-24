@@ -1,8 +1,7 @@
 package com.vicutu.commons.test;
 
-import com.vicutu.commons.logging.Logger;
-import com.vicutu.commons.logging.LoggerFactory;
+import com.vicutu.commons.lang.Debugger;
 
 public abstract class LoggedJUnit4BasicTests {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Debugger debugger = new Debugger();
 }
