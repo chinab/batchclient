@@ -9,15 +9,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.vicutu.commons.test.LoggedJUnit4SpringContextTests;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 import com.vicutu.http.utils.HtmlUtils;
 import com.vicutu.http.utils.HttpUtils;
 
 @ContextConfiguration(locations = { "ctx-http-test.xml" })
 @RunWith(LoggedSpringJUnit4ClassRunner.class)
-public class HttpTestCase extends AbstractJUnit4SpringContextTests {
+public class HttpTestCase extends LoggedJUnit4SpringContextTests {
 
 	private static final String TEST_URL = "http://www.apache.org";
 
@@ -31,7 +31,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void test_html() throws Exception {
-		logger.info(HttpUtils.downloadHtml(httpClient, TEST_URL));
+		debugger.println(HttpUtils.downloadHtml(httpClient, TEST_URL));
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> images = HtmlUtils.selectAllImage(html);
 		for (String image : images) {
-			logger.info(image);
+			debugger.println(image);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> hrefs = HtmlUtils.selectAllHREF(html);
 		for (String href : hrefs) {
-			logger.info(href);
+			debugger.println(href);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> jpgs = HtmlUtils.selectAllJPG(html);
 		for (String jpg : jpgs) {
-			logger.info(jpg);
+			debugger.println(jpg);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
 		List<String> hrefs = HtmlUtils.selectAsString(html, TEST_URL, "a[href]", "abs:href");
 		for (String href : hrefs) {
-			logger.info(href);
+			debugger.println(href);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 	public void clean_up() {
 		if (httpClient != null) {
 			httpClient.getConnectionManager().shutdown();
-			logger.info("http client has been shut down");
+			debugger.println("http client has been shut down");
 		}
 	}
 }
