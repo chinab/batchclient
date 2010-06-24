@@ -14,5 +14,4 @@ public class LoggedSpringJUnit4ClassRunner extends SpringJUnit4ClassRunner {
 	public LoggedSpringJUnit4ClassRunner(Class<?> clazz) throws InitializationError {
 		super(clazz);
 	}
-
 }
