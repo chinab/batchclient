@@ -16,11 +16,9 @@ import com.vicutu.vo.Person;
 
 @ContextConfiguration(locations = { "ctx-kv-test.xml" })
 @RunWith(LoggedSpringJUnit4ClassRunner.class)
-public class JSONRESTfulKVClientTestCase extends LoggedJUnit4SpringContextTests {
+public class ByteArrayRESTfulKVClientTestCase extends LoggedJUnit4SpringContextTests {
 
-	public static final String BASE_URI = "http://localhost:8088/entry/demo/space/";
-
-	private boolean executeClean = false;
+	public static final String BASE_URI = "http://localhost:2431/entry/demo/space/";
 
 	@Autowired
 	@Qualifier("jsonRESTfulKVClient")
@@ -30,7 +28,7 @@ public class JSONRESTfulKVClientTestCase extends LoggedJUnit4SpringContextTests 
 	public void test_post() throws Throwable {
 
 		Person p1 = new Person();
-		p1.setId(Long.valueOf(1L));
+		p1.setId(Long.valueOf(3L));
 		p1.setBirthday(new Date(System.currentTimeMillis()));
 		p1.setName("Tom");
 		p1.setSalary(200.36D);
@@ -62,20 +60,12 @@ public class JSONRESTfulKVClientTestCase extends LoggedJUnit4SpringContextTests 
 		Person p1 = kvClientService.get(uri, Person.class);
 		debugger.println(p1);
 	}
-	
-	@Test
-	public void test_delete() throws Throwable {
-		URI uri = new URI(BASE_URI + Long.valueOf(1L));
-		debugger.println(kvClientService.delete(uri));
-	}
 
 	@After
 	public void cleanup() throws Throwable {
 		debugger.println("clean up...");
-		if (executeClean) {
-			for (int i = 0; i < 10; i++) {
-				debugger.println(kvClientService.delete(new URI(BASE_URI + i)));
-			}
+		for (int i = 0; i < 100; i++) {
+			debugger.println(kvClientService.delete(new URI(BASE_URI + i)));
 		}
 	}
 }
