@@ -125,11 +125,11 @@ public class Debugger
 			{
 				println((Object[]) object);
 			}
-			else if (object instanceof List)
+			else if (object instanceof List<?>)
 			{
 				println((List<?>) object);
 			}
-			else if (object instanceof Map)
+			else if (object instanceof Map<?,?>)
 			{
 				println((Map<?,?>) object);
 			}
