@@ -11,7 +11,6 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import com.vicutu.commons.lang.FileUtils;
 import com.vicutu.commons.lang.StringUtils;
 
-@SuppressWarnings("unchecked")
 public final class Path {
 	private static String systemPath;
 
@@ -125,7 +124,7 @@ public final class Path {
 		return path;
 	}
 
-	private static String getLocation(Class clazz) throws Exception {
+	private static String getLocation(Class<?> clazz) throws Exception {
 		String className = clazz.getName();
 		int pos = className.lastIndexOf(".");
 		if (pos > 0) {
