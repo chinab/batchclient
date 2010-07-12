@@ -82,7 +82,7 @@
 	
 	<task:scheduler id="searchScheduler" pool-size="5"/>
 	
-	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory">
+	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory" destroy-method="cleanup">
 		<property name="maxTotalConnections" value="50"/>
 		<property name="maxConnectionsPerRoute" value="5"/>
 		<property name="schemes">
@@ -95,4 +95,5 @@
 	
 	<bean id="gipsAlpinHttpClient" factory-bean="threadSafeHttpClientFactory" factory-method="createHttpClientInstance" />
 
+	<bean id="bostonBigPictureHttpClient" factory-bean="threadSafeHttpClientFactory" factory-method="createHttpClientInstance" />
 </beans>
