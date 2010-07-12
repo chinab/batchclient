@@ -12,6 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.engine.AbstractEngine;
 import com.vicutu.bw.engine.DownloadItem;
@@ -26,6 +27,7 @@ import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
 
+@Component
 public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 
 	private static final String ACCESS_DETAIL_NAME = "BostonBigPiture";
@@ -52,22 +54,26 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 			if (searchStatus == null) {
 				searchStatus = new SearchStatus();
 				searchStatus.setLastSearchUrl(startUrl);
+				searchStatus.setAccessName(ACCESS_DETAIL_NAME);
 				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
 			} else {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
 			Date currentTime = new Date(System.currentTimeMillis());
 			Date startTime = parseStartTimeFromUrl(currentTime, startUrl, baseUrl);
-			for (Date searchDate = startTime; searchDate.equals(currentTime) || searchDate.before(currentTime); searchDate = DateUtils
-					.addMonths(searchDate, 1)) {
-
+			Date searchDate = startTime;
+			while (searchDate.equals(currentTime) || searchDate.before(currentTime)) {
 				String folderName = DateFormatUtils.format(searchDate, "yyyy/MM");
 				String searchUrl = baseUrl + folderName;
 				searchStatus.setLastSearchUrl(searchUrl);
 				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
 				List<String> hrefList = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, searchUrl));
 				ListOrderedSet los = new ListOrderedSet();
-				los.addAll(hrefList);
+				for (String tempHref : hrefList) {
+					if (tempHref.startsWith(baseUrl)) {
+						los.add(tempHref);
+					}
+				}
 				@SuppressWarnings("unchecked")
 				Iterator<String> hrefs = los.iterator();
 				while (hrefs.hasNext()) {
@@ -79,16 +85,18 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 					if (!folder.exists() && folder.mkdirs()) {
 						logger.info("create new folder : {}", folder.getAbsolutePath());
 					}
-					List<String> imageUrls = HtmlUtils.selectAllImage(HttpUtils.downloadHtml(httpClient, href));
+					List<String> imageUrls = HtmlUtils.selectAllJPG((HttpUtils.downloadHtml(httpClient, href)));
 					for (String imageUrl : imageUrls) {
-						String fileName = StringUtils.substringAfterLast(imageUrl, "/");
-						File downloadFile = new File(folder, fileName);
-						fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
-								imageUrl);
+						if (!imageUrl.contains("glogo.jpg") && !imageUrl.contains("bp_header_e.jpg")) {
+							String fileName = StringUtils.substringAfterLast(imageUrl, "/");
+							File downloadFile = new File(folder, fileName);
+							fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
+									imageUrl);
+						}
 					}
 				}
+				searchDate = DateUtils.addMonths(searchDate, 1);
 			}
-
 		} catch (Exception e) {
 			logger.error("occur error when searching", e);
 		}
@@ -98,7 +106,7 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 		String[] yAndMStr = StringUtils.split(StringUtils.removeStartIgnoreCase(startUrl, baseUrl), "/");
 		int year = Integer.valueOf(yAndMStr[0]);
 		int month = Integer.valueOf(yAndMStr[1]);
-		return DateUtils.setMonths(DateUtils.setYears(currentTime, year), month);
+		return DateUtils.setMonths(DateUtils.setYears(currentTime, year), month - 1);
 	}
 
 	private void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String fileName,
