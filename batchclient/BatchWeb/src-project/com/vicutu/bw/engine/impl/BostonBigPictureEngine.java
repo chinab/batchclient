@@ -12,7 +12,6 @@ import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.engine.AbstractEngine;
 import com.vicutu.bw.engine.DownloadItem;
@@ -27,7 +26,7 @@ import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
 
-@Component
+//@Component
 public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 
 	private static final String ACCESS_DETAIL_NAME = "BostonBigPiture";
