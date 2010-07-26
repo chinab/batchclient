@@ -1,9 +1,14 @@
 package com.vicutu.bw.http;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -11,7 +16,6 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +23,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.bw.http.utils.HtmlUtils;
+import com.vicutu.bw.http.utils.HttpUtils;
 import com.vicutu.commons.exception.BaseRuntimeException;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
@@ -78,9 +82,9 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(href);
 		}
 	}
-	
+
 	@Test
-	public void test_login()throws Exception {
+	public void test_login() throws Exception {
 		final String loginUrl = "http://www.gips-alpin.com/src/en/checkpwd.php";
 		final String loginRefreshUrl = "http://www.gips-alpin.com/src/en/members/start.php?userid=9741";
 		HttpPost httpost = new HttpPost(loginUrl);
@@ -119,11 +123,25 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		logger.info(HttpUtils.downloadHtml(httpClient, "http://www.gips-alpin.com/src/en/listshootings.php"));
 	}
 
-	@After
-	public void clean_up() {
-		if (httpClient != null) {
-			httpClient.getConnectionManager().shutdown();
-			logger.info("http client has been shut down");
+	@Test
+	public void test_downloadImage() throws Exception {
+		@SuppressWarnings("unchecked")
+		List<String> urls = FileUtils.readLines(new File("E:/downloads/new2.txt"));
+		for (String url : urls) {
+			FileOutputStream fos = null;
+			try {
+				fos = FileUtils.openOutputStream(new File("E:/downloads/wedding/"
+						+ StringUtils.substringAfterLast(url, "/")));
+				logger.info("downloading " + url);
+				HttpUtils.download(httpClient, url, fos);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				if (fos != null) {
+					IOUtils.closeQuietly(fos);
+				}
+			}
 		}
 	}
 }

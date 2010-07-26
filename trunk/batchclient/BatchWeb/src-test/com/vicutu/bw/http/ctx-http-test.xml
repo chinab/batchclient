@@ -15,7 +15,7 @@
 	http://www.springframework.org/schema/task 
 	http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 	
-	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory">
+	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory" destroy-method="cleanup">
 		<property name="maxTotalConnections" value="50"/>
 		<property name="maxConnectionsPerRoute" value="5"/>
 		<property name="schemes">
