@@ -2,7 +2,7 @@ package com.vicutu.commons.convert.converter;
 
 import com.vicutu.commons.exception.BaseRuntimeException;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ConverterException extends BaseRuntimeException {
 	/**
 	 * 

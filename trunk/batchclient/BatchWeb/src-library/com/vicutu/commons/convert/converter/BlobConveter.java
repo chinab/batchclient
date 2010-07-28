@@ -4,9 +4,9 @@ import java.sql.Blob;
 
 import org.apache.commons.beanutils.Converter;
 
-@SuppressWarnings("unchecked")
 public class BlobConveter implements Converter {
 
+	@SuppressWarnings("rawtypes")
 	public Object convert(Class type, Object value) {
 		if (value instanceof Blob) {
 			return value;

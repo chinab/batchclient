@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.Converter;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class TimeConveter implements Converter {
 	public Object convert(Class type, Object value) {
 		if (value instanceof Time) {

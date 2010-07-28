@@ -2,7 +2,7 @@ package com.vicutu.commons.convert.converter;
 
 import org.apache.commons.beanutils.Converter;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class DoubleArrayConveter implements Converter {
 	public Object convert(Class type, Object value) {
 		if (value instanceof Object[]) {

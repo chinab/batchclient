@@ -8,7 +8,7 @@ import java.util.Date;
 
 import org.apache.commons.beanutils.Converter;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class StringConveter implements Converter {
 	public Object convert(Class type, Object value) {
 		if (value instanceof String) {
