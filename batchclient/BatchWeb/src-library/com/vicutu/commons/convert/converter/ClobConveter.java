@@ -4,7 +4,7 @@ import java.sql.Clob;
 
 import org.apache.commons.beanutils.Converter;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ClobConveter implements Converter {
 	public Object convert(Class type, Object value) {
 		if (value instanceof Clob) {

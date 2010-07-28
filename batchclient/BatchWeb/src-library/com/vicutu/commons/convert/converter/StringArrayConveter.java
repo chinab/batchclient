@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.Converter;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class StringArrayConveter implements Converter {
 	public Object convert(Class type, Object value) {
 		if (value instanceof Object[]) {
@@ -33,7 +33,7 @@ public class StringArrayConveter implements Converter {
 				return new String[0];
 			}
 
-			List list = new ArrayList();
+			List<String> list = new ArrayList<String>();
 			StringTokenizer st = new StringTokenizer(stringValue, ",");
 			while (st.hasMoreTokens()) {
 				list.add(st.nextToken());
