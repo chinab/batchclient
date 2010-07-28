@@ -25,8 +25,8 @@ public class AccessDetailDaoImpl extends HibernateGenericDaoSupport<AccessDetail
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public AccessDetail findAccessDetailByName(String name) {
-		List<AccessDetail> list = this.getSession().createCriteria(AccessDetail.class).add(
-				Restrictions.eq("name", name)).list();
+		List<AccessDetail> list = this.getSession().createCriteria(AccessDetail.class)
+				.add(Restrictions.eq("name", name)).list();
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
