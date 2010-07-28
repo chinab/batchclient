@@ -31,7 +31,7 @@ public class HibernateGenericDaoSupport<E> extends HibernateCrudDaoSupport<E> im
 		super.setSessionFactory(sessionFactory);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<E> queryByCriteria(final DetachedCriteria detachedCriteria) {
 		return (List<E>) getHibernateTemplate().executeWithNativeSession(new HibernateCallback() {
@@ -42,7 +42,7 @@ public class HibernateGenericDaoSupport<E> extends HibernateCrudDaoSupport<E> im
 		});
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public int countByCriteria(final DetachedCriteria detachedCriteria) {
 		Integer count = (Integer) getHibernateTemplate().executeWithNativeSession(new HibernateCallback() {
@@ -54,7 +54,7 @@ public class HibernateGenericDaoSupport<E> extends HibernateCrudDaoSupport<E> im
 		return count.intValue();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Pagination<E> queryByCriteria(final DetachedCriteria detachedCriteria, final int start, final int limit) {
 		return (Pagination<E>) getHibernateTemplate().executeWithNativeSession(new HibernateCallback() {
