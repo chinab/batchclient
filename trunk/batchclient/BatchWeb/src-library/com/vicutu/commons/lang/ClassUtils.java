@@ -2,15 +2,14 @@ package com.vicutu.commons.lang;
 
 import java.lang.reflect.Field;
 
-@SuppressWarnings("unchecked")
 public final class ClassUtils {
 	private static final String ENHANCER_FLAG = "$$EnhancerByCGLIB$$";
 
-	public static boolean isIntercept(Class clazz) {
+	public static boolean isIntercept(Class<?> clazz) {
 		return clazz.getName().indexOf(ENHANCER_FLAG) > 0;
 	}
 
-	public static Class getRealClass(Class clazz) {
+	public static Class<?> getRealClass(Class<?> clazz) {
 		if (isIntercept(clazz)) {
 			return clazz.getSuperclass();
 		} else {
@@ -18,11 +17,11 @@ public final class ClassUtils {
 		}
 	}
 
-	public static Class getRealClass(Object object) {
+	public static Class<?> getRealClass(Object object) {
 		return getRealClass(object.getClass());
 	}
 
-	public static Field getField(Class clazz, String name) {
+	public static Field getField(Class<?> clazz, String name) {
 		if (clazz != Object.class) {
 			try {
 				return clazz.getDeclaredField(name);

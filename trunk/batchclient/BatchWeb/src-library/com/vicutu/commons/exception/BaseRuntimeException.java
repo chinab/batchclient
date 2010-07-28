@@ -12,7 +12,6 @@ import com.vicutu.commons.lang.IReadable;
 import com.vicutu.commons.lang.StringUtils;
 import com.vicutu.commons.xml.XmlUtils;
 
-@SuppressWarnings("unchecked")
 public class BaseRuntimeException extends NestableRuntimeException implements IReadable {
 	/**
 	 * 
@@ -23,7 +22,7 @@ public class BaseRuntimeException extends NestableRuntimeException implements IR
 
 	private String description;
 
-	private Map attributes = new HashMap();
+	private Map<String,Object> attributes = new HashMap<String,Object>();
 
 	public BaseRuntimeException() {
 		super("");
@@ -43,7 +42,7 @@ public class BaseRuntimeException extends NestableRuntimeException implements IR
 		super(ex);
 	}
 
-	public BaseRuntimeException(Map attributes) {
+	public BaseRuntimeException(Map<String,Object> attributes) {
 		this.attributes = attributes;
 	}
 
@@ -82,7 +81,7 @@ public class BaseRuntimeException extends NestableRuntimeException implements IR
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 
-		Iterator iter = attributes.keySet().iterator();
+		Iterator<?> iter = attributes.keySet().iterator();
 		while (iter.hasNext()) {
 			String name = (String) iter.next();
 			Object value = attributes.get(name);

@@ -22,28 +22,28 @@ public final class ObjectUtils {
 	private ObjectUtils() {
 	}
 
-	public static Object create(String className, String factoryMethod, Class[] paramTypes, Object[] paramValues)
+	public static Object create(String className, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues)
 			throws Exception {
-		Class clazz = ClassLoaderUtils.loadClass(className);
+		Class<?> clazz = ClassLoaderUtils.loadClass(className);
 		Method method = clazz.getMethod(factoryMethod, paramTypes);
 		return method.invoke(null, paramValues);
 	}
 
-	public static Object create(Object bean, String factoryMethod, Class[] paramTypes, Object[] paramValues)
+	public static Object create(Object bean, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues)
 			throws Exception {
-		Class clazz = bean.getClass();
+		Class<?> clazz = bean.getClass();
 		Method method = clazz.getMethod(factoryMethod, paramTypes);
 		return method.invoke(bean, paramValues);
 	}
 
 	public static Object create(String className) throws Exception {
-		Class clazz = ClassLoaderUtils.loadClass(className);
+		Class<?> clazz = ClassLoaderUtils.loadClass(className);
 		return clazz.newInstance();
 	}
 
-	public static Object create(String className, Class[] paramTypes, Object[] paramValues) throws Exception {
-		Class clazz = ClassLoaderUtils.loadClass(className);
-		Constructor constructor = clazz.getConstructor(paramTypes);
+	public static Object create(String className, Class<?>[] paramTypes, Object[] paramValues) throws Exception {
+		Class<?> clazz = ClassLoaderUtils.loadClass(className);
+		Constructor<?> constructor = clazz.getConstructor(paramTypes);
 		return constructor.newInstance(paramValues);
 	}
 
@@ -190,9 +190,9 @@ public final class ObjectUtils {
 		}
 
 		if (object instanceof ListOrderedMap) {
-			Map source = (Map) object;
-			Map value = new ListOrderedMap();
-			Iterator iter = source.keySet().iterator();
+			Map<?, ?> source = (Map<?, ?>) object;
+			Map<Object, Object> value = new ListOrderedMap();
+			Iterator<?> iter = source.keySet().iterator();
 			while (iter.hasNext()) {
 				Object key = iter.next();
 				value.put(key, clone(source.get(key)));
@@ -202,8 +202,8 @@ public final class ObjectUtils {
 		}
 
 		if (object instanceof List) {
-			List source = (List) object;
-			List value = new ArrayList(source.size());
+			List<?> source = (List<?>) object;
+			List<Object> value = new ArrayList<Object>(source.size());
 			for (int i = 0, size = source.size(); i < size; i++) {
 				value.add(clone(source.get(i)));
 			}
@@ -212,9 +212,9 @@ public final class ObjectUtils {
 		}
 
 		if (object instanceof Map) {
-			Map source = (Map) object;
-			Map value = new HashMap();
-			Iterator iter = source.keySet().iterator();
+			Map<?, ?> source = (Map<?, ?>) object;
+			Map<Object, Object> value = new HashMap<Object, Object>();
+			Iterator<?> iter = source.keySet().iterator();
 			while (iter.hasNext()) {
 				Object key = iter.next();
 				value.put(key, clone(source.get(key)));

@@ -8,9 +8,8 @@ import org.apache.commons.logging.LogFactory;
 import com.vicutu.commons.logging.ILoggerFactory;
 import com.vicutu.commons.logging.Logger;
 
-@SuppressWarnings("unchecked")
 public class Log4jFactory implements ILoggerFactory {
-	private Map loggers = new HashMap();
+	private Map<String, Logger> loggers = new HashMap<String, Logger>();
 
 	public Logger getLogger(String name) {
 		Logger logger = (Logger) loggers.get(name);
@@ -27,7 +26,7 @@ public class Log4jFactory implements ILoggerFactory {
 		return logger;
 	}
 
-	public Logger getLogger(Class clazz) {
+	public Logger getLogger(Class<?> clazz) {
 		return getLogger(clazz.getName());
 	}
 }

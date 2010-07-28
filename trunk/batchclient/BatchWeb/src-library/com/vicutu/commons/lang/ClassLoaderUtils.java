@@ -3,10 +3,9 @@ package com.vicutu.commons.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public final class ClassLoaderUtils {
 
-	private static Map primitiveMapping = new HashMap();
+	private static Map<String,Class<?>> primitiveMapping = new HashMap<String,Class<?>>();
 
 	static {
 		primitiveMapping.put(boolean.class.getName(), boolean.class);
@@ -38,16 +37,16 @@ public final class ClassLoaderUtils {
 		return Thread.currentThread().getContextClassLoader();
 	}
 
-	public static Class loadClass(String className) throws Exception {
+	public static Class<?> loadClass(String className) throws Exception {
 		return loadClass(className, null);
 	}
 
-	public static Class loadClass(String className, Class defaultClass) throws Exception {
+	public static Class<?> loadClass(String className, Class<?> defaultClass) throws Exception {
 		if (className == null || className.equals("")) {
 			return defaultClass;
 		} else {
 			if (primitiveMapping.containsKey(className)) {
-				return (Class) primitiveMapping.get(className);
+				return (Class<?>) primitiveMapping.get(className);
 			} else {
 				return getClassLoader().loadClass(className);
 			}
