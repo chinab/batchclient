@@ -5,7 +5,7 @@ import java.util.Map;
 
 public final class ClassLoaderUtils {
 
-	private static Map<String,Class<?>> primitiveMapping = new HashMap<String,Class<?>>();
+	private static Map<String, Class<?>> primitiveMapping = new HashMap<String, Class<?>>();
 
 	static {
 		primitiveMapping.put(boolean.class.getName(), boolean.class);

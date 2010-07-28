@@ -10,7 +10,7 @@ public class LoggedBasicJUnit4ClassRunner extends BlockJUnit4ClassRunner {
 	static {
 		Application.initLog4j();
 	}
-	
+
 	public LoggedBasicJUnit4ClassRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}

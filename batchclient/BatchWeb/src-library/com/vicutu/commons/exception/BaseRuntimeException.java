@@ -22,7 +22,7 @@ public class BaseRuntimeException extends NestableRuntimeException implements IR
 
 	private String description;
 
-	private Map<String,Object> attributes = new HashMap<String,Object>();
+	private Map<String, Object> attributes = new HashMap<String, Object>();
 
 	public BaseRuntimeException() {
 		super("");
@@ -42,7 +42,7 @@ public class BaseRuntimeException extends NestableRuntimeException implements IR
 		super(ex);
 	}
 
-	public BaseRuntimeException(Map<String,Object> attributes) {
+	public BaseRuntimeException(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
 
