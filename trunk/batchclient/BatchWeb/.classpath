@@ -46,8 +46,6 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/apache-mime4j-0.6.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/ehcache-core-2.1.0.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/jsoup-1.1.1.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/bonecp-0.6.5.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/bonecp-provider-0.6.5.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/bonecp-0.6.7.2.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/bonecp-provider-0.6.7.2.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
