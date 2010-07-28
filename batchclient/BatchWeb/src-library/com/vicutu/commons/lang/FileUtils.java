@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
-@SuppressWarnings("unchecked")
 public final class FileUtils extends org.apache.commons.io.FileUtils {
 	private static String PATH_SEPARATOR = "/";
 
@@ -43,13 +42,13 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 
 	public static File[] filterFiles(File folderFile, String filePattern, boolean recursion, boolean sort) {
-		List container = new ArrayList();
+		List<File> container = new ArrayList<File>();
 		filterFiles(folderFile, filePattern, container, recursion, sort);
 
 		return (File[]) container.toArray(new File[container.size()]);
 	}
 
-	private static void filterFiles(File folderFile, String filePattern, List container, boolean recursion, boolean sort) {
+	private static void filterFiles(File folderFile, String filePattern, List<File> container, boolean recursion, boolean sort) {
 		File[] childFile = folderFile.listFiles();
 
 		if (sort) {

@@ -4,7 +4,6 @@ import com.vicutu.commons.exception.CreateObjectException;
 import com.vicutu.commons.lang.ObjectUtils;
 import com.vicutu.commons.logging.slf4j.Slf4jFactory;
 
-@SuppressWarnings("unchecked")
 public final class LoggerFactory {
 	private static ILoggerFactory factory;
 
@@ -23,7 +22,7 @@ public final class LoggerFactory {
 		return factory.getLogger(name);
 	}
 
-	public static Logger getLogger(Class clazz) {
+	public static Logger getLogger(Class<?> clazz) {
 		return factory.getLogger(clazz);
 	}
 }

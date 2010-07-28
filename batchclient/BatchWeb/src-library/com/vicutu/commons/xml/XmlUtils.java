@@ -27,7 +27,6 @@ import com.vicutu.commons.lang.DateUtils;
 import com.vicutu.commons.lang.IReadable;
 import com.vicutu.commons.lang.StringUtils;
 
-@SuppressWarnings("unchecked")
 public final class XmlUtils {
 	private static final String ENCODING = "UTF-8";
 
@@ -199,7 +198,7 @@ public final class XmlUtils {
 	public static void addObject(Branch parent, Object object) throws Exception {
 		if (object != null) {
 			if (object instanceof Collection) {
-				Collection list = (Collection) object;
+				Collection<?> list = (Collection<?>) object;
 				for (Object item : list) {
 					if (item instanceof IReadable) {
 						((IReadable) item).buildElement(parent);
@@ -218,9 +217,9 @@ public final class XmlUtils {
 					}
 				}
 			} else if (object instanceof Map) {
-				Map map = (Map) object;
+				Map<?,?> map = (Map<?,?>) object;
 
-				Iterator iter = map.keySet().iterator();
+				Iterator<?> iter = map.keySet().iterator();
 				while (iter.hasNext()) {
 					Object key = iter.next();
 					Object item = map.get(key);

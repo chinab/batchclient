@@ -40,7 +40,6 @@ import com.vicutu.commons.convert.converter.TimeConveter;
 import com.vicutu.commons.convert.converter.TimestampConverter;
 import com.vicutu.commons.lang.ClassLoaderUtils;
 
-@SuppressWarnings("unchecked")
 public final class ConvertUtils {
 	private static Converter booleanConveter = new BooleanConveter();
 
@@ -92,7 +91,7 @@ public final class ConvertUtils {
 
 	private static Converter doubleArrayConveter = new DoubleArrayConveter();
 
-	private static HashMap converts = new HashMap();
+	private static HashMap<Class<?>,Converter> converts = new HashMap<Class<?>,Converter>();
 
 	static {
 		converts.put(java.sql.Date.class, dateConveter);
@@ -140,7 +139,7 @@ public final class ConvertUtils {
 	private ConvertUtils() {
 	}
 
-	public static Object convert(Object value, Class clazz) {
+	public static Object convert(Object value, Class<?> clazz) {
 		if (clazz == null || value == null) {
 			return value;
 		}
@@ -224,7 +223,7 @@ public final class ConvertUtils {
 
 			PropertyDescriptor property = PropertyUtils.getPropertyDescriptor(bean, name);
 			if (property != null) {
-				Class clazz = property.getPropertyType();
+				Class<?> clazz = property.getPropertyType();
 
 				value = convert(value, clazz);
 				if (PropertyUtils.isWriteable(bean, name)) {
