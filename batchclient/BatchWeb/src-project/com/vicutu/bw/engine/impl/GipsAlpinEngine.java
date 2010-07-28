@@ -41,7 +41,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	private static final String BASE_URL = "http://www.gips-alpin.com/src/en/";
 
 	private static final String IMAGE_ROOT_URL = "http://www.gips-alpin.com/shoots/pix/";
-	
+
 	private static final String ACCESS_DETAIL_NAME = "GipsAlpin";
 
 	@Override
@@ -61,7 +61,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				return;
 			}
 			this.login(httpClient, accessDetail);
-			
+
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
 			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
