@@ -91,7 +91,7 @@ public final class ConvertUtils {
 
 	private static Converter doubleArrayConveter = new DoubleArrayConveter();
 
-	private static HashMap<Class<?>,Converter> converts = new HashMap<Class<?>,Converter>();
+	private static HashMap<Class<?>, Converter> converts = new HashMap<Class<?>, Converter>();
 
 	static {
 		converts.put(java.sql.Date.class, dateConveter);

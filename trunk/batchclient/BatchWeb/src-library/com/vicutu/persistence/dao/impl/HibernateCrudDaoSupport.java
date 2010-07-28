@@ -197,8 +197,8 @@ public class HibernateCrudDaoSupport<E> extends HibernateDaoSupport implements B
 			return null;
 		}
 		StrBuilder buf = new StrBuilder();
-		buf.append("FROM ").append(this.getPojoClass().getSimpleName()).append(" WHERE ").append(paramName).append(
-				" = :condition");
+		buf.append("FROM ").append(this.getPojoClass().getSimpleName()).append(" WHERE ").append(paramName)
+				.append(" = :condition");
 		List<E> entities = this.getHibernateTemplate().findByNamedParam(buf.toString(), "condition", value);
 		return entities;
 	}

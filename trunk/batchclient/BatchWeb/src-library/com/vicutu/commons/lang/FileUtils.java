@@ -48,7 +48,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 		return (File[]) container.toArray(new File[container.size()]);
 	}
 
-	private static void filterFiles(File folderFile, String filePattern, List<File> container, boolean recursion, boolean sort) {
+	private static void filterFiles(File folderFile, String filePattern, List<File> container, boolean recursion,
+			boolean sort) {
 		File[] childFile = folderFile.listFiles();
 
 		if (sort) {

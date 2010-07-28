@@ -217,7 +217,7 @@ public final class XmlUtils {
 					}
 				}
 			} else if (object instanceof Map) {
-				Map<?,?> map = (Map<?,?>) object;
+				Map<?, ?> map = (Map<?, ?>) object;
 
 				Iterator<?> iter = map.keySet().iterator();
 				while (iter.hasNext()) {

@@ -94,7 +94,7 @@ public class Debugger {
 				} else if (object instanceof List) {
 					println((List<?>) object);
 				} else if (object instanceof Map) {
-					println((Map<?,?>) object);
+					println((Map<?, ?>) object);
 				} else {
 					println(object.toString());
 				}
@@ -114,7 +114,7 @@ public class Debugger {
 		}
 	}
 
-	public void println(Map<?,?> map) {
+	public void println(Map<?, ?> map) {
 		if (enable) {
 			if (!map.isEmpty()) {
 				Iterator<?> iter = map.keySet().iterator();
