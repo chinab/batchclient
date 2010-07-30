@@ -64,8 +64,8 @@ public class HtmlUtils {
 			StringTokenizer st = new StringTokenizer(url0, "&");
 			while (st.hasMoreTokens()) {
 				String searchValue = st.nextToken();
-				parameters.put(StringUtils.substringBefore(searchValue, "="), StringUtils.substringAfter(searchValue,
-						"="));
+				parameters.put(StringUtils.substringBefore(searchValue, "="),
+						StringUtils.substringAfter(searchValue, "="));
 			}
 		}
 		return parameters;
