@@ -19,8 +19,8 @@ public class SearchStatusDaoImpl extends HibernateGenericDaoSupport<SearchStatus
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public SearchStatus findSearchStatusByName(String accessName) {
-		List<SearchStatus> list = this.getSession().createCriteria(SearchStatus.class).add(
-				Restrictions.eq("accessName", accessName)).list();
+		List<SearchStatus> list = this.getSession().createCriteria(SearchStatus.class)
+				.add(Restrictions.eq("accessName", accessName)).list();
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
