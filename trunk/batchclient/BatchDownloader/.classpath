@@ -23,19 +23,6 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/mysql-connector-java-5.1.12-bin.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.aop-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.asm-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.beans-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.context-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.context.support-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.core-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.expression-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.jdbc-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.orm-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.test-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.transaction-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web-3.0.2.RELEASE.jar" sourcepath="jar-src/org.springframework.web-sources-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web.servlet-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/slf4j-api-1.5.11.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/slf4j-log4j12-1.5.11.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/httpclient-4.0.1.jar"/>
@@ -44,6 +31,19 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/httpmime-4.0.1.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/apache-mime4j-0.6.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/vicutu-lib-2.0.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.aop-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.asm-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.beans-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.context-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.context.support-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.core-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.expression-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.jdbc-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.orm-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.test-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.transaction-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web-3.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/org.springframework.web.servlet-3.0.3.RELEASE.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
