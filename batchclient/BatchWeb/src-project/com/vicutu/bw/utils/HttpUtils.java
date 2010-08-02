@@ -1,4 +1,4 @@
-package com.vicutu.bw.http.utils;
+package com.vicutu.bw.utils;
 
 import java.io.IOException;
 import java.io.OutputStream;

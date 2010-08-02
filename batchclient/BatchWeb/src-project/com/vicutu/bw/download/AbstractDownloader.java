@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
-import com.vicutu.bw.http.utils.HttpUtils;
+import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.commons.lang.FileUtils;

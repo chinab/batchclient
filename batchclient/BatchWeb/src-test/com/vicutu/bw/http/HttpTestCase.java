@@ -23,8 +23,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.vicutu.bw.http.utils.HtmlUtils;
-import com.vicutu.bw.http.utils.HttpUtils;
+import com.vicutu.bw.utils.HtmlUtils;
+import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.commons.exception.BaseRuntimeException;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
@@ -142,6 +142,16 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 					IOUtils.closeQuietly(fos);
 				}
 			}
+		}
+	}
+
+	@Test
+	public void test_beautyleg() throws Exception {
+		String url = "http://www.beautyleg.cc";
+		String html = HttpUtils.downloadHtml(httpClient, url);
+		List<String> hrefs = HtmlUtils.selectAsString(html, url, "a[href]", "abs:href");
+		for (String href : hrefs) {
+			logger.info(href);
 		}
 	}
 }
