@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,16 +41,20 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 		List<String> result = new ArrayList<String>();
 		List<String> hrefs = HtmlUtils.selectAllHREF(downloadHtml(currentUri), rootUri);
 		URIFilter filter = new URIFilter(hrefs).selectContains(currentUri);
-		Collection<String> pageUris = filter.selectContains(pagePropertyName).result();
-		int maxPage = this.getMaxPage(pageUris, pagePropertyName);
-		Collection<String> albumUris = filter.removeContains(pagePropertyName).result();
+		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().result();
 		result.addAll(albumUris);
-		for (int i = 2; i <= maxPage; i++) {
-			logger.info("page = " + i);
-			hrefs = HtmlUtils.selectAllHREF(
-					downloadHtml(new StringBuilder(currentUri).append("?").append(pagePropertyName).append("=")
-							.append(i).toString()), rootUri);
-			result.addAll(new URIFilter(hrefs).selectContains(currentUri).removeContains(pagePropertyName).result());
+		Collection<String> pageUris = filter.selectContains(pagePropertyName).result();
+		if (!pageUris.isEmpty()) {
+			int maxPage = this.getMaxPage(pageUris, pagePropertyName);
+
+			for (int i = 2; i <= maxPage; i++) {
+				logger.info("page = " + i);
+				hrefs = HtmlUtils.selectAllHREF(
+						downloadHtml(new StringBuilder(currentUri).append("?").append(pagePropertyName).append("=")
+								.append(i).toString()), rootUri);
+				result.addAll(new URIFilter(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
+						.removeDuplicate().result());
+			}
 		}
 		return result;
 	}
@@ -66,10 +71,28 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void test_combinePages() throws Exception {
-		List<String> albums = combinePages(httpClient, "http://www.beautyleg.cc", "http://www.beautyleg.cc/2010",
-				"page");
-		for (String album : albums) {
-			logger.info(album);
+
+		String rootUri = "http://www.beautyleg.cc";
+		List<String> albums = combinePages(httpClient, rootUri,
+				"http://www.beautyleg.cc/2010/2010-7-9-No-422-Jellyfish-66P", "page");
+		String firstPage = albums.get(0);
+		Collection<String> images = new URIFilter(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri))
+				.selectContains("albums").result();
+		if (!images.isEmpty()) {
+			String firstImage = ((List<String>) images).get(0);
+			logger.info(firstImage);
+			firstImage = StringUtils.substringBeforeLast(firstImage, "?m=");
+			logger.info(firstImage);
+			for (int i = 1; i <= albums.size(); i++) {
+				logger.info(StringUtils.replace(firstImage, "001", String.format("%03d", Integer.valueOf(i))));
+			}
+		}
+	}
+
+	@Test
+	public void test_format() throws Exception {
+		for (int i = 1; i <= 98; i++) {
+			logger.info(String.format("%03d", Integer.valueOf(i)));
 		}
 	}
 }
