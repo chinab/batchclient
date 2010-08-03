@@ -32,7 +32,7 @@ import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 @RunWith(LoggedSpringJUnit4ClassRunner.class)
 public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 
-	private static final String TEST_URL = "http://www.beautyleg.cc/2010";
+	private static final String TEST_URL = "http://www.beautyleg.cc/2005";
 
 	private HttpClient httpClient;
 
@@ -59,7 +59,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void test_hrefs() throws Exception {
 		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
-		List<String> hrefs = HtmlUtils.selectAllHREF(html);
+		List<String> hrefs = HtmlUtils.selectAllHREF(html,"http://www.beautyleg.cc");
 		for (String href : hrefs) {
 			logger.info(href);
 		}

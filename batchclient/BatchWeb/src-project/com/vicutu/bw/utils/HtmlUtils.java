@@ -52,11 +52,11 @@ public class HtmlUtils {
 	}
 
 	public static List<String> selectAllJPG(String html, String baseUri) {
-		return selectAllJPG(html, null);
+		return selectAsString(html, baseUri, "img[src$=.gif]", "abs:src");
 	}
 
 	public static List<String> selectAllGIF(String html) {
-		return selectAsString(html, null, "img[src$=.gif]", "abs:src");
+		return selectAllJPG(html, null);
 	}
 
 	public static List<String> selectAllGIF(String html, String baseUri) {
