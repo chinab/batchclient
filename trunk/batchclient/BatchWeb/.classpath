@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="content/WEB-INF/lib/google-collect-1.0.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/javassist-3.9.0.GA.jar"/>
@@ -35,6 +34,7 @@
 	<classpathentry kind="lib" path="content/WEB-INF/lib/bonecp-0.6.7.2.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/bonecp-provider-0.6.7.2.jar"/>
 	<classpathentry kind="lib" path="content/WEB-INF/lib/ehcache-core-2.2.0.jar"/>
+	<classpathentry kind="lib" path="content/WEB-INF/lib/guava-r06.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
