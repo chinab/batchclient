@@ -26,7 +26,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 	}
 
 	private List<String> getHrefs() throws Exception {
-		String url = "http://www.beautyleg.cc";
+		String url = "http://www.beautyleg.cc/2010";
 		String html = HttpUtils.downloadHtml(httpClient, url);
 		List<String> hrefs = HtmlUtils.selectAsString(html, url, "a[href]", "abs:href");
 		for (String href : hrefs) {
@@ -112,7 +112,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void test_URIFilter() throws Exception {
 		List<String> hrefs = getHrefs();
-		Collection<String> c = new URIFilter(hrefs).removeDuplicate().selectContainsPattern("\\d{4}$").result();
+		Collection<String> c = new URIFilter(hrefs).removeDuplicate().selectContains("http://www.beautyleg.cc/2010").result();
 		for (String s : c) {
 			logger.info(s);
 		}
