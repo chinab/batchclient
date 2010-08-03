@@ -21,6 +21,9 @@ import com.vicutu.bw.utils.functors.SuffixPredicate;
 
 public class URIUtils {
 
+	private URIUtils() {
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Collection<String> removeDuplicate(Collection<String> input) {
 		Collection<String> c = null;
