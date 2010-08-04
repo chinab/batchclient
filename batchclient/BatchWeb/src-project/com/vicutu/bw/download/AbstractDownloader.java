@@ -2,6 +2,7 @@ package com.vicutu.bw.download;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.HttpClient;
@@ -75,6 +76,7 @@ public abstract class AbstractDownloader implements Downloader {
 			logger.info("occur error when downloading [{}]", downloadDetail.getRealUrl(), e);
 		} finally {
 			IOUtils.closeQuietly(os);
+			downloadDetail.setUpdateTime(new Date(System.currentTimeMillis()));
 			applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
 		}
 	}
