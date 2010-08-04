@@ -54,7 +54,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_selectStartsWith() throws Exception {
 		List<String> hrefs = getHrefs();
@@ -63,7 +63,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_removeEndsWith() throws Exception {
 		List<String> hrefs = getHrefs();
@@ -72,7 +72,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_selectEndsWith() throws Exception {
 		List<String> hrefs = getHrefs();
@@ -81,7 +81,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_removeContains() throws Exception {
 		List<String> hrefs = getHrefs();
@@ -90,7 +90,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_removeByPattern() throws Exception {
 		List<String> hrefs = getHrefs();
@@ -99,7 +99,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_selectContainsPattern() throws Exception {
 		List<String> hrefs = getHrefs();
@@ -108,11 +108,12 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(s);
 		}
 	}
-	
+
 	@Test
 	public void test_URIFilter() throws Exception {
 		List<String> hrefs = getHrefs();
-		Collection<String> c = new URIFilter(hrefs).removeDuplicate().selectContains("http://www.beautyleg.cc/2010").result();
+		Collection<String> c = new URIFilter(hrefs).removeDuplicate().selectContains("http://www.beautyleg.cc/2010")
+				.result();
 		for (String s : c) {
 			logger.info(s);
 		}

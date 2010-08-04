@@ -59,7 +59,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void test_hrefs() throws Exception {
 		String html = HttpUtils.downloadHtml(httpClient, TEST_URL);
-		List<String> hrefs = HtmlUtils.selectAllHREF(html,"http://www.beautyleg.cc");
+		List<String> hrefs = HtmlUtils.selectAllHREF(html, "http://www.beautyleg.cc");
 		for (String href : hrefs) {
 			logger.info(href);
 		}
