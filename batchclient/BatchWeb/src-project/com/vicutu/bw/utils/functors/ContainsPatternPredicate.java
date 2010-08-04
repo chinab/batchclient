@@ -11,7 +11,7 @@ public class ContainsPatternPredicate implements Predicate {
 	public ContainsPatternPredicate(Pattern pattern) {
 		this.pattern = pattern;
 	}
-	
+
 	public ContainsPatternPredicate(String regex) {
 		this(Pattern.compile(regex));
 	}

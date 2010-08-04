@@ -60,7 +60,7 @@ public class URIFilter {
 	public URIFilter removeContains(String... contents) {
 		return removeContains(true, contents);
 	}
-	
+
 	public URIFilter selectContains(boolean caseSensitive, String... contents) {
 		return new URIFilter(URIUtils.selectContains(uris, caseSensitive, contents));
 	}
