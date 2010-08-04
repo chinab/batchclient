@@ -109,7 +109,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 			throws Exception {
 
 		List<String> result = new ArrayList<String>();
-		logger.debug("searching page : {}", currentUri);
+		logger.info("searching page : {}", currentUri);
 		List<String> hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, currentUri), rootUri);
 		URIFilter filter = new URIFilter(hrefs).selectContains(currentUri);
 		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().result();
@@ -121,13 +121,13 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 			for (int i = 2; i <= maxPage; i++) {
 				String comingUrl = new StringBuilder(currentUri).append("?").append(pagePropertyName).append("=")
 						.append(i).toString();
-				logger.debug("searching page : {}", comingUrl);
+				logger.info("searching page : {}", comingUrl);
 				hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, comingUrl), rootUri);
 				result.addAll(new URIFilter(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
 						.removeDuplicate().result());
 			}
 		}
-		logger.debug("result count : {}", Integer.valueOf(result.size()));
+		logger.info("result count : {}", Integer.valueOf(result.size()));
 		return result;
 	}
 
