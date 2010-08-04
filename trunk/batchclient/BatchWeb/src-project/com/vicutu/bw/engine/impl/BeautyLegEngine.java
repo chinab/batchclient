@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +40,10 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 		return ACCESS_DETAIL_NAME;
 	}
 
-	@Override
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = queryAccessDetail();
+			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(ACCESS_DETAIL_NAME);
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
@@ -69,7 +69,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 				baseHrefs = baseHrefs.subList(currentSearchIndex, baseHrefs.size());
 			}
 			for (String baseHref : baseHrefs) {
-				searchStatus.setLastSearchUrl(baseHref);
+				searchStatus.setLastSearchTime(new Date(System.currentTimeMillis()));
 				fireUpdateSearchStatusEvent(searchStatus);
 				logger.info("searching root url : {}", baseHref);
 				List<String> albums = combinePages(httpClient, baseUrl, baseHref, "page");
@@ -88,9 +88,9 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 						if (!images.isEmpty()) {
 							String firstImage = ((List<String>) images).get(0);
 							firstImage = StringUtils.substringBeforeLast(firstImage, "?m=");
-							for (int i = 1; i <= albums.size(); i++) {
+							for (String imagePage : imagePages) {
 								String imageUrl = StringUtils.replace(firstImage, "001",
-										String.format("%03d", Integer.valueOf(i)));
+										StringUtils.right(imagePage, 3));
 								String fileName = StringUtils.substringAfterLast(imageUrl, "/");
 								File downloadFile = new File(folder, fileName);
 								fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
