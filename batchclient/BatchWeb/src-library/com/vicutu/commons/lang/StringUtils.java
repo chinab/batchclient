@@ -3,8 +3,6 @@ package com.vicutu.commons.lang;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import com.vicutu.commons.convert.ConvertUtils;
-
 public class StringUtils extends org.apache.commons.lang.StringUtils {
 	private static final char DELIM_START = '{';
 
@@ -90,17 +88,6 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
 			return condition + " escape '" + escape + "'";
 		} else {
 			return condition;
-		}
-	}
-
-	//------------------------------------------------------------------------//
-	//--type convert
-	//------------------------------------------------------------------------//
-	public static String[] getStringArray(String value, String[] defaultValue) {
-		if (value == null || value.equals("")) {
-			return defaultValue;
-		} else {
-			return (String[]) ConvertUtils.convert(value, String[].class);
 		}
 	}
 
