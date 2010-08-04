@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,16 +14,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.engine.AbstractEngine;
-import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.engine.Engine;
-import com.vicutu.bw.event.AddDownloadItemEvent;
-import com.vicutu.bw.event.UpdateDownloadDetailEvent;
-import com.vicutu.bw.event.UpdateSearchStatusEvent;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.bw.utils.URIFilter;
 import com.vicutu.bw.vo.AccessDetail;
-import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
 
@@ -41,10 +35,15 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 	}
 
 	@Override
+	protected String getAccessDetailName() {
+		return ACCESS_DETAIL_NAME;
+	}
+
+	@Override
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(ACCESS_DETAIL_NAME);
+			AccessDetail accessDetail = queryAccessDetail();
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
@@ -52,12 +51,12 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 			String startUrl = accessDetail.getSearchUrl();
 			String baseUrl = accessDetail.getBaseUrl();
 			String savePath = accessDetail.getSavePath();
-			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(ACCESS_DETAIL_NAME);
+			SearchStatus searchStatus = querySearchStatus();
 			if (searchStatus == null) {
 				searchStatus = new SearchStatus();
 				searchStatus.setLastSearchUrl(startUrl);
 				searchStatus.setAccessName(ACCESS_DETAIL_NAME);
-				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
+				fireUpdateSearchStatusEvent(searchStatus);
 			} else {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
@@ -71,8 +70,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 			}
 			for (String baseHref : baseHrefs) {
 				searchStatus.setLastSearchUrl(baseHref);
-				searchStatus.setLastSearchTime(new Date(System.currentTimeMillis()));
-				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
+				fireUpdateSearchStatusEvent(searchStatus);
 				logger.info("searching root url : {}", baseHref);
 				List<String> albums = combinePages(httpClient, baseUrl, baseHref, "page");
 				for (String album : albums) {
@@ -141,17 +139,5 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 			maxPage = page > maxPage ? page : maxPage;
 		}
 		return maxPage;
-	}
-
-	private void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String fileName,
-			String realPath, String imageUrl0) {
-		DownloadDetail downloadDetail = new DownloadDetail();
-		downloadDetail.setRealUrl(imageUrl0);
-		downloadDetail.setRealPath(realPath);
-		downloadDetail.setFileName(fileName);
-		logger.info("DownloadDetail-Url : {}", imageUrl0);
-		applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
-		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
-		applicationContext.publishEvent(new AddDownloadItemEvent(this, downloadItem));
 	}
 }

@@ -23,15 +23,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.engine.AbstractEngine;
-import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.engine.Engine;
-import com.vicutu.bw.event.AddDownloadItemEvent;
-import com.vicutu.bw.event.UpdateDownloadDetailEvent;
-import com.vicutu.bw.event.UpdateSearchStatusEvent;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.bw.vo.AccessDetail;
-import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.exception.BaseRuntimeException;
 
@@ -52,10 +47,15 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	}
 
 	@Override
+	protected String getAccessDetailName() {
+		return ACCESS_DETAIL_NAME;
+	}
+
+	@Override
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(ACCESS_DETAIL_NAME);
+			AccessDetail accessDetail = queryAccessDetail();
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
@@ -65,7 +65,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
 			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
-			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(ACCESS_DETAIL_NAME);
+			SearchStatus searchStatus = querySearchStatus();
 			String lastSearchUrl = searchStatus.getLastSearchUrl();
 
 			if (lastSearchUrl != null) {
@@ -76,7 +76,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			}
 			for (String firstUrl : firstList) {
 				searchStatus.setLastSearchUrl(firstUrl);
-				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
+				fireUpdateSearchStatusEvent(searchStatus);
 
 				Map<String, String> parameters = HtmlUtils.getParametersFromUrl(firstUrl);
 				String firstUrl0 = BASE_URL + firstUrl;
@@ -122,18 +122,6 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(), imageUrl0);
 			}
 		}
-	}
-
-	private void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String fileName,
-			String realPath, String imageUrl0) {
-		DownloadDetail downloadDetail = new DownloadDetail();
-		downloadDetail.setRealUrl(imageUrl0);
-		downloadDetail.setRealPath(realPath);
-		downloadDetail.setFileName(fileName);
-		logger.info("DownloadDetail-Url : {}", imageUrl0);
-		applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
-		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
-		applicationContext.publishEvent(new AddDownloadItemEvent(this, downloadItem));
 	}
 
 	private void login(HttpClient httpClient, AccessDetail accessDetail) throws Exception {
