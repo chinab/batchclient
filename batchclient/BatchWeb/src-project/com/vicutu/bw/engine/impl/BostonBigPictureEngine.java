@@ -14,15 +14,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.vicutu.bw.engine.AbstractEngine;
-import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.engine.Engine;
-import com.vicutu.bw.event.AddDownloadItemEvent;
-import com.vicutu.bw.event.UpdateDownloadDetailEvent;
-import com.vicutu.bw.event.UpdateSearchStatusEvent;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.bw.vo.AccessDetail;
-import com.vicutu.bw.vo.DownloadDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
 
@@ -39,22 +34,27 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 	}
 
 	@Override
+	protected String getAccessDetailName() {
+		return ACCESS_DETAIL_NAME;
+	}
+
+	@Override
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(ACCESS_DETAIL_NAME);
+			AccessDetail accessDetail = queryAccessDetail();
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
 			String startUrl = accessDetail.getSearchUrl();
 			String baseUrl = accessDetail.getBaseUrl();
-			SearchStatus searchStatus = searchStatusService.findSearchStatusByName(ACCESS_DETAIL_NAME);
+			SearchStatus searchStatus = querySearchStatus();
 			if (searchStatus == null) {
 				searchStatus = new SearchStatus();
 				searchStatus.setLastSearchUrl(startUrl);
 				searchStatus.setAccessName(ACCESS_DETAIL_NAME);
-				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
+				fireUpdateSearchStatusEvent(searchStatus);
 			} else {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
@@ -65,7 +65,7 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 				String folderName = DateFormatUtils.format(searchDate, "yyyy/MM");
 				String searchUrl = baseUrl + folderName;
 				searchStatus.setLastSearchUrl(searchUrl);
-				applicationContext.publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
+				fireUpdateSearchStatusEvent(searchStatus);
 				List<String> hrefList = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, searchUrl));
 				ListOrderedSet los = new ListOrderedSet();
 				for (String tempHref : hrefList) {
@@ -106,17 +106,5 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 		int year = Integer.valueOf(yAndMStr[0]);
 		int month = Integer.valueOf(yAndMStr[1]);
 		return DateUtils.setMonths(DateUtils.setYears(currentTime, year), month - 1);
-	}
-
-	private void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String fileName,
-			String realPath, String imageUrl0) {
-		DownloadDetail downloadDetail = new DownloadDetail();
-		downloadDetail.setRealUrl(imageUrl0);
-		downloadDetail.setRealPath(realPath);
-		downloadDetail.setFileName(fileName);
-		logger.info("DownloadDetail-Url : {}", imageUrl0);
-		applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
-		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
-		applicationContext.publishEvent(new AddDownloadItemEvent(this, downloadItem));
 	}
 }
