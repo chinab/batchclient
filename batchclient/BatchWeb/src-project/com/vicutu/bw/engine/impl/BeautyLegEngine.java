@@ -18,7 +18,7 @@ import com.vicutu.bw.engine.AbstractEngine;
 import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
-import com.vicutu.bw.utils.URIFilter;
+import com.vicutu.bw.utils.URICollectionFilter;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
@@ -61,7 +61,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
 			List<String> allHrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, baseUrl), baseUrl);
-			List<String> baseHrefs = URIFilter.valueOf(allHrefs).selectContainsPattern("\\d{4}$").removeDuplicate()
+			List<String> baseHrefs = URICollectionFilter.valueOf(allHrefs).selectContainsPattern("\\d{4}$").removeDuplicate()
 					.list();
 			Collections.sort(baseHrefs);
 			int currentSearchIndex = baseHrefs.indexOf(startUrl);
@@ -82,7 +82,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 					List<String> imagePages = combinePages(httpClient, baseUrl, album, "page");
 					if (!imagePages.isEmpty()) {
 						String firstPage = imagePages.get(0);
-						Collection<String> images = URIFilter
+						Collection<String> images = URICollectionFilter
 								.valueOf(
 										HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, firstPage), baseUrl))
 								.selectContains("albums").collection();
@@ -112,7 +112,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 		List<String> result = new ArrayList<String>();
 		logger.info("searching page : {}", currentUri);
 		List<String> hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, currentUri), rootUri);
-		URIFilter filter = URIFilter.valueOf(hrefs).selectContains(currentUri);
+		URICollectionFilter filter = URICollectionFilter.valueOf(hrefs).selectContains(currentUri);
 		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().collection();
 		result.addAll(albumUris);
 		Collection<String> pageUris = filter.selectContains(pagePropertyName).collection();
@@ -124,7 +124,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 						.append(i).toString();
 				logger.info("searching page : {}", comingUrl);
 				hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, comingUrl), rootUri);
-				result.addAll(URIFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
+				result.addAll(URICollectionFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
 						.removeDuplicate().collection());
 			}
 		}
