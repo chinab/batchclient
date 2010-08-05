@@ -70,6 +70,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 			}
 			for (String baseHref : baseHrefs) {
 				searchStatus.setLastSearchTime(new Date(System.currentTimeMillis()));
+				searchStatus.setLastSearchUrl(baseHref);
 				fireUpdateSearchStatusEvent(searchStatus);
 				logger.info("searching root url : {}", baseHref);
 				List<String> albums = combinePages(httpClient, baseUrl, baseHref, "page");
