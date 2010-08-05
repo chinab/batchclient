@@ -40,10 +40,10 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 		logger.info("page = 1");
 		List<String> result = new ArrayList<String>();
 		List<String> hrefs = HtmlUtils.selectAllHREF(downloadHtml(currentUri), rootUri);
-		URIFilter filter = new URIFilter(hrefs).selectContains(currentUri);
-		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().result();
+		URIFilter filter = URIFilter.valueOf(hrefs).selectContains(currentUri);
+		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().collection();
 		result.addAll(albumUris);
-		Collection<String> pageUris = filter.selectContains(pagePropertyName).result();
+		Collection<String> pageUris = filter.selectContains(pagePropertyName).collection();
 		if (!pageUris.isEmpty()) {
 			int maxPage = this.getMaxPage(pageUris, pagePropertyName);
 
@@ -52,8 +52,8 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 				hrefs = HtmlUtils.selectAllHREF(
 						downloadHtml(new StringBuilder(currentUri).append("?").append(pagePropertyName).append("=")
 								.append(i).toString()), rootUri);
-				result.addAll(new URIFilter(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
-						.removeDuplicate().result());
+				result.addAll(URIFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
+						.removeDuplicate().collection());
 			}
 		}
 		return result;
@@ -76,8 +76,8 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 		List<String> albums = combinePages(httpClient, rootUri,
 				"http://www.beautyleg.cc/2010/2010-7-9-No-422-Jellyfish-66P", "page");
 		String firstPage = albums.get(0);
-		Collection<String> images = new URIFilter(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri))
-				.selectContains("albums").result();
+		Collection<String> images = URIFilter.valueOf(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri))
+				.selectContains("albums").collection();
 		if (!images.isEmpty()) {
 			String firstImage = ((List<String>) images).get(0);
 			logger.info(firstImage);

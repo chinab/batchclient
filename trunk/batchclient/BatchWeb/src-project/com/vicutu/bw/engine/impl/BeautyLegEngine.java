@@ -43,7 +43,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
 		try {
-			AccessDetail accessDetail = accessDetailService.findAccessDetailByName(ACCESS_DETAIL_NAME);
+			AccessDetail accessDetail = queryAccessDetail();
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
@@ -61,8 +61,8 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
 			List<String> allHrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, baseUrl), baseUrl);
-			List<String> baseHrefs = (List<String>) (new URIFilter(allHrefs).selectContainsPattern("\\d{4}$")
-					.removeDuplicate().result());
+			List<String> baseHrefs = URIFilter.valueOf(allHrefs).selectContainsPattern("\\d{4}$").removeDuplicate()
+					.list();
 			Collections.sort(baseHrefs);
 			int currentSearchIndex = baseHrefs.indexOf(startUrl);
 			if (currentSearchIndex > 0) {
@@ -82,9 +82,10 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 					List<String> imagePages = combinePages(httpClient, baseUrl, album, "page");
 					if (!imagePages.isEmpty()) {
 						String firstPage = imagePages.get(0);
-						Collection<String> images = new URIFilter(HtmlUtils.selectAllHREF(
-								HttpUtils.downloadHtml(httpClient, firstPage), baseUrl)).selectContains("albums")
-								.result();
+						Collection<String> images = URIFilter
+								.valueOf(
+										HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, firstPage), baseUrl))
+								.selectContains("albums").collection();
 						if (!images.isEmpty()) {
 							String firstImage = ((List<String>) images).get(0);
 							firstImage = StringUtils.substringBeforeLast(firstImage, "?m=");
@@ -111,10 +112,10 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 		List<String> result = new ArrayList<String>();
 		logger.info("searching page : {}", currentUri);
 		List<String> hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, currentUri), rootUri);
-		URIFilter filter = new URIFilter(hrefs).selectContains(currentUri);
-		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().result();
+		URIFilter filter = URIFilter.valueOf(hrefs).selectContains(currentUri);
+		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().collection();
 		result.addAll(albumUris);
-		Collection<String> pageUris = filter.selectContains(pagePropertyName).result();
+		Collection<String> pageUris = filter.selectContains(pagePropertyName).collection();
 		if (!pageUris.isEmpty()) {
 			int maxPage = this.getMaxPage(pageUris, pagePropertyName);
 
@@ -123,8 +124,8 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 						.append(i).toString();
 				logger.info("searching page : {}", comingUrl);
 				hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, comingUrl), rootUri);
-				result.addAll(new URIFilter(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
-						.removeDuplicate().result());
+				result.addAll(URIFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
+						.removeDuplicate().collection());
 			}
 		}
 		logger.info("result count : {}", Integer.valueOf(result.size()));
