@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
-import com.vicutu.bw.utils.URIFilter;
+import com.vicutu.bw.utils.URICollectionFilter;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations = { "ctx-engine-test.xml" })
@@ -40,7 +40,7 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 		logger.info("page = 1");
 		List<String> result = new ArrayList<String>();
 		List<String> hrefs = HtmlUtils.selectAllHREF(downloadHtml(currentUri), rootUri);
-		URIFilter filter = URIFilter.valueOf(hrefs).selectContains(currentUri);
+		URICollectionFilter filter = URICollectionFilter.valueOf(hrefs).selectContains(currentUri);
 		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().collection();
 		result.addAll(albumUris);
 		Collection<String> pageUris = filter.selectContains(pagePropertyName).collection();
@@ -52,7 +52,7 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 				hrefs = HtmlUtils.selectAllHREF(
 						downloadHtml(new StringBuilder(currentUri).append("?").append(pagePropertyName).append("=")
 								.append(i).toString()), rootUri);
-				result.addAll(URIFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
+				result.addAll(URICollectionFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
 						.removeDuplicate().collection());
 			}
 		}
@@ -76,7 +76,7 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 		List<String> albums = combinePages(httpClient, rootUri,
 				"http://www.beautyleg.cc/2010/2010-7-9-No-422-Jellyfish-66P", "page");
 		String firstPage = albums.get(0);
-		Collection<String> images = URIFilter.valueOf(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri))
+		Collection<String> images = URICollectionFilter.valueOf(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri))
 				.selectContains("albums").collection();
 		if (!images.isEmpty()) {
 			String firstImage = ((List<String>) images).get(0);
