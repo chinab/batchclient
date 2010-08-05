@@ -113,10 +113,10 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 		List<String> result = new ArrayList<String>();
 		logger.info("searching page : {}", currentUri);
 		List<String> hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, currentUri), rootUri);
-		URICollectionFilter filter = URICollectionFilter.valueOf(hrefs).selectContains(currentUri);
-		Collection<String> albumUris = filter.removeContains(pagePropertyName).removeDuplicate().collection();
+		Collection<String> allUris = URICollectionFilter.valueOf(hrefs).selectContains(currentUri).collection();
+		Collection<String> albumUris = URICollectionFilter.valueOf(allUris).removeContains(pagePropertyName).removeDuplicate().collection();
 		result.addAll(albumUris);
-		Collection<String> pageUris = filter.selectContains(pagePropertyName).collection();
+		Collection<String> pageUris = URICollectionFilter.valueOf(allUris).selectContains(pagePropertyName).collection();
 		if (!pageUris.isEmpty()) {
 			int maxPage = this.getMaxPage(pageUris, pagePropertyName);
 
