@@ -1,28 +1,65 @@
 package com.vicutu.bw.utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections.functors.NOPTransformer;
 
 public class URIFilter {
 
-	private final Collection<String> uris;
+	private Collection<String> innerCollection;
 
-	public URIFilter(Collection<String> uris) {
-		super();
-		this.uris = uris;
+	public static URIFilter valueOf(Collection<String> inputCollection) {
+		return new URIFilter(inputCollection);
 	}
 
-	public Collection<String> result() {
-		return uris;
+	private URIFilter() {
+		innerCollection = null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private URIFilter(Collection<String> input) {
+		super();
+		innerCollection = CollectionUtils.collect(input, NOPTransformer.INSTANCE);
+	}
+
+	private URIFilter clearAndSwap(Collection<String> c) {
+		innerCollection.clear();
+		innerCollection = c;
+		return this;
+	}
+
+	public Collection<String> collection() {
+		return innerCollection;
+	}
+	
+	public List<String> list(){
+		if(innerCollection instanceof List<?>){
+			return (List<String>)innerCollection;
+		}else{
+			return new ArrayList<String>(innerCollection);
+		}
+	}
+	
+	public Set<String> set(){
+		if(innerCollection instanceof Set<?>){
+			return (Set<String>)innerCollection;
+		}else{
+			return new HashSet<String>(innerCollection);
+		}
 	}
 
 	public URIFilter removeDuplicate() {
-		return new URIFilter(URIUtils.removeDuplicate(uris));
+		return clearAndSwap(URIUtils.removeDuplicate(innerCollection));
 	}
 
 	public URIFilter removeStartsWith(boolean caseSensitive, String... prefixes) {
-		return new URIFilter(URIUtils.removeStartsWith(uris, caseSensitive, prefixes));
+		return clearAndSwap(URIUtils.removeStartsWith(innerCollection, caseSensitive, prefixes));
 	}
 
 	public URIFilter removeStartsWith(String... prefixes) {
@@ -30,7 +67,7 @@ public class URIFilter {
 	}
 
 	public URIFilter selectStartsWith(boolean caseSensitive, String... prefixes) {
-		return new URIFilter(URIUtils.selectStartsWith(uris, caseSensitive, prefixes));
+		return clearAndSwap(URIUtils.selectStartsWith(innerCollection, caseSensitive, prefixes));
 	}
 
 	public URIFilter selectStartsWith(String... prefixes) {
@@ -38,7 +75,7 @@ public class URIFilter {
 	}
 
 	public URIFilter removeEndsWith(boolean caseSensitive, String... suffixes) {
-		return new URIFilter(URIUtils.removeEndsWith(uris, caseSensitive, suffixes));
+		return clearAndSwap(URIUtils.removeEndsWith(innerCollection, caseSensitive, suffixes));
 	}
 
 	public URIFilter removeEndsWith(String... suffixes) {
@@ -46,7 +83,7 @@ public class URIFilter {
 	}
 
 	public URIFilter selectEndsWith(boolean caseSensitive, String... suffixes) {
-		return new URIFilter(URIUtils.selectEndsWith(uris, caseSensitive, suffixes));
+		return clearAndSwap(URIUtils.selectEndsWith(innerCollection, caseSensitive, suffixes));
 	}
 
 	public URIFilter selectEndsWith(String... suffixes) {
@@ -54,7 +91,7 @@ public class URIFilter {
 	}
 
 	public URIFilter removeContains(boolean caseSensitive, String... contents) {
-		return new URIFilter(URIUtils.removeContains(uris, caseSensitive, contents));
+		return clearAndSwap(URIUtils.removeContains(innerCollection, caseSensitive, contents));
 	}
 
 	public URIFilter removeContains(String... contents) {
@@ -62,7 +99,7 @@ public class URIFilter {
 	}
 
 	public URIFilter selectContains(boolean caseSensitive, String... contents) {
-		return new URIFilter(URIUtils.selectContains(uris, caseSensitive, contents));
+		return clearAndSwap(URIUtils.selectContains(innerCollection, caseSensitive, contents));
 	}
 
 	public URIFilter selectContains(String... contents) {
@@ -70,18 +107,18 @@ public class URIFilter {
 	}
 
 	public URIFilter removeContainsPattern(String... regexes) {
-		return new URIFilter(URIUtils.removeContainsPattern(uris, regexes));
+		return clearAndSwap(URIUtils.removeContainsPattern(innerCollection, regexes));
 	}
 
 	public URIFilter selectContainsPattern(String... regexes) {
-		return new URIFilter(URIUtils.selectContainsPattern(uris, regexes));
+		return clearAndSwap(URIUtils.selectContainsPattern(innerCollection, regexes));
 	}
 
 	public URIFilter remove(Predicate... predicates) {
-		return new URIFilter(URIUtils.remove(uris, predicates));
+		return clearAndSwap(URIUtils.remove(innerCollection, predicates));
 	}
 
 	public URIFilter select(Predicate... predicates) {
-		return new URIFilter(URIUtils.select(uris, predicates));
+		return clearAndSwap(URIUtils.select(innerCollection, predicates));
 	}
 }
