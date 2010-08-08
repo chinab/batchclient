@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.functors.OrPredicate;
 import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +20,8 @@ import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.bw.utils.URICollectionFilter;
+import com.vicutu.bw.utils.functors.ContainsPatternPredicate;
+import com.vicutu.bw.utils.functors.ContentPredicate;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
@@ -61,7 +64,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
 			List<String> allHrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, baseUrl), baseUrl);
-			List<String> baseHrefs = URICollectionFilter.valueOf(allHrefs).selectContainsPattern("\\d{4}$").removeDuplicate()
+			List<String> baseHrefs = URICollectionFilter.valueOf(allHrefs).removeDuplicate().select(new OrPredicate(new ContainsPatternPredicate("\\d{4}$"),new ContentPredicate("new",true))).removeContains("news","rss")
 					.list();
 			Collections.sort(baseHrefs);
 			int currentSearchIndex = baseHrefs.indexOf(startUrl);
