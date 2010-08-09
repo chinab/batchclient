@@ -37,19 +37,19 @@ public class URICollectionFilter {
 	public Collection<String> collection() {
 		return innerCollection;
 	}
-	
-	public List<String> list(){
-		if(innerCollection instanceof List<?>){
-			return (List<String>)innerCollection;
-		}else{
+
+	public List<String> list() {
+		if (innerCollection instanceof List<?>) {
+			return (List<String>) innerCollection;
+		} else {
 			return new ArrayList<String>(innerCollection);
 		}
 	}
-	
-	public Set<String> set(){
-		if(innerCollection instanceof Set<?>){
-			return (Set<String>)innerCollection;
-		}else{
+
+	public Set<String> set() {
+		if (innerCollection instanceof Set<?>) {
+			return (Set<String>) innerCollection;
+		} else {
 			return new HashSet<String>(innerCollection);
 		}
 	}

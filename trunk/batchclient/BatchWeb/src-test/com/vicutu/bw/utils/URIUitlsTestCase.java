@@ -112,8 +112,8 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void test_URIFilter() throws Exception {
 		List<String> hrefs = getHrefs();
-		for (String s : URICollectionFilter.valueOf(hrefs).removeDuplicate().selectContains("http://www.beautyleg.cc/2010")
-				.collection()) {
+		for (String s : URICollectionFilter.valueOf(hrefs).removeDuplicate()
+				.selectContains("http://www.beautyleg.cc/2010").collection()) {
 			logger.info(s);
 		}
 	}

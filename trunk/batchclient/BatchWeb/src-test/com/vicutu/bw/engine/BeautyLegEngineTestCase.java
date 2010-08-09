@@ -52,8 +52,8 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 				hrefs = HtmlUtils.selectAllHREF(
 						downloadHtml(new StringBuilder(currentUri).append("?").append(pagePropertyName).append("=")
 								.append(i).toString()), rootUri);
-				result.addAll(URICollectionFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
-						.removeDuplicate().collection());
+				result.addAll(URICollectionFilter.valueOf(hrefs).selectContains(currentUri)
+						.removeContains(pagePropertyName).removeDuplicate().collection());
 			}
 		}
 		return result;
@@ -76,8 +76,9 @@ public class BeautyLegEngineTestCase extends AbstractJUnit4SpringContextTests {
 		List<String> albums = combinePages(httpClient, rootUri,
 				"http://www.beautyleg.cc/2010/2010-7-9-No-422-Jellyfish-66P", "page");
 		String firstPage = albums.get(0);
-		Collection<String> images = URICollectionFilter.valueOf(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri))
-				.selectContains("albums").collection();
+		Collection<String> images = URICollectionFilter
+				.valueOf(HtmlUtils.selectAllHREF(downloadHtml(firstPage), rootUri)).selectContains("albums")
+				.collection();
 		if (!images.isEmpty()) {
 			String firstImage = ((List<String>) images).get(0);
 			logger.info(firstImage);
