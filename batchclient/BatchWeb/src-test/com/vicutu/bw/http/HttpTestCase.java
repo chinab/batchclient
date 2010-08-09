@@ -32,7 +32,7 @@ import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 @RunWith(LoggedSpringJUnit4ClassRunner.class)
 public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 
-	private static final String TEST_URL = "http://www.beautyleg.cc/2005";
+	private static final String TEST_URL = "http://www.apache.org";
 
 	private HttpClient httpClient;
 
