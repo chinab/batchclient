@@ -64,8 +64,11 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 				startUrl = searchStatus.getLastSearchUrl();
 			}
 			List<String> allHrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, baseUrl), baseUrl);
-			List<String> baseHrefs = URICollectionFilter.valueOf(allHrefs).removeDuplicate().select(new OrPredicate(new ContainsPatternPredicate("\\d{4}$"),new ContentPredicate("new",true))).removeContains("news","rss")
-					.list();
+			List<String> baseHrefs = URICollectionFilter
+					.valueOf(allHrefs)
+					.removeDuplicate()
+					.select(new OrPredicate(new ContainsPatternPredicate("\\d{4}$"), new ContentPredicate("new", true)))
+					.removeContains("rss").list();
 			Collections.sort(baseHrefs);
 			int currentSearchIndex = baseHrefs.indexOf(startUrl);
 			if (currentSearchIndex > 0) {
@@ -117,9 +120,11 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 		logger.info("searching page : {}", currentUri);
 		List<String> hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, currentUri), rootUri);
 		Collection<String> allUris = URICollectionFilter.valueOf(hrefs).selectContains(currentUri).collection();
-		Collection<String> albumUris = URICollectionFilter.valueOf(allUris).removeContains(pagePropertyName).removeDuplicate().collection();
+		Collection<String> albumUris = URICollectionFilter.valueOf(allUris).removeContains(pagePropertyName)
+				.removeDuplicate().collection();
 		result.addAll(albumUris);
-		Collection<String> pageUris = URICollectionFilter.valueOf(allUris).selectContains(pagePropertyName).collection();
+		Collection<String> pageUris = URICollectionFilter.valueOf(allUris).selectContains(pagePropertyName)
+				.collection();
 		if (!pageUris.isEmpty()) {
 			int maxPage = this.getMaxPage(pageUris, pagePropertyName);
 
@@ -128,8 +133,8 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 						.append(i).toString();
 				logger.info("searching page : {}", comingUrl);
 				hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, comingUrl), rootUri);
-				result.addAll(URICollectionFilter.valueOf(hrefs).selectContains(currentUri).removeContains(pagePropertyName)
-						.removeDuplicate().collection());
+				result.addAll(URICollectionFilter.valueOf(hrefs).selectContains(currentUri)
+						.removeContains(pagePropertyName).removeDuplicate().collection());
 			}
 		}
 		logger.info("result count : {}", Integer.valueOf(result.size()));

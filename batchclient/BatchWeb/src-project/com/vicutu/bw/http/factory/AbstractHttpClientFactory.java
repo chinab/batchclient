@@ -28,7 +28,7 @@ import com.vicutu.commons.logging.LoggerFactory;
 public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	private List<HttpRequestInterceptor> httpRequestInterceptors;
 
 	private List<HttpResponseInterceptor> httpResponseInterceptors;
