@@ -82,18 +82,20 @@
 	
 	<task:scheduler id="searchScheduler" pool-size="5"/>
 	
-	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory" destroy-method="cleanup">
+	<bean id="httpParamConfiguration" class="com.vicutu.bw.http.params.impl.HttpParamConfigBean">
 		<property name="maxTotalConnections" value="50"/>
 		<property name="maxConnectionsPerRoute" value="5"/>
-		<property name="schemes">
-			<map>
-				<entry key="80" value="http"/>
-				<entry key="443" value="https"/>
-			</map>
+	</bean>
+	
+	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory" destroy-method="cleanup">
+		<property name="httpParamConfiguration">
+			<ref bean="httpParamConfiguration" />
 		</property>
+		<property name="housekeepingTimeout" value="30000"/>
+		<property name="closeExpired" value="true"/>
+		<property name="closeIdleTimeout" value="180000"/>
 	</bean>
 	
 	<bean id="gipsAlpinHttpClient" factory-bean="threadSafeHttpClientFactory" factory-method="createHttpClientInstance" />
 
-	<!--<bean id="bostonBigPictureHttpClient" factory-bean="threadSafeHttpClientFactory" factory-method="createHttpClientInstance" />-->
 </beans>

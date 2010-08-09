@@ -1,10 +1,12 @@
 package com.vicutu.bw.http.factory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponseInterceptor;
@@ -20,18 +22,42 @@ import org.apache.http.params.HttpParams;
 import com.vicutu.bw.http.params.HttpParamConfiguration;
 import com.vicutu.bw.http.params.HttpParamUtils;
 import com.vicutu.commons.exception.BaseRuntimeException;
+import com.vicutu.commons.logging.Logger;
+import com.vicutu.commons.logging.LoggerFactory;
 
 public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	private List<HttpRequestInterceptor> httpRequestInterceptors;
 
 	private List<HttpResponseInterceptor> httpResponseInterceptors;
 
 	private Map<Integer, String> schemes;
 
-	private List<DefaultHttpClient> httpClients = new ArrayList<DefaultHttpClient>();
+	private List<DefaultHttpClient> httpClients = Collections.synchronizedList(new ArrayList<DefaultHttpClient>());
 
 	private HttpParamConfiguration httpParamConfiguration;
+
+	private boolean closeExpired;
+
+	private long closeIdleTimeout;
+
+	private long housekeepingTimeout;
+
+	private IdleConnectionEvictor idleConnectionEvictor;
+
+	public void setHousekeepingTimeout(long housekeepingTimeout) {
+		this.housekeepingTimeout = housekeepingTimeout;
+	}
+
+	public void setCloseExpired(boolean closeExpired) {
+		this.closeExpired = closeExpired;
+	}
+
+	public void setCloseIdleTimeout(long closeIdleTimeout) {
+		this.closeIdleTimeout = closeIdleTimeout;
+	}
 
 	public void setHttpParamConfiguration(HttpParamConfiguration httpParamConfiguration) {
 		this.httpParamConfiguration = httpParamConfiguration;
@@ -49,18 +75,24 @@ public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 		this.httpResponseInterceptors = httpResponseInterceptors;
 	}
 
-	protected abstract ClientConnectionManager getClientConnectionManager(HttpParams params,SchemeRegistry schemeRegistry);
+	protected abstract ClientConnectionManager getClientConnectionManager(HttpParams params,
+			SchemeRegistry schemeRegistry);
 
 	@Override
 	public HttpClient createHttpClientInstance() {
 		SchemeRegistry schemeRegistry = initScheme(schemes);
 		HttpParams params = httpParamConfiguration != null ? httpParamConfiguration.getHttpParam() : HttpParamUtils
 				.getDefaultHttpParam();
-		ClientConnectionManager clientConnectionManager = getClientConnectionManager(params,schemeRegistry);
+		ClientConnectionManager clientConnectionManager = getClientConnectionManager(params, schemeRegistry);
 
 		DefaultHttpClient httpClient = new DefaultHttpClient(clientConnectionManager, params);
 		initInterceptor(httpClient, httpRequestInterceptors, httpResponseInterceptors);
 		httpClients.add(httpClient);
+		if (housekeepingTimeout > 0) {
+			idleConnectionEvictor = new IdleConnectionEvictor();
+			idleConnectionEvictor.start();
+			logger.info("IdleConnectionEvictor has been started.");
+		}
 		return httpClient;
 	}
 
@@ -104,8 +136,50 @@ public abstract class AbstractHttpClientFactory implements HttpClientFactory {
 	}
 
 	public void cleanup() throws Throwable {
+		if (idleConnectionEvictor != null) {
+			idleConnectionEvictor.shutdown();
+			idleConnectionEvictor.join();
+			logger.info("IdleConnectionEvictor has been shutdown.");
+		}
 		for (DefaultHttpClient httpClient : httpClients) {
 			httpClient.getConnectionManager().shutdown();
+		}
+	}
+
+	public class IdleConnectionEvictor extends Thread {
+
+		private volatile boolean shutdown;
+
+		@Override
+		public void run() {
+			try {
+				while (!shutdown) {
+					synchronized (this) {
+						wait(housekeepingTimeout);
+						logger.info("IdleConnectionEvictor is running.");
+						for (DefaultHttpClient httpClient : httpClients) {
+							// Close expired connections
+							if (closeExpired) {
+								httpClient.getConnectionManager().closeExpiredConnections();
+							}
+							// Optionally, close connections
+							if (closeIdleTimeout > 0) {
+								httpClient.getConnectionManager().closeIdleConnections(closeIdleTimeout,
+										TimeUnit.MILLISECONDS);
+							}
+						}
+					}
+				}
+			} catch (InterruptedException ex) {
+				// terminate
+			}
+		}
+
+		public void shutdown() {
+			shutdown = true;
+			synchronized (this) {
+				notifyAll();
+			}
 		}
 	}
 }
