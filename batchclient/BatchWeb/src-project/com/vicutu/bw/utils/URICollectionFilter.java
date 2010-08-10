@@ -12,7 +12,7 @@ import org.apache.commons.collections.functors.NOPTransformer;
 
 public class URICollectionFilter {
 
-	private Collection<String> innerCollection;
+	private final Collection<String> innerCollection;
 
 	public static URICollectionFilter valueOf(Collection<String> inputCollection) {
 		return new URICollectionFilter(inputCollection);
@@ -28,10 +28,8 @@ public class URICollectionFilter {
 		innerCollection = CollectionUtils.collect(input, NOPTransformer.INSTANCE);
 	}
 
-	private URICollectionFilter clearAndSwap(Collection<String> c) {
-		innerCollection.clear();
-		innerCollection = c;
-		return this;
+	private URICollectionFilter reborn(Collection<String> c) {
+		return valueOf(c);
 	}
 
 	public Collection<String> collection() {
@@ -55,11 +53,11 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter removeDuplicate() {
-		return clearAndSwap(URIUtils.removeDuplicate(innerCollection));
+		return reborn(URIUtils.removeDuplicate(innerCollection));
 	}
 
 	public URICollectionFilter removeStartsWith(boolean caseSensitive, String... prefixes) {
-		return clearAndSwap(URIUtils.removeStartsWith(innerCollection, caseSensitive, prefixes));
+		return reborn(URIUtils.removeStartsWith(innerCollection, caseSensitive, prefixes));
 	}
 
 	public URICollectionFilter removeStartsWith(String... prefixes) {
@@ -67,7 +65,7 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter selectStartsWith(boolean caseSensitive, String... prefixes) {
-		return clearAndSwap(URIUtils.selectStartsWith(innerCollection, caseSensitive, prefixes));
+		return reborn(URIUtils.selectStartsWith(innerCollection, caseSensitive, prefixes));
 	}
 
 	public URICollectionFilter selectStartsWith(String... prefixes) {
@@ -75,7 +73,7 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter removeEndsWith(boolean caseSensitive, String... suffixes) {
-		return clearAndSwap(URIUtils.removeEndsWith(innerCollection, caseSensitive, suffixes));
+		return reborn(URIUtils.removeEndsWith(innerCollection, caseSensitive, suffixes));
 	}
 
 	public URICollectionFilter removeEndsWith(String... suffixes) {
@@ -83,7 +81,7 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter selectEndsWith(boolean caseSensitive, String... suffixes) {
-		return clearAndSwap(URIUtils.selectEndsWith(innerCollection, caseSensitive, suffixes));
+		return reborn(URIUtils.selectEndsWith(innerCollection, caseSensitive, suffixes));
 	}
 
 	public URICollectionFilter selectEndsWith(String... suffixes) {
@@ -91,7 +89,7 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter removeContains(boolean caseSensitive, String... contents) {
-		return clearAndSwap(URIUtils.removeContains(innerCollection, caseSensitive, contents));
+		return reborn(URIUtils.removeContains(innerCollection, caseSensitive, contents));
 	}
 
 	public URICollectionFilter removeContains(String... contents) {
@@ -99,7 +97,7 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter selectContains(boolean caseSensitive, String... contents) {
-		return clearAndSwap(URIUtils.selectContains(innerCollection, caseSensitive, contents));
+		return reborn(URIUtils.selectContains(innerCollection, caseSensitive, contents));
 	}
 
 	public URICollectionFilter selectContains(String... contents) {
@@ -107,18 +105,18 @@ public class URICollectionFilter {
 	}
 
 	public URICollectionFilter removeContainsPattern(String... regexes) {
-		return clearAndSwap(URIUtils.removeContainsPattern(innerCollection, regexes));
+		return reborn(URIUtils.removeContainsPattern(innerCollection, regexes));
 	}
 
 	public URICollectionFilter selectContainsPattern(String... regexes) {
-		return clearAndSwap(URIUtils.selectContainsPattern(innerCollection, regexes));
+		return reborn(URIUtils.selectContainsPattern(innerCollection, regexes));
 	}
 
 	public URICollectionFilter remove(Predicate... predicates) {
-		return clearAndSwap(URIUtils.remove(innerCollection, predicates));
+		return reborn(URIUtils.remove(innerCollection, predicates));
 	}
 
 	public URICollectionFilter select(Predicate... predicates) {
-		return clearAndSwap(URIUtils.select(innerCollection, predicates));
+		return reborn(URIUtils.select(innerCollection, predicates));
 	}
 }

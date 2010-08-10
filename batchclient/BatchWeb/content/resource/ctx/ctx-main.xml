@@ -91,7 +91,7 @@
 		<property name="httpParamConfiguration">
 			<ref bean="httpParamConfiguration" />
 		</property>
-		<property name="housekeepingTimeout" value="30000"/>
+		<property name="housekeepingTimeout" value="300000"/>
 		<property name="closeExpired" value="true"/>
 		<property name="closeIdleTimeout" value="180000"/>
 	</bean>
