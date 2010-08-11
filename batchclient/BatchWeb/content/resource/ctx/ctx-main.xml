@@ -78,7 +78,7 @@
 	
 	<task:annotation-driven executor="downloadExecutor" scheduler="searchScheduler"/>
 	
-	<task:executor id="downloadExecutor"  pool-size="3" queue-capacity="500" rejection-policy="CALLER_RUNS"/>
+	<task:executor id="downloadExecutor"  pool-size="3" queue-capacity="10" rejection-policy="CALLER_RUNS"/>
 	
 	<task:scheduler id="searchScheduler" pool-size="5"/>
 	
