@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans
@@ -14,14 +12,15 @@
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd
 	http://www.springframework.org/schema/task 
 	http://www.springframework.org/schema/task/spring-task-3.0.xsd">
-	
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
-	
+
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.connection.provider_class">com.jolbox.bonecp.provider.BoneCPConnectionProvider</prop>
+				<prop key="hibernate.connection.provider_class">com.jolbox.bonecp.provider.BoneCPConnectionProvider
+				</prop>
 				<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
 				<prop key="hibernate.connection.url">jdbc:mysql://127.0.0.1/batchweb</prop>
 				<prop key="hibernate.connection.username">batchweb</prop>
@@ -42,7 +41,7 @@
 				<prop key="bonecp.releaseHelperThreads">3</prop>
 			</props>
 		</property>
-		<property name="packagesToScan" value="com.vicutu.bw.vo" />  
+		<property name="packagesToScan" value="com.vicutu.bw.vo" />
 	</bean>
 
 	<bean id="transactionManager"
@@ -51,14 +50,14 @@
 			<ref local="sessionFactory" />
 		</property>
 	</bean>
-	
+
 	<bean id="ehCacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<property name="configLocation">
 			<value>file:${webapp.root}config/ehcache-config.xml</value>
 		</property>
 	</bean>
-	
+
 	<bean id="queryCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
 		<property name="cacheManager">
 			<ref local="ehCacheManager" />
@@ -67,35 +66,51 @@
 			<value>queryCache</value>
 		</property>
 	</bean>
-	
-	<bean id="detachedCriteriaBuilder" class="com.vicutu.persistence.query.impl.AnnotationDetachedCriteriaBuilderBean">
+
+	<bean id="detachedCriteriaBuilder"
+		class="com.vicutu.persistence.query.impl.AnnotationDetachedCriteriaBuilderBean">
 		<property name="cache">
 			<ref bean="queryCache" />
 		</property>
 	</bean>
-	
-	<context:component-scan base-package="com.vicutu.bw"/>
-	
-	<task:annotation-driven executor="downloadExecutor" scheduler="searchScheduler"/>
-	
-	<task:executor id="downloadExecutor"  pool-size="3" queue-capacity="10" rejection-policy="CALLER_RUNS"/>
-	
-	<task:scheduler id="searchScheduler" pool-size="5"/>
-	
-	<bean id="httpParamConfiguration" class="com.vicutu.bw.http.params.impl.HttpParamConfigBean">
-		<property name="maxTotalConnections" value="50"/>
-		<property name="maxConnectionsPerRoute" value="5"/>
+
+	<context:component-scan base-package="com.vicutu.bw" />
+
+	<task:annotation-driven executor="downloadExecutor"
+		scheduler="searchScheduler" />
+
+	<!-- <task:executor id="downloadExecutor" pool-size="3" queue-capacity="10" 
+		rejection-policy="CALLER_RUNS"/> -->
+
+	<bean id="downloadExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="1" />
+		<property name="maxPoolSize" value="3" />
+		<property name="queueCapacity" value="5" />
+		<property name="rejectedExecutionHandler">
+			<bean class="com.vicutu.bw.engine.support.BlockPolicy" />
+		</property>
 	</bean>
-	
-	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory" destroy-method="cleanup">
+
+	<task:scheduler id="searchScheduler" pool-size="5" />
+
+	<bean id="httpParamConfiguration" class="com.vicutu.bw.http.params.impl.HttpParamConfigBean">
+		<property name="maxTotalConnections" value="50" />
+		<property name="maxConnectionsPerRoute" value="5" />
+	</bean>
+
+	<bean id="threadSafeHttpClientFactory"
+		class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory"
+		destroy-method="cleanup">
 		<property name="httpParamConfiguration">
 			<ref bean="httpParamConfiguration" />
 		</property>
-		<property name="housekeepingTimeout" value="300000"/>
-		<property name="closeExpired" value="true"/>
-		<property name="closeIdleTimeout" value="180000"/>
+		<property name="housekeepingTimeout" value="300000" />
+		<property name="closeExpired" value="true" />
+		<property name="closeIdleTimeout" value="180000" />
 	</bean>
-	
-	<bean id="gipsAlpinHttpClient" factory-bean="threadSafeHttpClientFactory" factory-method="createHttpClientInstance" />
+
+	<bean id="defaultHttpClient" factory-bean="threadSafeHttpClientFactory"
+		factory-method="createHttpClientInstance" />
 
 </beans>

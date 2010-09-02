@@ -41,7 +41,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 
 	@Override
 	@Autowired
-	@Qualifier("gipsAlpinHttpClient")
+	@Qualifier("defaultHttpClient")
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
 	}
@@ -115,11 +115,15 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		for (String imageUrl : imageUrlList) {
 			String imageUrl0 = IMAGE_ROOT_URL + StringUtils.substringAfterLast(imageUrl, "thumbs/");
 			String fileName = StringUtils.substringAfterLast(imageUrl, "/");
-			File downloadFile = new File(folder, fileName);
-			if (downloadFile.exists() && !accessDetail.isReplaceExist()) {
-				logger.info("ignore exist : {}", imageUrl0);
+			if (StringUtils.endsWithIgnoreCase(fileName, ".jpg")) {
+				File downloadFile = new File(folder, fileName);
+				if (downloadFile.exists() && !accessDetail.isReplaceExist()) {
+					logger.info("ignore exist : {}", imageUrl0);
+				} else {
+					fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(), imageUrl0);
+				}
 			} else {
-				fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(), imageUrl0);
+				logger.warn("illegal uri of image file : {}", fileName);
 			}
 		}
 	}
