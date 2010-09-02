@@ -33,7 +33,7 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 
 	@Override
 	@Autowired
-	@Qualifier("gipsAlpinHttpClient")
+	@Qualifier("defaultHttpClient")
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
 	}
