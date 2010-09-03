@@ -75,7 +75,7 @@
 	</logger>
 	
 	<logger name="com.vicutu.bw.engine.support.BlockPolicy" additivity="false">
-		<level value="debug"/>
+		<level value="info"/>
 		<appender-ref ref="consoleOut"/>
 		<appender-ref ref="queueBlockLogFile"/>
 	</logger>
