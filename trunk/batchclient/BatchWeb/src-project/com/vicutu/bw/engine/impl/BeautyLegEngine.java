@@ -97,8 +97,9 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 							String firstImage = ((List<String>) images).get(0);
 							firstImage = StringUtils.substringBeforeLast(firstImage, "?m=");
 							for (String imagePage : imagePages) {
-								String imageUrl = StringUtils.replace(firstImage, "001",
-										StringUtils.right(imagePage, 3));
+								String imageUrl = StringUtils
+										.replaceEach(firstImage, new String[] { "0000", "001" }, new String[] {
+												StringUtils.right(imagePage, 4), StringUtils.right(imagePage, 3) });
 								String fileName = StringUtils.substringAfterLast(imageUrl, "/");
 								File downloadFile = new File(folder, fileName);
 								fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
