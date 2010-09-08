@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.http.client.HttpClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -177,5 +178,10 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 			maxPage = page > maxPage ? page : maxPage;
 		}
 		return maxPage;
+	}
+	
+	@Test
+	public void test_yesOrNo() {
+		logger.info(RandomUtils.nextBoolean());
 	}
 }
