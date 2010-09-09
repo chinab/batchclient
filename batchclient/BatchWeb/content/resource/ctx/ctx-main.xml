@@ -34,8 +34,8 @@
 				<prop key="bonecp.idleConnectionTestPeriod">60</prop>
 				<prop key="bonecp.partitionCount">3</prop>
 				<prop key="bonecp.acquireIncrement">3</prop>
-				<prop key="bonecp.maxConnectionsPerPartition">30</prop>
-				<prop key="bonecp.minConnectionsPerPartition">10</prop>
+				<prop key="bonecp.maxConnectionsPerPartition">5</prop>
+				<prop key="bonecp.minConnectionsPerPartition">1</prop>
 				<prop key="bonecp.preparedStatementCacheSize">100</prop>
 				<prop key="bonecp.statementsCachedPerConnection">30</prop>
 				<prop key="bonecp.releaseHelperThreads">3</prop>
