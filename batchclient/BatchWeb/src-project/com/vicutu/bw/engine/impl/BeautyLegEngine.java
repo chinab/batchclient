@@ -89,14 +89,20 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 					List<String> imagePages = combinePages(httpClient, baseUrl, album, "page");
 					if (!imagePages.isEmpty()) {
 						String firstPage = imagePages.get(0);
-						//get all images from first image page
-						Collection<String> images = URICollectionFilter
+						String secondPage = imagePages.get(1);
+						Collection<String> firstImages = URICollectionFilter
 								.valueOf(
 										HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, firstPage), baseUrl))
 								.selectContains("albums").collection();
-						if (!images.isEmpty()) {
-							String firstImage = StringUtils.substringBeforeLast(((List<String>) images).get(0), "?m=");
-							String secondImage = StringUtils.substringBeforeLast(((List<String>) images).get(1), "?m=");
+						Collection<String> secondImages = URICollectionFilter
+								.valueOf(
+										HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, secondPage), baseUrl))
+								.selectContains("albums").collection();
+						if (!firstImages.isEmpty()) {
+							String firstImage = StringUtils.substringBeforeLast(((List<String>) firstImages).get(0),
+									"?m=");
+							String secondImage = StringUtils.substringBeforeLast(((List<String>) secondImages).get(0),
+									"?m=");
 							if (StringUtils.contains(firstImage, "0000")) {
 								if (StringUtils.contains(secondImage, "000")) {
 									//head is the same as others
