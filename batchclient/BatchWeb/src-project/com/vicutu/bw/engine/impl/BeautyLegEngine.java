@@ -148,7 +148,6 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 
 	private List<String> combinePages(HttpClient httpClient, String rootUri, String currentUri, String pagePropertyName)
 			throws Exception {
-
 		List<String> result = new ArrayList<String>();
 		logger.info("searching page : {}", currentUri);
 		List<String> hrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, currentUri), rootUri);
