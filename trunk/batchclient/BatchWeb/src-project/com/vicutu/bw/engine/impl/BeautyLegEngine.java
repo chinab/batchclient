@@ -95,24 +95,47 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 										HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, firstPage), baseUrl))
 								.selectContains("albums").collection();
 						if (!images.isEmpty()) {
-							String headImage = StringUtils.substringBeforeLast(((List<String>) images).get(0), "?m=");
-							String otherImage = StringUtils.substringBeforeLast(((List<String>) images).get(1), "?m=");
-							boolean head = true;
-							for (String imagePage : imagePages) {
-								String imageUriTemp = null;
-								if (head) {
-									imageUriTemp = headImage;
-									head = false;
+							String firstImage = StringUtils.substringBeforeLast(((List<String>) images).get(0), "?m=");
+							String secondImage = StringUtils.substringBeforeLast(((List<String>) images).get(1), "?m=");
+							if (StringUtils.contains(firstImage, "0000")) {
+								if (StringUtils.contains(secondImage, "000")) {
+									//head is the same as others
+									for (String imagePage : imagePages) {
+										String imageUrl = StringUtils.replace(firstImage, "0000",
+												StringUtils.right(imagePage, 4));
+										String fileName = StringUtils.substringAfterLast(imageUrl, "/");
+										File downloadFile = new File(folder, fileName);
+										fireDownloadEvent(accessDetail, searchStatus, fileName,
+												downloadFile.getAbsolutePath(), imageUrl);
+									}
 								} else {
-									imageUriTemp = otherImage;
+									//head is 0000, others are like 001,002,003......
+									//download firstImage first
+									String fileName = StringUtils.substringAfterLast(firstImage, "/");
+									File downloadFile = new File(folder, fileName);
+									fireDownloadEvent(accessDetail, searchStatus, fileName,
+											downloadFile.getAbsolutePath(), firstImage);
+									//and then download others, use secondImage as the template
+									for (int i = 1; i < imagePages.size(); i++) {
+										String imagePage = imagePages.get(i);
+										String imageUrl = StringUtils.replace(secondImage, "001",
+												StringUtils.right(imagePage, 3));
+										fileName = StringUtils.substringAfterLast(imageUrl, "/");
+										downloadFile = new File(folder, fileName);
+										fireDownloadEvent(accessDetail, searchStatus, fileName,
+												downloadFile.getAbsolutePath(), imageUrl);
+									}
 								}
-								String imageUrl = StringUtils
-										.replaceEach(imageUriTemp, new String[] { "0000", "001" }, new String[] {
-												StringUtils.right(imagePage, 4), StringUtils.right(imagePage, 3) });
-								String fileName = StringUtils.substringAfterLast(imageUrl, "/");
-								File downloadFile = new File(folder, fileName);
-								fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
-										imageUrl);
+							} else {
+								//no head, all images are like 001,002,003
+								for (String imagePage : imagePages) {
+									String imageUrl = StringUtils.replace(firstImage, "001",
+											StringUtils.right(imagePage, 3));
+									String fileName = StringUtils.substringAfterLast(imageUrl, "/");
+									File downloadFile = new File(folder, fileName);
+									fireDownloadEvent(accessDetail, searchStatus, fileName,
+											downloadFile.getAbsolutePath(), imageUrl);
+								}
 							}
 						}
 					}
