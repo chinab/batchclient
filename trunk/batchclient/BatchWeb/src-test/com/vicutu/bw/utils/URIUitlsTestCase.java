@@ -96,6 +96,18 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 	}
 
 	@Test
+	public void test_00000() throws Exception {
+		Collection<String> images = URICollectionFilter
+				.valueOf(
+						HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient,
+								"http://www.beautyleg.cc/2010/2010-6-4-No-409-Eva-49P"), "http://www.beautyleg.cc"))
+				.selectContains("albums").collection();
+		for (String s : images) {
+			logger.info(s);
+		}
+	}
+
+	@Test
 	public void test_removeByPattern() throws Exception {
 		List<String> hrefs = getHrefs();
 		Collection<String> c = URIUtils.selectContains(hrefs, false, "tag");
@@ -179,7 +191,7 @@ public class URIUitlsTestCase extends AbstractJUnit4SpringContextTests {
 		}
 		return maxPage;
 	}
-	
+
 	@Test
 	public void test_yesOrNo() {
 		logger.info(RandomUtils.nextBoolean());
