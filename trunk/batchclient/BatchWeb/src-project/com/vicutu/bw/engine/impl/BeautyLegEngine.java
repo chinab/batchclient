@@ -100,7 +100,6 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 							boolean head = true;
 							for (String imagePage : imagePages) {
 								String imageUriTemp = null;
-
 								if (head) {
 									imageUriTemp = headImage;
 									head = false;
