@@ -89,16 +89,26 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 					List<String> imagePages = combinePages(httpClient, baseUrl, album, "page");
 					if (!imagePages.isEmpty()) {
 						String firstPage = imagePages.get(0);
+						//get all images from first image page
 						Collection<String> images = URICollectionFilter
 								.valueOf(
 										HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, firstPage), baseUrl))
 								.selectContains("albums").collection();
 						if (!images.isEmpty()) {
-							String firstImage = ((List<String>) images).get(0);
-							firstImage = StringUtils.substringBeforeLast(firstImage, "?m=");
+							String headImage = StringUtils.substringBeforeLast(((List<String>) images).get(0), "?m=");
+							String otherImage = StringUtils.substringBeforeLast(((List<String>) images).get(1), "?m=");
+							boolean head = true;
 							for (String imagePage : imagePages) {
+								String imageUriTemp = null;
+
+								if (head) {
+									imageUriTemp = headImage;
+									head = false;
+								} else {
+									imageUriTemp = otherImage;
+								}
 								String imageUrl = StringUtils
-										.replaceEach(firstImage, new String[] { "0000", "001" }, new String[] {
+										.replaceEach(imageUriTemp, new String[] { "0000", "001" }, new String[] {
 												StringUtils.right(imagePage, 4), StringUtils.right(imagePage, 3) });
 								String fileName = StringUtils.substringAfterLast(imageUrl, "/");
 								File downloadFile = new File(folder, fileName);
