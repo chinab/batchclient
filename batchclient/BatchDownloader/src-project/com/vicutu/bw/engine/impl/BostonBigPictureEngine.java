@@ -1,6 +1,7 @@
 package com.vicutu.bw.engine.impl;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.vicutu.bw.engine.AbstractEngine;
 import com.vicutu.bw.engine.Engine;
 import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
+import com.vicutu.bw.utils.URICollectionFilter;
 import com.vicutu.bw.vo.AccessDetail;
 import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.lang.StringUtils;
@@ -85,14 +87,14 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 					if (!folder.exists() && folder.mkdirs()) {
 						logger.info("create new folder : {}", folder.getAbsolutePath());
 					}
-					List<String> imageUrls = HtmlUtils.selectAllJPG((HttpUtils.downloadHtml(httpClient, href)));
+					Collection<String> imageUrls = URICollectionFilter
+							.valueOf(HtmlUtils.selectAllJPG((HttpUtils.downloadHtml(httpClient, href))))
+							.removeContains("glogo.jpg", "bp_header_e.jpg").collection();
 					for (String imageUrl : imageUrls) {
-						if (!imageUrl.contains("glogo.jpg") && !imageUrl.contains("bp_header_e.jpg")) {
-							String fileName = StringUtils.substringAfterLast(imageUrl, "/");
-							File downloadFile = new File(folder, fileName);
-							fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
-									imageUrl);
-						}
+						String fileName = StringUtils.substringAfterLast(imageUrl, "/");
+						File downloadFile = new File(folder, fileName);
+						fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(),
+								imageUrl);
 					}
 				}
 				searchDate = DateUtils.addMonths(searchDate, 1);
