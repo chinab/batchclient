@@ -78,20 +78,34 @@
 	
 	<task:annotation-driven executor="downloadExecutor" scheduler="searchScheduler"/>
 	
-	<task:executor id="downloadExecutor"  pool-size="3" queue-capacity="500" rejection-policy="CALLER_RUNS"/>
-	
-	<task:scheduler id="searchScheduler" pool-size="5"/>
-	
-	<bean id="threadSafeHttpClientFactory" class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory" destroy-method="cleanup">
-		<property name="maxTotalConnections" value="50"/>
-		<property name="maxConnectionsPerRoute" value="5"/>
-		<property name="schemes">
-			<map>
-				<entry key="80" value="http"/>
-				<entry key="443" value="https"/>
-			</map>
+	<bean id="downloadExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="1" />
+		<property name="maxPoolSize" value="3" />
+		<property name="queueCapacity" value="5" />
+		<property name="rejectedExecutionHandler">
+			<bean class="com.vicutu.bw.engine.support.BlockPolicy" />
 		</property>
 	</bean>
 
-	<bean id="bostonBigPictureHttpClient" factory-bean="threadSafeHttpClientFactory" factory-method="createHttpClientInstance" />
+	<task:scheduler id="searchScheduler" pool-size="5" />
+
+	<bean id="httpParamConfiguration" class="com.vicutu.bw.http.params.impl.HttpParamConfigBean">
+		<property name="maxTotalConnections" value="50" />
+		<property name="maxConnectionsPerRoute" value="5" />
+	</bean>
+
+	<bean id="threadSafeHttpClientFactory"
+		class="com.vicutu.bw.http.factory.impl.ThreadSafeHttpClientFactory"
+		destroy-method="cleanup">
+		<property name="httpParamConfiguration">
+			<ref bean="httpParamConfiguration" />
+		</property>
+		<property name="housekeepingTimeout" value="300000" />
+		<property name="closeExpired" value="true" />
+		<property name="closeIdleTimeout" value="180000" />
+	</bean>
+
+	<bean id="defaultHttpClient" factory-bean="threadSafeHttpClientFactory"
+		factory-method="createHttpClientInstance" />
 </beans>
