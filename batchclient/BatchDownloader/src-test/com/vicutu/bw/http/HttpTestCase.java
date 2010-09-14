@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.vicutu.bw.http.utils.HtmlUtils;
-import com.vicutu.bw.http.utils.HttpUtils;
+import com.vicutu.bw.utils.HtmlUtils;
+import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations = { "ctx-http-test.xml" })
