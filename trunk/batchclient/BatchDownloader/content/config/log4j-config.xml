@@ -7,8 +7,39 @@
 			<param name="ConversionPattern" value="%d %5p (%t) (%c:%L) - %m%n"/>
 		</layout>
 	</appender>
+	
 	<appender name="mainLogFile" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="${webapp.root}log/main.log"/>
+		<param name="Append" value="true"/>
+		<param name="MaxFileSize" value="1024KB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p (%t) (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="queueBlockLogFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${webapp.root}log/queueblock.log"/>
+		<param name="Append" value="true"/>
+		<param name="MaxFileSize" value="1024KB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p (%t) (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="engineLogFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${webapp.root}log/engine.log"/>
+		<param name="Append" value="true"/>
+		<param name="MaxFileSize" value="1024KB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p (%t) (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="downloadLogFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${webapp.root}log/download.log"/>
 		<param name="Append" value="true"/>
 		<param name="MaxFileSize" value="1024KB"/>
 		<param name="MaxBackupIndex" value="10"/>
@@ -43,11 +74,30 @@
 		<appender-ref ref="consoleOut"/>
 	</logger>
 	
+	<logger name="com.vicutu.bw.engine.support.BlockPolicy" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="consoleOut"/>
+		<appender-ref ref="queueBlockLogFile"/>
+	</logger>
+	
+	<logger name="com.vicutu.bw.engine" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="consoleOut"/>
+		<appender-ref ref="engineLogFile"/>
+	</logger>
+	
+	<logger name="com.vicutu.bw.download" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="consoleOut"/>
+		<appender-ref ref="downloadLogFile"/>
+	</logger>
+	
 	<logger name="com.vicutu.bw" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="consoleOut"/>
 		<appender-ref ref="mainLogFile"/>
 	</logger>
+	
 	
 	<logger name="org.springframework" additivity="false">
 		<level value="info"/>
