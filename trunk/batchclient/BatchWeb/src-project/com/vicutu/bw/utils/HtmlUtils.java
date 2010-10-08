@@ -32,7 +32,7 @@ public class HtmlUtils {
 	}
 
 	public static List<String> selectAllHREF(String html) {
-		return selectAllHREF(html, null);
+		return selectAsString(html, null, "a[href]", "href");
 	}
 
 	public static List<String> selectAllHREF(String html, String baseUri) {
@@ -40,7 +40,7 @@ public class HtmlUtils {
 	}
 
 	public static List<String> selectAllImage(String html) {
-		return selectAllImage(html, null);
+		return selectAsString(html, null, "img[src]", "src");
 	}
 
 	public static List<String> selectAllImage(String html, String baseUri) {
@@ -48,23 +48,23 @@ public class HtmlUtils {
 	}
 
 	public static List<String> selectAllJPG(String html) {
-		return selectAsString(html, null, "img[src$=.jpg]", "abs:src");
+		return selectAsString(html, null, "img[src$=.jpg]", "src");
 	}
 
 	public static List<String> selectAllJPG(String html, String baseUri) {
-		return selectAsString(html, baseUri, "img[src$=.gif]", "abs:src");
+		return selectAsString(html, baseUri, "img[src$=.jpg]", "abs:src");
 	}
 
 	public static List<String> selectAllGIF(String html) {
-		return selectAllJPG(html, null);
+		return selectAsString(html, null, "img[src$=.gif]", "src");
 	}
 
 	public static List<String> selectAllGIF(String html, String baseUri) {
-		return selectAllGIF(html, null);
+		return selectAsString(html, baseUri, "img[src$=.gif]", "abs:src");
 	}
 
 	public static List<String> selectImageByType(String html, String type) {
-		return selectImageByType(html, type, null);
+		return selectAsString(html, null, "img[src$=." + type.toLowerCase() + "]", "src");
 	}
 
 	public static List<String> selectImageByType(String html, String type, String baseUri) {
