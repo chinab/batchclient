@@ -1,6 +1,7 @@
 package com.vicutu.bw.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,6 @@ public class HtmlUtils {
 						StringUtils.substringAfter(searchValue, "="));
 			}
 		}
-		return parameters;
+		return Collections.unmodifiableMap(parameters);
 	}
 }
