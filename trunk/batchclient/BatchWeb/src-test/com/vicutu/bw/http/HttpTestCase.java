@@ -16,6 +16,8 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,6 +154,30 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		List<String> hrefs = HtmlUtils.selectAsString(html, url, "a[href]", "abs:href");
 		for (String href : hrefs) {
 			logger.info(href);
+		}
+	}
+
+	@Test
+	public void test_orentalcastgirls() throws Exception {
+		String url = "http://www.orientalcastgirls.com/Member/new/cast.htm";
+		String baseUrl = "http://www.orientalcastgirls.com/Member/new/";
+		HttpUtils.setCredentials(httpClient, "www.orientalcastgirls.com", 80, "dipengfei", "Nfd[BIJ0HZ7J");
+		String htmlStr = HttpUtils.downloadHtml(httpClient, url);
+		//logger.info(htmlStr);
+		List<String> hrefList = HtmlUtils.selectAllHREF(htmlStr, baseUrl);
+		for (String href : hrefList) {
+			logger.info(href);
+		}
+	}
+
+	@Test
+	public void test_option() throws Exception {
+		String url = "http://www.orientalcastgirls.com/Member/ModelBased/Chengyu%20HIP/Chenyu%20HIP%2002/imagepages/image1.html";
+		HttpUtils.setCredentials(httpClient, "www.orientalcastgirls.com", 80, "dipengfei", "Nfd[BIJ0HZ7J");
+		String htmlStr = HttpUtils.downloadHtml(httpClient, url);
+		Elements elements = HtmlUtils.seletctAsElement(htmlStr, null, "option");
+		for (Element element : elements) {
+			logger.info(element.text());
 		}
 	}
 }
