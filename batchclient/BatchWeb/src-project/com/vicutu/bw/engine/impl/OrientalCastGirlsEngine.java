@@ -58,12 +58,10 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 				logger.info("searching target [{}]", searchUrl);
 				doSearch(searchUrl, savePath, accessDetail);
 			}
-
 			logger.info("search finished...");
 		} catch (Exception e) {
 			logger.error("occur error when searching", e);
 		}
-
 	}
 
 	private void setCredentials(AccessDetail accessDetail) {
