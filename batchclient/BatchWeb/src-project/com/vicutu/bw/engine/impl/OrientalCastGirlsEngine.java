@@ -27,8 +27,6 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 
 	private static final String[] SEARCH_TARGET = new String[] { "cast", "bandage", "webfind" };
 
-	private static final String MODEL_BASE_URL = "http://www.orientalcastgirls.com/Member/ModelBased/";
-
 	@Override
 	@Autowired
 	@Qualifier("defaultHttpClient")
@@ -93,8 +91,8 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	}
 
 	private void searchPart(String partUrl, String savePath, AccessDetail accessDetail) throws Exception {
-		File realSavePath = new File(savePath, StringUtils.replace(
-				StringUtils.substringAfterLast(partUrl, MODEL_BASE_URL), "%20", "_"));
+		String temp = StringUtils.substringAfterLast(partUrl, "Member/");
+		File realSavePath = new File(savePath, StringUtils.replace(StringUtils.substringAfter(temp, "/"), "%20", "_"));
 		if (!realSavePath.exists()) {
 			realSavePath.mkdirs();
 		}
@@ -113,7 +111,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 			String optionText = element.text();
 			String imageFileName = StringUtils.substringAfter(optionText, " ");
 			String imageUrl = StringUtils.replace(imageBaseUrl + imageFileName, " ", "%20");
-			File imageFile = new File(realSavePath, StringUtils.replace(imageFileName, " ", "%20"));
+			File imageFile = new File(realSavePath, StringUtils.replace(imageFileName, " ", "_"));
 			if (imageFile.exists() && !accessDetail.isReplaceExist()) {
 				logger.info("ignore exist : {}", imageUrl);
 			} else {
