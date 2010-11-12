@@ -25,7 +25,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 
 	private static final String ACCESS_DETAIL_NAME = "OrientalCastGirls";
 
-	private static final String[] SEARCH_TARGET = new String[] { "cast", "bandage", "webfind" };
+	private static final String[] SEARCH_TARGET = new String[] { "cast", "bandage" };
 
 	@Override
 	@Autowired

@@ -68,6 +68,16 @@
 		</layout>
 	</appender>
 	
+	<appender name="displayLogFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${webapp.root}log/display.log"/>
+		<param name="Append" value="true"/>
+		<param name="MaxFileSize" value="1024KB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p (%t) (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
 
 	<logger name="org.apache.commons" additivity="false">
 		<level value="error"/>
@@ -90,6 +100,12 @@
 		<level value="info"/>
 		<appender-ref ref="consoleOut"/>
 		<appender-ref ref="downloadLogFile"/>
+	</logger>
+	
+	<logger name="com.vicutu.bw.support.SpeedRecorder" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="consoleOut"/>
+		<appender-ref ref="displayLogFile"/>
 	</logger>
 	
 	<logger name="com.vicutu.bw" additivity="false">
