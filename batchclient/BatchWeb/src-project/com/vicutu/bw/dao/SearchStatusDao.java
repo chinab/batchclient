@@ -7,4 +7,6 @@ public interface SearchStatusDao {
 	SearchStatus findSearchStatusByName(String accessName);
 
 	void saveOrUpdateSearchStatus(SearchStatus searchStatus);
+	
+	boolean lastSearchUrlExists(String accessName, String lastSearchUrl);
 }

@@ -27,4 +27,8 @@ public class SearchStatusServiceImpl implements SearchStatusService {
 		searchStatusDao.saveOrUpdateSearchStatus(searchStatus);
 	}
 
+	@Override
+	public boolean lastSearchUrlExists(String accessName, String lastSearchUrl) {
+		return searchStatusDao.lastSearchUrlExists(accessName, lastSearchUrl);
+	}
 }

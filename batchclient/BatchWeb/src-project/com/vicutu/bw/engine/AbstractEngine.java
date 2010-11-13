@@ -88,5 +88,9 @@ public abstract class AbstractEngine implements Engine {
 		applicationContext.publishEvent(event);
 	}
 
+	protected boolean lastSearchUrlExists(String lastSearchUrl) {
+		return searchStatusService.lastSearchUrlExists(getAccessDetailName(), lastSearchUrl);
+	}
+
 	protected abstract String getAccessDetailName();
 }
