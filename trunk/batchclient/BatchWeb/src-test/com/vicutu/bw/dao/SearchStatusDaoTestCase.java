@@ -25,4 +25,10 @@ public class SearchStatusDaoTestCase extends AbstractJUnit4SpringContextTests {
 		SearchStatus searchStatus = searchStatusDao.findSearchStatusByName("GipsAlpin");
 		logger.info(searchStatus);
 	}
+
+	@Test
+	public void test_lastSearchUrlExists() {
+		logger.info(searchStatusDao.lastSearchUrlExists("OrientalCastGirls",
+				"http://www.orientalcastgirls.com/Member/ModelBased/Chengyu%20HIP/Chenyu%20HIP%2002/"));
+	}
 }

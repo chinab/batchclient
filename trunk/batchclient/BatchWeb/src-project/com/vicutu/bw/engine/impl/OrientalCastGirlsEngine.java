@@ -19,6 +19,7 @@ import com.vicutu.bw.utils.HtmlUtils;
 import com.vicutu.bw.utils.HttpUtils;
 import com.vicutu.bw.utils.URIUtils;
 import com.vicutu.bw.vo.AccessDetail;
+import com.vicutu.bw.vo.SearchStatus;
 
 @Component
 public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
@@ -83,8 +84,16 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 		String htmlStr = HttpUtils.downloadHtml(httpClient, albumUrl);
 		List<String> parts = HtmlUtils.selectAllHREF(htmlStr, accessDetail.getBaseUrl());
 		for (String part : parts) {
-			logger.info("searching part [{}]", part);
-			searchPart(part, savePath, accessDetail);
+			if (lastSearchUrlExists(part)) {
+				logger.info("part [{}] has been searched...", part);
+			} else {
+				logger.info("searching part [{}]", part);
+				SearchStatus searchStatus = new SearchStatus();
+				searchStatus.setAccessName(getAccessDetailName());
+				searchStatus.setLastSearchUrl(part);
+				fireUpdateSearchStatusEvent(searchStatus);
+				searchPart(part, savePath, accessDetail);
+			}
 		}
 	}
 
