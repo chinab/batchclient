@@ -37,9 +37,7 @@ public class SearchStatusDaoImpl extends HibernateGenericDaoSupport<SearchStatus
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public boolean lastSearchUrlExists(String accessName, String lastSearchUrl) {
-		SearchStatus searchStatus = new SearchStatus();
-		searchStatus.setAccessName(accessName);
-		searchStatus.setLastSearchUrl(lastSearchUrl);
-		return this.getHibernateTemplate().findByExample(searchStatus).size() > 0;
+		return !this.getSession().createCriteria(SearchStatus.class).add(Restrictions.eq("accessName", accessName))
+				.add(Restrictions.eq("lastSearchUrl", lastSearchUrl)).list().isEmpty();
 	}
 }
