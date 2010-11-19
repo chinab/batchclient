@@ -1,9 +1,10 @@
-package com.vicutu.bw.event;
+package com.vicutu.bw.event.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import com.vicutu.bw.event.UpdateDownloadDetailEvent;
 import com.vicutu.bw.support.SpeedRecorder;
 
 @Component
