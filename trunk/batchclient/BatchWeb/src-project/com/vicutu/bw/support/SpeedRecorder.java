@@ -2,14 +2,6 @@ package com.vicutu.bw.support;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import com.vicutu.commons.lang.FileUtils;
-import com.vicutu.commons.logging.Logger;
-import com.vicutu.commons.logging.LoggerFactory;
-
-@Component
 public class SpeedRecorder {
 
 	private final AtomicLong totalTransferredBytes = new AtomicLong();
@@ -20,32 +12,51 @@ public class SpeedRecorder {
 
 	private long firstDisplayTimestamp;
 
-	private final Logger logger = LoggerFactory.getLogger(SpeedRecorder.class);
+	private volatile long currentSpeed;
 
-	public void record(long size) {
-		totalTransferredBytes.addAndGet(size);
-		currentTransferredBytes.addAndGet(size);
+	private volatile long averageSpeed;
+
+	private volatile long totalSize;
+
+	private String name;
+
+	public SpeedRecorder(String name) {
+		this.name = name;
+		lastDisplayTimestamp = System.currentTimeMillis();
+		firstDisplayTimestamp = lastDisplayTimestamp;
 	}
 
-	@Scheduled(fixedDelay = 10000)
-	public void dispaly() {
+	public void record(long size) {
 		if (lastDisplayTimestamp > 0) {
 			long currentTimestamp = System.currentTimeMillis();
 			long currentCost = currentTimestamp - lastDisplayTimestamp;
 			long totalCost = currentTimestamp - firstDisplayTimestamp;
-			long totalBytes = totalTransferredBytes.get();
-			long currentBytes = currentTransferredBytes.get();
-			String currentSpeed = FileUtils.byteCountToDisplaySize(currentBytes / (currentCost / 1000));
-			String averageSpeed = FileUtils.byteCountToDisplaySize(totalBytes / (totalCost / 1000));
-			String totalSize = FileUtils.byteCountToDisplaySize(totalBytes);
-			logger.info("CurrentSpeed : [{}]\tAverageSpeed : [{}]\tTotalSize : [{}]", currentSpeed, averageSpeed,
-					totalSize);
+			long totalBytes = totalTransferredBytes.addAndGet(size);
+			long currentBytes = currentTransferredBytes.addAndGet(size);
+			currentSpeed = currentBytes / (currentCost / 1000);
+			averageSpeed = totalBytes / (totalCost / 1000);
+			totalSize = totalBytes;
 
 			lastDisplayTimestamp = currentTimestamp;
 			currentTransferredBytes.set(0L);
 		} else {
-			lastDisplayTimestamp = System.currentTimeMillis();
-			firstDisplayTimestamp = lastDisplayTimestamp;
+			throw new IllegalStateException("SpeedRecorder is not completely initialized");
 		}
+	}
+
+	public long getCurrentSpeed() {
+		return currentSpeed;
+	}
+
+	public long getAverageSpeed() {
+		return averageSpeed;
+	}
+
+	public long getTotalSize() {
+		return totalSize;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
