@@ -102,7 +102,7 @@
 		<appender-ref ref="downloadLogFile"/>
 	</logger>
 	
-	<logger name="com.vicutu.bw.support.SpeedRecorder" additivity="false">
+	<logger name="com.vicutu.bw.support.SpeedLogger" additivity="false">
 		<level value="info"/>
 		<appender-ref ref="consoleOut"/>
 		<appender-ref ref="displayLogFile"/>

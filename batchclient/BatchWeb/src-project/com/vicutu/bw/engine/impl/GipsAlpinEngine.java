@@ -156,7 +156,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 		if (loginResult.booleanValue()) {
 			HttpGet httpget = new HttpGet(accessDetail.getLoginRefreshUrl());
 			HttpResponse response = httpClient.execute(httpget);
-			response.getEntity().consumeContent();
+			EntityUtils.consume(response.getEntity());
 		} else {
 			throw new BaseRuntimeException("log in failed");
 		}

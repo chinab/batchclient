@@ -118,7 +118,7 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		if (loginResult) {
 			HttpGet httpget = new HttpGet(loginRefreshUrl);
 			HttpResponse response = httpClient.execute(httpget);
-			response.getEntity().consumeContent();
+			EntityUtils.consume(response.getEntity());
 		} else {
 			throw new BaseRuntimeException("log in failed");
 		}

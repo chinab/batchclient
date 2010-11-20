@@ -5,7 +5,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.vicutu.bw.download.Downloader;
-import com.vicutu.bw.engine.DownloadItem;
 import com.vicutu.bw.event.AddDownloadItemEvent;
 import com.vicutu.commons.logging.Logger;
 import com.vicutu.commons.logging.LoggerFactory;
@@ -24,7 +23,6 @@ public class AddDownloadItemListener implements ApplicationListener<AddDownloadI
 
 	@Override
 	public void onApplicationEvent(AddDownloadItemEvent event) {
-		DownloadItem downloadItem = event.getDownloadItem();
-		downloader.download(downloadItem);
+		downloader.download(event.getDownloadItem());
 	}
 }

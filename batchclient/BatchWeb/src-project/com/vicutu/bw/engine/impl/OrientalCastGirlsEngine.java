@@ -43,12 +43,14 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	@Override
 	@Scheduled(fixedDelay = 600000)
 	public void search() {
+		this.fireSearchBeginEvent();
 		try {
 			AccessDetail accessDetail = queryAccessDetail();
 			if (!accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
+
 			this.setCredentials(accessDetail);
 
 			String baseUrl = accessDetail.getBaseUrl();
@@ -62,6 +64,8 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 			logger.info("search finished...");
 		} catch (Exception e) {
 			logger.error("occur error when searching", e);
+		} finally {
+			this.fireSearchEndEvent();
 		}
 	}
 
