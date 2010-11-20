@@ -36,7 +36,7 @@ public class SpeedLogger {
 					FileUtils.byteCountToDisplaySize(recorder.getCurrentSpeed()),
 					FileUtils.byteCountToDisplaySize(recorder.getAverageSpeed()),
 					FileUtils.byteCountToDisplaySize(recorder.getTotalSize()) };
-			logger.info("Engine : [{}]\tCurrentSpeed : [{}]\tAverageSpeed : [{}]\tTotalSize : [{}]", texts);
+			logger.info("Engine : [{}]\tCurrentSpeed : [{}]\tAverageSpeed : [{}]\tTotalSize : [{}]", texts, null);
 		}
 	}
 }

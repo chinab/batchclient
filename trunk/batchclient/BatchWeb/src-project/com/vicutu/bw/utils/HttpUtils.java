@@ -92,7 +92,7 @@ public class HttpUtils {
 				if (response != null) {
 					HttpEntity entity = response.getEntity();
 					if (entity != null) {
-						entity.consumeContent();
+						EntityUtils.consume(entity);
 					}
 				}
 			} catch (IOException e1) {

@@ -77,7 +77,8 @@ public abstract class AbstractDownloader implements Downloader {
 		} finally {
 			IOUtils.closeQuietly(os);
 			downloadDetail.setUpdateTime(new Date(System.currentTimeMillis()));
-			applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
+			applicationContext.publishEvent(new UpdateDownloadDetailEvent(this, downloadItem.getAccessDetail(),
+					downloadDetail));
 		}
 	}
 }

@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 
 import com.vicutu.bw.event.AddDownloadItemEvent;
+import com.vicutu.bw.event.SearchBeginEvent;
+import com.vicutu.bw.event.SearchEndEvent;
 import com.vicutu.bw.event.UpdateDownloadDetailEvent;
 import com.vicutu.bw.event.UpdateSearchStatusEvent;
 import com.vicutu.bw.service.AccessDetailService;
@@ -66,7 +68,7 @@ public abstract class AbstractEngine implements Engine {
 		downloadDetail.setFileName(fileName);
 		downloadDetail.setUpdateTime(new Date(System.currentTimeMillis()));
 		logger.info("DownloadDetail-Url : {}", imageUrl0);
-		publishEvent(new UpdateDownloadDetailEvent(this, downloadDetail));
+		publishEvent(new UpdateDownloadDetailEvent(this, accessDetail, downloadDetail));
 		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
 		publishEvent(new AddDownloadItemEvent(this, downloadItem));
 	}
@@ -74,6 +76,14 @@ public abstract class AbstractEngine implements Engine {
 	protected void fireUpdateSearchStatusEvent(SearchStatus searchStatus) {
 		searchStatus.setLastSearchTime(new Date(System.currentTimeMillis()));
 		publishEvent(new UpdateSearchStatusEvent(this, searchStatus));
+	}
+
+	protected void fireSearchBeginEvent() {
+		publishEvent(new SearchBeginEvent(this, getAccessDetailName(), new Date(System.currentTimeMillis())));
+	}
+
+	protected void fireSearchEndEvent() {
+		publishEvent(new SearchEndEvent(this, getAccessDetailName(), new Date(System.currentTimeMillis())));
 	}
 
 	protected AccessDetail queryAccessDetail() {
