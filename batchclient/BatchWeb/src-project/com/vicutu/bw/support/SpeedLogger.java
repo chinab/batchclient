@@ -15,7 +15,11 @@ public class SpeedLogger {
 
 	private final Logger logger = LoggerFactory.getLogger(SpeedLogger.class);
 
-	ConcurrentMap<String, SpeedRecorder> recorders = new ConcurrentHashMap<String, SpeedRecorder>();
+	private ConcurrentMap<String, SpeedRecorder> recorders = new ConcurrentHashMap<String, SpeedRecorder>();
+
+	private long firstDisplayTimestamp;
+
+	private long lastDisplayTimestamp;
 
 	public void beginLog(String name) {
 		recorders.putIfAbsent(name, new SpeedRecorder(name));
@@ -31,12 +35,25 @@ public class SpeedLogger {
 
 	@Scheduled(fixedDelay = 10000)
 	public void log() {
-		for (SpeedRecorder recorder : recorders.values()) {
-			String[] texts = new String[] { recorder.getName(),
-					FileUtils.byteCountToDisplaySize(recorder.getCurrentSpeed()),
-					FileUtils.byteCountToDisplaySize(recorder.getAverageSpeed()),
-					FileUtils.byteCountToDisplaySize(recorder.getTotalSize()) };
-			logger.info("Engine : [{}]\tCurrentSpeed : [{}]\tAverageSpeed : [{}]\tTotalSize : [{}]", texts, null);
+		if (lastDisplayTimestamp > 0) {
+			for (SpeedRecorder recorder : recorders.values()) {
+				long currentTimestamp = System.currentTimeMillis();
+				long currentCost = currentTimestamp - lastDisplayTimestamp;
+				long totalCost = currentTimestamp - firstDisplayTimestamp;
+				long totalBytes = recorder.getTotalTransferredBytes();
+				long currentBytes = recorder.getCurrentTransferredBytes();
+				String currentSpeed = FileUtils.byteCountToDisplaySize(currentBytes / (currentCost / 1000));
+				String averageSpeed = FileUtils.byteCountToDisplaySize(totalBytes / (totalCost / 1000));
+				String totalSize = FileUtils.byteCountToDisplaySize(totalBytes);
+				String[] texts = new String[] { recorder.getName(), currentSpeed, averageSpeed, totalSize };
+				logger.info("Engine : [{}]\tCurrentSpeed : [{}]\tAverageSpeed : [{}]\tTotalSize : [{}]", texts, null);
+
+				lastDisplayTimestamp = currentTimestamp;
+				recorder.reset();
+			}
+		} else {
+			lastDisplayTimestamp = System.currentTimeMillis();
+			firstDisplayTimestamp = lastDisplayTimestamp;
 		}
 	}
 }

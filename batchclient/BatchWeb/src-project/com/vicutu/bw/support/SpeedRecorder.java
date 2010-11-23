@@ -8,54 +8,34 @@ public class SpeedRecorder {
 
 	private final AtomicLong currentTransferredBytes = new AtomicLong();
 
-	private long lastDisplayTimestamp;
-
-	private long firstDisplayTimestamp;
-
-	private volatile long currentSpeed;
-
-	private volatile long averageSpeed;
-
-	private volatile long totalSize;
-
 	private String name;
 
 	public SpeedRecorder(String name) {
 		this.name = name;
-		lastDisplayTimestamp = System.currentTimeMillis();
-		firstDisplayTimestamp = lastDisplayTimestamp;
 	}
 
 	public void record(long size) {
-		if (lastDisplayTimestamp > 0) {
-			long currentTimestamp = System.currentTimeMillis();
-			long currentCost = currentTimestamp - lastDisplayTimestamp;
-			long totalCost = currentTimestamp - firstDisplayTimestamp;
-			long totalBytes = totalTransferredBytes.addAndGet(size);
-			long currentBytes = currentTransferredBytes.addAndGet(size);
-			currentSpeed = currentBytes / (currentCost / 1000);
-			averageSpeed = totalBytes / (totalCost / 1000);
-			totalSize = totalBytes;
-
-			lastDisplayTimestamp = currentTimestamp;
-			currentTransferredBytes.set(0L);
-		} else {
-			throw new IllegalStateException("SpeedRecorder is not completely initialized");
-		}
+		totalTransferredBytes.addAndGet(size);
+		currentTransferredBytes.addAndGet(size);
 	}
 
-	public long getCurrentSpeed() {
-		return currentSpeed;
+	public long getTotalTransferredBytes() {
+		return totalTransferredBytes.get();
 	}
 
-	public long getAverageSpeed() {
-		return averageSpeed;
+	public long getCurrentTransferredBytes() {
+		return currentTransferredBytes.get();
 	}
 
-	public long getTotalSize() {
-		return totalSize;
+	public void reset() {
+		currentTransferredBytes.set(0L);
 	}
-	
+
+	public void resetAll() {
+		currentTransferredBytes.set(0L);
+		totalTransferredBytes.set(0L);
+	}
+
 	public String getName() {
 		return name;
 	}

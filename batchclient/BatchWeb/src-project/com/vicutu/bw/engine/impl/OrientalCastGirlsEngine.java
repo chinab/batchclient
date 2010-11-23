@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.jsoup.nodes.Element;
@@ -39,6 +41,11 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	protected String getAccessDetailName() {
 		return ACCESS_DETAIL_NAME;
 	}
+	
+	@PostConstruct
+	public void init(){
+		this.setCredentials(queryAccessDetail());
+	}
 
 	@Override
 	@Scheduled(fixedDelay = 600000)
@@ -50,8 +57,6 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
-
-			this.setCredentials(accessDetail);
 
 			String baseUrl = accessDetail.getBaseUrl();
 
