@@ -44,21 +44,13 @@ public class BostonBigPictureEngine extends AbstractEngine implements Engine {
 	public void search() {
 		try {
 			AccessDetail accessDetail = queryAccessDetail();
-			if (!accessDetail.isAvailble()) {
+			if (accessDetail == null || !accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
 			String startUrl = accessDetail.getSearchUrl();
 			String baseUrl = accessDetail.getBaseUrl();
-			SearchStatus searchStatus = querySearchStatus();
-			if (searchStatus == null) {
-				searchStatus = new SearchStatus();
-				searchStatus.setLastSearchUrl(startUrl);
-				searchStatus.setAccessName(ACCESS_DETAIL_NAME);
-				fireUpdateSearchStatusEvent(searchStatus);
-			} else {
-				startUrl = searchStatus.getLastSearchUrl();
-			}
+			SearchStatus searchStatus = new SearchStatus();
 			Date currentTime = new Date(System.currentTimeMillis());
 			Date startTime = parseStartTimeFromUrl(currentTime, startUrl, baseUrl);
 			Date searchDate = startTime;

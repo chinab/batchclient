@@ -18,17 +18,17 @@ public class SearchStatusServiceImpl implements SearchStatusService {
 	}
 
 	@Override
-	public SearchStatus findSearchStatusByName(String accessName) {
-		return searchStatusDao.findSearchStatusByName(accessName);
-	}
-
-	@Override
 	public void saveOrUpdateSearchStatus(SearchStatus searchStatus) {
 		searchStatusDao.saveOrUpdateSearchStatus(searchStatus);
 	}
 
 	@Override
-	public boolean lastSearchUrlExists(String accessName, String lastSearchUrl) {
-		return searchStatusDao.lastSearchUrlExists(accessName, lastSearchUrl);
+	public boolean urlExists(String url) {
+		return searchStatusDao.urlExists(url);
+	}
+
+	@Override
+	public SearchStatus findSearchStatusByUrl(String url) {
+		return searchStatusDao.findSearchStatusByUrl(url);
 	}
 }

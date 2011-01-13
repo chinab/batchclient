@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-import com.vicutu.bw.vo.SearchStatus;
 import com.vicutu.commons.test.LoggedSpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations = { "ctx-dao-test.xml" })
@@ -21,14 +20,8 @@ public class SearchStatusDaoTestCase extends AbstractJUnit4SpringContextTests {
 	}
 
 	@Test
-	public void test_findByName() {
-		SearchStatus searchStatus = searchStatusDao.findSearchStatusByName("GipsAlpin");
-		logger.info(searchStatus);
-	}
-
-	@Test
-	public void test_lastSearchUrlExists() {
-		logger.info(searchStatusDao.lastSearchUrlExists("OrientalCastGirls",
-				"http://www.orientalcastgirls.com/Member/month_1010/Yuzhen%20LLC/yuzhen%20LLC%2007"));
+	public void test_urlExists() {
+		logger.info(searchStatusDao
+				.urlExists("http://www.orientalcastgirls.com/Member/month_1010/Yuzhen%20LLC/yuzhen%20LLC%2007"));
 	}
 }
