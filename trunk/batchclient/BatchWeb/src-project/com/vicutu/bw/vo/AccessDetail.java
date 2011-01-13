@@ -105,6 +105,8 @@ public class AccessDetail implements Serializable, IReadable {
 	@Column(name = "replace_exist")
 	private boolean replaceExist;
 
+	private boolean checkStatus;
+
 	public long getId() {
 		return id;
 	}
@@ -303,6 +305,14 @@ public class AccessDetail implements Serializable, IReadable {
 
 	public void setReplaceExist(boolean replaceExist) {
 		this.replaceExist = replaceExist;
+	}
+
+	public boolean isCheckStatus() {
+		return checkStatus;
+	}
+
+	public void setCheckStatus(boolean checkStatus) {
+		this.checkStatus = checkStatus;
 	}
 
 	@Override

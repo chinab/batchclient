@@ -26,13 +26,13 @@ public class MembaseSetup {
 
 	public void setup() throws Exception {
 		for (AccessDetail accessDetail : setupAccessDetails) {
-			memcachedClient.set(accessDetail.getName(), 0, accessDetail);
+			memcachedClient.set("AccessDetail$" + accessDetail.getName(), 0, accessDetail);
 		}
 	}
 
 	public void clear() throws Exception {
 		for (AccessDetail accessDetail : setupAccessDetails) {
-			memcachedClient.delete(accessDetail.getName());
+			memcachedClient.delete("AccessDetail$" + accessDetail.getName());
 		}
 	}
 
@@ -50,7 +50,7 @@ public class MembaseSetup {
 
 	public void printConfigFromServer() throws Exception {
 		for (AccessDetail accessDetail : setupAccessDetails) {
-			System.err.println(memcachedClient.get(accessDetail.getName()));
+			System.err.println(memcachedClient.get("AccessDetail$" + accessDetail.getName()));
 		}
 	}
 
@@ -65,8 +65,8 @@ public class MembaseSetup {
 			membaseSetup.printConfigFromLocal();
 			membaseSetup.setup();
 			membaseSetup.printConfigFromServer();
-			//			membaseSetup.clear();
-			//			membaseSetup.printConfigFromServer();
+//			membaseSetup.clear();
+//			membaseSetup.printConfigFromServer();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{

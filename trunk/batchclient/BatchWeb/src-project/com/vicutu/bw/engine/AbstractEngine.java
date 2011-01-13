@@ -90,16 +90,12 @@ public abstract class AbstractEngine implements Engine {
 		return accessDetailService.findAccessDetailByName(getAccessDetailName());
 	}
 
-	protected SearchStatus querySearchStatus() {
-		return searchStatusService.findSearchStatusByName(getAccessDetailName());
-	}
-
 	protected void publishEvent(ApplicationEvent event) {
 		applicationContext.publishEvent(event);
 	}
 
-	protected boolean lastSearchUrlExists(String lastSearchUrl) {
-		return searchStatusService.lastSearchUrlExists(getAccessDetailName(), lastSearchUrl);
+	protected boolean urlExists(String url) {
+		return searchStatusService.urlExists(url);
 	}
 
 	protected abstract String getAccessDetailName();

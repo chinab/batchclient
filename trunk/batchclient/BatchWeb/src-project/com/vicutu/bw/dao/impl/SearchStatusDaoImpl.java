@@ -18,9 +18,9 @@ public class SearchStatusDaoImpl extends HibernateGenericDaoSupport<SearchStatus
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public SearchStatus findSearchStatusByName(String accessName) {
+	public SearchStatus findSearchStatusByUrl(String url) {
 		List<SearchStatus> list = this.getSession().createCriteria(SearchStatus.class)
-				.add(Restrictions.eq("accessName", accessName)).list();
+				.add(Restrictions.eq("lastSearchUrl", url)).list();
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -36,8 +36,8 @@ public class SearchStatusDaoImpl extends HibernateGenericDaoSupport<SearchStatus
 
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public boolean lastSearchUrlExists(String accessName, String lastSearchUrl) {
-		return !this.getSession().createCriteria(SearchStatus.class).add(Restrictions.eq("accessName", accessName))
-				.add(Restrictions.eq("lastSearchUrl", lastSearchUrl)).list().isEmpty();
+	public boolean urlExists(String url) {
+		return !this.getSession().createCriteria(SearchStatus.class).add(Restrictions.eq("lastSearchUrl", url)).list()
+				.isEmpty();
 	}
 }

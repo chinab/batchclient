@@ -41,9 +41,9 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	protected String getAccessDetailName() {
 		return ACCESS_DETAIL_NAME;
 	}
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		this.setCredentials(queryAccessDetail());
 	}
 
@@ -53,7 +53,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 		this.fireSearchBeginEvent();
 		try {
 			AccessDetail accessDetail = queryAccessDetail();
-			if (!accessDetail.isAvailble()) {
+			if (accessDetail == null || !accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
@@ -93,7 +93,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 		String htmlStr = HttpUtils.downloadHtml(httpClient, albumUrl);
 		List<String> parts = HtmlUtils.selectAllHREF(htmlStr, accessDetail.getBaseUrl());
 		for (String part : parts) {
-			if (lastSearchUrlExists(part)) {
+			if (searchStatusService.urlExists(part)) {
 				logger.info("part [{}] has been searched...", part);
 			} else {
 				logger.info("searching part [{}]", part);

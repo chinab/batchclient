@@ -47,22 +47,14 @@ public class BeautyLegEngine extends AbstractEngine implements Engine {
 	public void search() {
 		try {
 			AccessDetail accessDetail = queryAccessDetail();
-			if (!accessDetail.isAvailble()) {
+			if (accessDetail == null || !accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
 			String startUrl = accessDetail.getSearchUrl();
 			String baseUrl = accessDetail.getBaseUrl();
 			String savePath = accessDetail.getSavePath();
-			SearchStatus searchStatus = querySearchStatus();
-			if (searchStatus == null) {
-				searchStatus = new SearchStatus();
-				searchStatus.setLastSearchUrl(startUrl);
-				searchStatus.setAccessName(ACCESS_DETAIL_NAME);
-				fireUpdateSearchStatusEvent(searchStatus);
-			} else {
-				startUrl = searchStatus.getLastSearchUrl();
-			}
+			SearchStatus searchStatus = new SearchStatus();
 			List<String> allHrefs = HtmlUtils.selectAllHREF(HttpUtils.downloadHtml(httpClient, baseUrl), baseUrl);
 			List<String> baseHrefs = URICollectionFilter
 					.valueOf(allHrefs)

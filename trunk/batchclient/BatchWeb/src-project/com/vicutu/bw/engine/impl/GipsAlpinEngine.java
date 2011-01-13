@@ -56,7 +56,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	public void search() {
 		try {
 			AccessDetail accessDetail = queryAccessDetail();
-			if (!accessDetail.isAvailble()) {
+			if (accessDetail == null || !accessDetail.isAvailble()) {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
@@ -65,7 +65,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
 			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
-			SearchStatus searchStatus = querySearchStatus();
+			SearchStatus searchStatus = new SearchStatus();
 			String lastSearchUrl = searchStatus.getLastSearchUrl();
 
 			if (lastSearchUrl != null) {

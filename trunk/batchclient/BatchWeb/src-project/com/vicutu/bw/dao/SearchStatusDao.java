@@ -4,9 +4,9 @@ import com.vicutu.bw.vo.SearchStatus;
 
 public interface SearchStatusDao {
 
-	SearchStatus findSearchStatusByName(String accessName);
-
 	void saveOrUpdateSearchStatus(SearchStatus searchStatus);
-	
-	boolean lastSearchUrlExists(String accessName, String lastSearchUrl);
+
+	boolean urlExists(String url);
+
+	SearchStatus findSearchStatusByUrl(String url);
 }
