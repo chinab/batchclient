@@ -1,6 +1,7 @@
 package com.vicutu.bw.engine;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PreDestroy;
 
@@ -27,6 +28,8 @@ public abstract class AbstractEngine implements Engine {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected HttpClient httpClient;
+	
+	protected AtomicInteger counter = new AtomicInteger();
 
 	protected AccessDetailService accessDetailService;
 
