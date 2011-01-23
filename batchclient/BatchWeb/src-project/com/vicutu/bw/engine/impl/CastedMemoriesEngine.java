@@ -117,6 +117,13 @@ public class CastedMemoriesEngine extends AbstractEngine implements Engine {
 					logger.info("ignore exist : {}", imageUrl0);
 				} else {
 					fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(), imageUrl0);
+					if (counter.incrementAndGet() > accessDetail.getPeak()) {
+						logger.info("reach peak of [{}] : [{}], resume search in [{}] milliseconds",
+								accessDetail.getName(), Integer.valueOf(accessDetail.getPeak()),
+								Long.valueOf(accessDetail.getInterval()));
+						Thread.sleep(accessDetail.getInterval());
+						counter.set(0);
+					}
 				}
 			} else {
 				logger.warn("illegal uri of image file : {}", fileName);

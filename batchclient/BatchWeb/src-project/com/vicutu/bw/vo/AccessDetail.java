@@ -106,6 +106,8 @@ public class AccessDetail implements Serializable, IReadable {
 	private boolean replaceExist;
 
 	private boolean checkStatus;
+	
+	private int peak;
 
 	public long getId() {
 		return id;
@@ -313,6 +315,14 @@ public class AccessDetail implements Serializable, IReadable {
 
 	public void setCheckStatus(boolean checkStatus) {
 		this.checkStatus = checkStatus;
+	}
+	
+	public int getPeak() {
+		return peak;
+	}
+
+	public void setPeak(int peak) {
+		this.peak = peak;
 	}
 
 	@Override
