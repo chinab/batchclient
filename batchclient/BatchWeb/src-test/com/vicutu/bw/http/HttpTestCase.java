@@ -2,6 +2,7 @@ package com.vicutu.bw.http;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,6 +179,15 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 		Elements elements = HtmlUtils.seletctAsElement(htmlStr, null, "option");
 		for (Element element : elements) {
 			logger.info(element.text());
+		}
+	}
+	
+	@Test
+	public void test_verification() throws Exception {
+		for (int i = 0; i < 100; i++) {
+			OutputStream os = FileUtils.openOutputStream(new File("D:/cu/" + i + ".bmp"));
+			HttpUtils.download(httpClient, "http://www.castedeurope.com/captcha.php?cap=" + i, os);
+			IOUtils.closeQuietly(os);
 		}
 	}
 }
