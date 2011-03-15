@@ -93,7 +93,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 		String htmlStr = HttpUtils.downloadHtml(httpClient, albumUrl);
 		List<String> parts = HtmlUtils.selectAllHREF(htmlStr, accessDetail.getBaseUrl());
 		for (String part : parts) {
-			if (searchStatusService.urlExists(part)) {
+			if (accessDetail.isCheckStatus() && searchStatusService.urlExists(part)) {
 				logger.info("part [{}] has been searched...", part);
 			} else {
 				logger.info("searching part [{}]", part);
