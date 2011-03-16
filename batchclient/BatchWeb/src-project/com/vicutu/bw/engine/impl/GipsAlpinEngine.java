@@ -65,7 +65,13 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
 			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
-			SearchStatus searchStatus = new SearchStatus();
+			SearchStatus searchStatus = null;
+			if(accessDetail.isCheckStatus()){
+				searchStatus = searchStatusService.findSearchStatusByUrl(null);
+			}
+			if(searchStatus == null){
+				searchStatus = new SearchStatus();
+			}
 			String lastSearchUrl = searchStatus.getLastSearchUrl();
 
 			if (lastSearchUrl != null) {
