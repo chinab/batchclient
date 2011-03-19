@@ -44,7 +44,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 
 	@PostConstruct
 	public void init() {
-		this.setCredentials(queryAccessDetail());
+		
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 				logger.info("Engine [{}] is not avaible now", ACCESS_DETAIL_NAME);
 				return;
 			}
-
+			this.setCredentials(accessDetail);
 			String baseUrl = accessDetail.getBaseUrl();
 
 			for (int i = 0; i < SEARCH_TARGET.length; i++) {
