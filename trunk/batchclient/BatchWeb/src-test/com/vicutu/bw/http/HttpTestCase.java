@@ -181,13 +181,20 @@ public class HttpTestCase extends AbstractJUnit4SpringContextTests {
 			logger.info(element.text());
 		}
 	}
-	
+
 	@Test
-	public void test_verification() throws Exception {
+	public void test_verifications() throws Exception {
 		for (int i = 0; i < 100; i++) {
 			OutputStream os = FileUtils.openOutputStream(new File("D:/cu/" + i + ".bmp"));
 			HttpUtils.download(httpClient, "http://www.castedeurope.com/captcha.php?cap=" + i, os);
 			IOUtils.closeQuietly(os);
 		}
+	}
+
+	@Test
+	public void test_verification() throws Exception {
+		OutputStream os = FileUtils.openOutputStream(new File("D:/cu/26.bmp"));
+		HttpUtils.download(httpClient, "http://www.castedeurope.com/captcha.php?cap=26", os);
+		IOUtils.closeQuietly(os);
 	}
 }

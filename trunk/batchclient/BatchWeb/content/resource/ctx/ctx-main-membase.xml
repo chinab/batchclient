@@ -58,7 +58,7 @@
 		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="1" />
 		<property name="maxPoolSize" value="3" />
-		<property name="queueCapacity" value="50" />
+		<property name="queueCapacity" value="5" />
 		<property name="rejectedExecutionHandler">
 			<bean class="com.vicutu.bw.engine.support.BlockPolicy" />
 		</property>
