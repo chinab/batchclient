@@ -42,7 +42,8 @@ public class SpeedLogger {
 				long totalCost = currentTimestamp - firstDisplayTimestamp;
 				long totalBytes = recorder.getTotalTransferredBytes();
 				long currentBytes = recorder.getCurrentTransferredBytes();
-				String currentSpeed = FileUtils.byteCountToDisplaySize(currentBytes / (currentCost / 1000));
+				String currentSpeed = FileUtils.byteCountToDisplaySize(currentBytes
+						/ ((currentCost / 1000) == 0 ? 1 : (currentCost / 1000)));
 				String averageSpeed = FileUtils.byteCountToDisplaySize(totalBytes / (totalCost / 1000));
 				String totalSize = FileUtils.byteCountToDisplaySize(totalBytes);
 				String[] texts = new String[] { recorder.getName(), currentSpeed, averageSpeed, totalSize };
