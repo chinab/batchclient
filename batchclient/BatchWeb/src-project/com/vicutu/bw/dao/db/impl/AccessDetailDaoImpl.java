@@ -1,4 +1,4 @@
-package com.vicutu.bw.dao.impl;
+package com.vicutu.bw.dao.db.impl;
 
 import java.util.List;
 
