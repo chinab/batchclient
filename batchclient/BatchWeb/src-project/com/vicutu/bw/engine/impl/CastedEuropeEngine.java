@@ -162,7 +162,7 @@ public class CastedEuropeEngine extends AbstractEngine implements Engine {
 		String verification = URICollectionFilter.valueOf(images).removeDuplicate().selectContains("captcha.php")
 				.list().get(0);
 
-		OutputStream os = FileUtils.openOutputStream(new File("D:/cu/verification.bmp"));
+		OutputStream os = FileUtils.openOutputStream(new File(accessDetail.getSavePath() + "verification.bmp"));
 		HttpUtils.download(httpClient, verification, os);
 		IOUtils.closeQuietly(os);
 
