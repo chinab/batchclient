@@ -55,6 +55,8 @@
 	<bean id="gipsalpin" class="com.vicutu.bw.vo.AccessDetail" />
 
 	<bean id="orientalcastgirls" class="com.vicutu.bw.vo.AccessDetail" />
+	
+	<bean id="castedeurope" class="com.vicutu.bw.vo.AccessDetail" />
 
 	<bean id="membaseSetup" class="com.vicutu.bw.support.setup.MembaseSetup"
 		init-method="init">
@@ -63,6 +65,7 @@
 				<ref bean="castedmemories" />
 				<ref bean="gipsalpin" />
 				<ref bean="orientalcastgirls" />
+				<ref bean="membaseSetup" />
 			</list>
 		</property>
 		<property name="memcachedClient" ref="memcachedClient" />
