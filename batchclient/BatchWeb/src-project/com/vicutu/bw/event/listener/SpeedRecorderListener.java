@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.vicutu.bw.event.UpdateDownloadDetailEvent;
+import com.vicutu.bw.event.SpeedRecorderEvent;
 import com.vicutu.bw.support.SpeedLogger;
 
 @Component
-public class SpeedRecorderListener implements ApplicationListener<UpdateDownloadDetailEvent> {
+public class SpeedRecorderListener implements ApplicationListener<SpeedRecorderEvent> {
 
 	private SpeedLogger speedLogger;
 
@@ -18,7 +18,7 @@ public class SpeedRecorderListener implements ApplicationListener<UpdateDownload
 	}
 
 	@Override
-	public void onApplicationEvent(UpdateDownloadDetailEvent event) {
-		speedLogger.update(event.getAccessDetail().getName(), event.getDownloadDetail().getFileLength());
+	public void onApplicationEvent(SpeedRecorderEvent event) {
+		speedLogger.update(event.getAccessDetail().getName(), event.getBufferLength());
 	}
 }
