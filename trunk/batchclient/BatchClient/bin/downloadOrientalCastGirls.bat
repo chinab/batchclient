@@ -1,1 +1,0 @@
-call batchclient.bat OrientalCastGirl
