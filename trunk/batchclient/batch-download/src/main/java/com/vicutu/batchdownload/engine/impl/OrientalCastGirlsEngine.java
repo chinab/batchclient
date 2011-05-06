@@ -107,18 +107,14 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	}
 
 	private void searchPart(String partUrl, String savePath, AccessDetail accessDetail) throws Exception {
-		String temp = StringUtils.substringAfterLast(partUrl, "Member/");
-		File realSavePath = new File(savePath, StringUtils.replace(StringUtils.substringAfter(temp, "/"), "%20", "_"));
-		if (!realSavePath.exists()) {
-			realSavePath.mkdirs();
-		}
+		
 		String imageBaseUrl = partUrl + "/images/";
 		String imgae1htmlUrl = partUrl + "/imagepages/image1.html";
 
-		assembleTask(imgae1htmlUrl, imageBaseUrl, realSavePath, accessDetail);
+		assembleTask(imgae1htmlUrl, imageBaseUrl, savePath, accessDetail);
 	}
 
-	private void assembleTask(String imgae1htmlUrl, String imageBaseUrl, File realSavePath, AccessDetail accessDetail)
+	private void assembleTask(String imgae1htmlUrl, String imageBaseUrl, String savePath, AccessDetail accessDetail)
 			throws Exception {
 		String htmlStr = HttpUtils.downloadHtml(httpClient, imgae1htmlUrl);
 
@@ -127,11 +123,17 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 			String optionText = element.text();
 			String imageFileName = StringUtils.substringAfter(optionText, " ");
 			String imageUrl = StringUtils.replace(imageBaseUrl + imageFileName, " ", "%20");
-			File imageFile = new File(realSavePath, StringUtils.replace(imageFileName, " ", "_"));
+			String realFileName = StringUtils.replace(imageFileName, " ", "_");
+			File realSavePath = new File(savePath, StringUtils.substringBeforeLast(realFileName, "_"));
+			if (!realSavePath.exists()) {
+				realSavePath.mkdirs();
+			}
+			
+			File imageFile = new File(realSavePath, realFileName);
 			if (imageFile.exists() && !accessDetail.isReplaceExist()) {
 				logger.info("ignore exist : {}", imageUrl);
 			} else {
-				fireDownloadEvent(accessDetail, null, imageFileName, imageFile.getAbsolutePath(), imageUrl);
+				fireDownloadEvent(accessDetail, null, realFileName, imageFile.getAbsolutePath(), imageUrl);
 			}
 		}
 	}
