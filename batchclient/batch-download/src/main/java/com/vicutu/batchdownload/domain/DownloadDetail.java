@@ -45,6 +45,8 @@ public class DownloadDetail implements Serializable, IReadable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private long id;
+	
+	private String folder;
 
 	@Column(name = "file_name")
 	private String fileName;
@@ -79,6 +81,14 @@ public class DownloadDetail implements Serializable, IReadable {
 		this.id = id;
 	}
 
+	public String getFolder() {
+		return folder;
+	}
+
+	public void setFolder(String folder) {
+		this.folder = folder;
+	}
+	
 	public String getFileName() {
 		return fileName;
 	}

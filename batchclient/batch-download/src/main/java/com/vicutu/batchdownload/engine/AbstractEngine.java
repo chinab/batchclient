@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +19,7 @@ import com.vicutu.batchdownload.engine.event.SearchBeginEvent;
 import com.vicutu.batchdownload.engine.event.SearchEndEvent;
 import com.vicutu.batchdownload.engine.event.UpdateDownloadDetailEvent;
 import com.vicutu.batchdownload.engine.event.UpdateSearchStatusEvent;
+import com.vicutu.batchdownload.engine.io.FileHandler;
 import com.vicutu.batchdownload.service.AccessDetailService;
 import com.vicutu.batchdownload.service.SearchStatusService;
 import com.vicutu.commons.logging.Logger;
@@ -36,6 +38,8 @@ public abstract class AbstractEngine implements Engine {
 	protected SearchStatusService searchStatusService;
 
 	protected ApplicationContext applicationContext;
+
+	protected FileHandler fileHandler;
 
 	@Autowired
 	public void setSearchStatusService(SearchStatusService searchStatusService) {
@@ -56,6 +60,10 @@ public abstract class AbstractEngine implements Engine {
 		this.httpClient = httpClient;
 	}
 
+	public void setFileHandler(FileHandler fileHandler) {
+		this.fileHandler = fileHandler;
+	}
+
 	@PreDestroy
 	public void cleanUp() {
 		if (httpClient != null) {
@@ -63,16 +71,22 @@ public abstract class AbstractEngine implements Engine {
 		}
 	}
 
-	protected void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String fileName,
-			String realPath, String imageUrl0) {
+	protected void fireDownloadEvent(AccessDetail accessDetail, SearchStatus searchStatus, String url, String folder,
+			String fileName) {
 		DownloadDetail downloadDetail = new DownloadDetail();
-		downloadDetail.setRealUrl(imageUrl0);
-		downloadDetail.setRealPath(realPath);
+		downloadDetail.setRealUrl(url);
+		downloadDetail.setFolder(folder);
 		downloadDetail.setFileName(fileName);
 		downloadDetail.setUpdateTime(new Date(System.currentTimeMillis()));
-		logger.info("DownloadDetail-Url : {}", imageUrl0);
+		if (StringUtils.endsWithAny(folder, new String[] { "/", "\\" })) {
+			downloadDetail.setRealPath((new StringBuilder()).append(folder).append(fileName).toString());
+		} else {
+			downloadDetail.setRealPath((new StringBuilder()).append(folder).append("/").append(fileName).toString());
+		}
+		logger.info("DownloadDetail-Url : {}", url);
 		publishEvent(new UpdateDownloadDetailEvent(this, accessDetail, downloadDetail));
-		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient);
+		DownloadItem downloadItem = new DownloadItem(accessDetail, downloadDetail, searchStatus, httpClient,
+				fileHandler);
 		publishEvent(new AddDownloadItemEvent(this, downloadItem));
 	}
 
