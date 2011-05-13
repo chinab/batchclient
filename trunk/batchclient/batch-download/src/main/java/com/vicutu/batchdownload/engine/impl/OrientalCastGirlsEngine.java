@@ -1,6 +1,5 @@
 package com.vicutu.batchdownload.engine.impl;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import com.vicutu.batchdownload.domain.AccessDetail;
 import com.vicutu.batchdownload.domain.SearchStatus;
 import com.vicutu.batchdownload.engine.AbstractEngine;
 import com.vicutu.batchdownload.engine.Engine;
+import com.vicutu.batchdownload.engine.io.FileHandler;
 import com.vicutu.batchdownload.utils.HtmlUtils;
 import com.vicutu.batchdownload.utils.HttpUtils;
 import com.vicutu.batchdownload.utils.URIUtils;
@@ -35,6 +35,13 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	@Qualifier("defaultHttpClient")
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
+	}
+
+	@Override
+	@Autowired
+	@Qualifier("simpleFileHandler")
+	public void setFileHandler(FileHandler fileHandler) {
+		this.fileHandler = fileHandler;
 	}
 
 	@Override
@@ -107,7 +114,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	}
 
 	private void searchPart(String partUrl, String savePath, AccessDetail accessDetail) throws Exception {
-		
+
 		String imageBaseUrl = partUrl + "/images/";
 		String imgae1htmlUrl = partUrl + "/imagepages/image1.html";
 
@@ -124,16 +131,19 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 			String imageFileName = StringUtils.substringAfter(optionText, " ");
 			String imageUrl = StringUtils.replace(imageBaseUrl + imageFileName, " ", "%20");
 			String realFileName = StringUtils.replace(imageFileName, " ", "_");
-			File realSavePath = new File(savePath, StringUtils.substringBeforeLast(realFileName, "_"));
-			if (!realSavePath.exists()) {
-				realSavePath.mkdirs();
+
+			String folderName = StringUtils.substringBeforeLast(realFileName, "_");
+			String realSavePath = null;
+			if (StringUtils.endsWithAny(savePath, new String[] { "/", "\\" })) {
+				realSavePath = new StringBuilder().append(savePath).append(folderName).toString();
+			} else {
+				realSavePath = new StringBuilder().append(savePath).append("/").append(folderName).toString();
 			}
-			
-			File imageFile = new File(realSavePath, realFileName);
-			if (imageFile.exists() && !accessDetail.isReplaceExist()) {
+
+			if (fileHandler.exists(realSavePath, realFileName) && !accessDetail.isReplaceExist()) {
 				logger.info("ignore exist : {}", imageUrl);
 			} else {
-				fireDownloadEvent(accessDetail, null, realFileName, imageFile.getAbsolutePath(), imageUrl);
+				fireDownloadEvent(accessDetail, null, imageUrl, realSavePath, realFileName);
 			}
 		}
 	}
