@@ -54,12 +54,12 @@
 	<bean id="defaultHttpClient" factory-bean="threadSafeHttpClientFactory"
 		factory-method="createHttpClientInstance" />
 		
-<!-- 	<bean id="archiveFileHandler" -->
-<!-- 		class="com.vicutu.batchdownload.engine.io.impl.ArchiveFileHandler"  init-method="init" -->
-<!-- 		destroy-method="cleanup"> -->
-<!-- 		<property name="timeBetweenEvictionRunsMillis" value="10000" /> -->
-<!-- 		<property name="closeIdleTimeout" value="10000" /> -->
-<!-- 	</bean> -->
+<!-- 	<bean id="archiveFileHandler"
+		class="com.vicutu.batchdownload.engine.io.impl.ArchiveFileHandler"  init-method="init"
+		destroy-method="cleanup">
+		<property name="timeBetweenEvictionRunsMillis" value="10000" />
+		<property name="closeIdleTimeout" value="10000" />
+	</bean> -->
 	
 	<bean id="simpleFileHandler" class="com.vicutu.batchdownload.engine.io.impl.SimpleFileHandler" />
 			

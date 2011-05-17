@@ -14,9 +14,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.util.StringUtils;
@@ -126,7 +128,7 @@ public class ArchiveFileHandler extends AbstractFileHandler implements FileHandl
 								if ((System.currentTimeMillis() - archiveFile.getLastModify()) > closeIdleTimeout) {
 									archiveFile.close();
 									archiveFileIterator.remove();
-									logger.info("close ArchiveFile : {}",archiveFile.getAbsoluteFile().getName());
+									logger.info("close ArchiveFile : {}", archiveFile.getAbsoluteFile().getName());
 								}
 							}
 						} finally {
@@ -153,7 +155,7 @@ public class ArchiveFileHandler extends AbstractFileHandler implements FileHandl
 
 		private Set<String> entities = new HashSet<String>();
 
-		private ZipArchiveOutputStream out;
+		private ArchiveOutputStream archiveOutputStream;
 
 		private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
@@ -168,18 +170,26 @@ public class ArchiveFileHandler extends AbstractFileHandler implements FileHandl
 					: absoluteFileName + ".zip";
 			absoluteFile = new File(absoluteFileName0);
 			if (absoluteFile.exists()) {
-				ZipArchiveInputStream is = null;
+				ArchiveInputStream in = null;
 				try {
-					is = new ZipArchiveInputStream(FileUtils.openInputStream(absoluteFile));
+					in = new ArchiveStreamFactory().createArchiveInputStream(ArchiveStreamFactory.ZIP,
+							FileUtils.openInputStream(absoluteFile));
 					ArchiveEntry ae = null;
-					while ((ae = is.getNextEntry()) != null) {
+					while ((ae = in.getNextEntry()) != null) {
 						entities.add(ae.getName());
 					}
+				} catch (ArchiveException e) {
+					throw new IOException(e);
 				} finally {
-					IOUtils.closeQuietly(is);
+					IOUtils.closeQuietly(in);
 				}
 			}
-			out = new ZipArchiveOutputStream(FileUtils.openOutputStream(absoluteFile));
+			try {
+				archiveOutputStream = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP,
+						FileUtils.openOutputStream(absoluteFile));
+			} catch (ArchiveException e) {
+				throw new IOException(e);
+			}
 			lastModify.set(System.currentTimeMillis());
 		}
 
@@ -199,14 +209,13 @@ public class ArchiveFileHandler extends AbstractFileHandler implements FileHandl
 		public long save(AccessDetail accessDetail, String name, InputStream input) throws IOException {
 			w.lock();
 			try {
-				ZipArchiveEntry zipEntry = new ZipArchiveEntry(name);
-				out.putArchiveEntry(zipEntry);
-				lastModify.set(System.currentTimeMillis());
-				return copyLarge(accessDetail, input, out);
+				archiveOutputStream.putArchiveEntry(new ZipArchiveEntry(name));
+				return copyLarge(accessDetail, input, archiveOutputStream);
 			} finally {
-				if (out != null) {
-					out.closeArchiveEntry();
+				if (archiveOutputStream != null) {
+					archiveOutputStream.closeArchiveEntry();
 				}
+				lastModify.set(System.currentTimeMillis());
 				w.unlock();
 			}
 		}
@@ -214,9 +223,9 @@ public class ArchiveFileHandler extends AbstractFileHandler implements FileHandl
 		public void close() {
 			w.lock();
 			try {
-				entities.clear();
-				IOUtils.closeQuietly(out);
+				IOUtils.closeQuietly(archiveOutputStream);
 			} finally {
+				entities.clear();
 				w.unlock();
 			}
 		}
