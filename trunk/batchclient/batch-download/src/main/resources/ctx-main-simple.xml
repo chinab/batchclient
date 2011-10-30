@@ -62,6 +62,8 @@
 	</bean> -->
 	
 	<bean id="simpleFileHandler" class="com.vicutu.batchdownload.engine.io.impl.SimpleFileHandler" />
+	
+	<bean id="archiveFileHandler" class="com.vicutu.batchdownload.engine.io.impl.ArchiveFileHandler" />
 			
 	<context:property-override
 		location="classpath:batchdownload.properties" />

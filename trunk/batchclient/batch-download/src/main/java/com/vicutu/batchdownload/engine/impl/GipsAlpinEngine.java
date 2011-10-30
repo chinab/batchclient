@@ -26,6 +26,7 @@ import com.vicutu.batchdownload.domain.AccessDetail;
 import com.vicutu.batchdownload.domain.SearchStatus;
 import com.vicutu.batchdownload.engine.AbstractEngine;
 import com.vicutu.batchdownload.engine.Engine;
+import com.vicutu.batchdownload.engine.io.FileHandler;
 import com.vicutu.batchdownload.utils.HtmlUtils;
 import com.vicutu.batchdownload.utils.HttpUtils;
 import com.vicutu.commons.exception.BaseRuntimeException;
@@ -47,6 +48,13 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 	}
 
 	@Override
+	@Autowired
+	@Qualifier("simpleFileHandler")
+	public void setFileHandler(FileHandler fileHandler) {
+		this.fileHandler = fileHandler;
+	}
+
+	@Override
 	protected String getAccessDetailName() {
 		return ACCESS_DETAIL_NAME;
 	}
@@ -61,7 +69,7 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 				return;
 			}
 			this.login(httpClient, accessDetail);
-
+			this.fireSearchBeginEvent();
 			String linkUrl = accessDetail.getSearchUrl();
 			String htmlStr = HttpUtils.downloadHtml(httpClient, linkUrl);
 			List<String> firstList = HtmlUtils.selectAllHREF(htmlStr);
@@ -93,6 +101,8 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			}
 		} catch (Exception e) {
 			logger.error("occur error when searching", e);
+		} finally {
+			this.fireSearchEndEvent();
 		}
 	}
 
@@ -122,11 +132,10 @@ public class GipsAlpinEngine extends AbstractEngine implements Engine {
 			String imageUrl0 = IMAGE_ROOT_URL + StringUtils.substringAfterLast(imageUrl, "thumbs/");
 			String fileName = StringUtils.substringAfterLast(imageUrl, "/");
 			if (StringUtils.endsWithIgnoreCase(fileName, ".jpg")) {
-				File downloadFile = new File(folder, fileName);
-				if (downloadFile.exists() && !accessDetail.isReplaceExist()) {
+				if (fileHandler.exists(folderName, fileName) && !accessDetail.isReplaceExist()) {
 					logger.info("ignore exist : {}", imageUrl0);
 				} else {
-					fireDownloadEvent(accessDetail, searchStatus, fileName, downloadFile.getAbsolutePath(), imageUrl0);
+					fireDownloadEvent(accessDetail, searchStatus, imageUrl0, folderName, fileName);
 				}
 			} else {
 				logger.warn("illegal uri of image file : {}", fileName);
