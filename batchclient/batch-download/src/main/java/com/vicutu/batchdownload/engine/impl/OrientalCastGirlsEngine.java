@@ -87,7 +87,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	}
 
 	private void doSearch(String searchUrl, String savePath, AccessDetail accessDetail) throws Exception {
-		String htmlStr = HttpUtils.downloadHtml(httpClient, searchUrl);
+		String htmlStr = this.downloadHtml(httpClient, searchUrl);
 		List<String> hrefList = HtmlUtils.selectAllHREF(htmlStr, accessDetail.getBaseUrl());
 		Collection<String> albums = URIUtils.removeContains(hrefList, false, "2009", "2010", "archive");
 		for (String albumUrl : albums) {
@@ -97,7 +97,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 	}
 
 	private void searchAlbum(String albumUrl, String savePath, AccessDetail accessDetail) throws Exception {
-		String htmlStr = HttpUtils.downloadHtml(httpClient, albumUrl);
+		String htmlStr = this.downloadHtml(httpClient, albumUrl);
 		List<String> parts = HtmlUtils.selectAllHREF(htmlStr, accessDetail.getBaseUrl());
 		for (String part : parts) {
 			if (searchStatusService.urlExists(part)) {
@@ -123,7 +123,7 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 
 	private void assembleTask(String imgae1htmlUrl, String imageBaseUrl, String savePath, AccessDetail accessDetail)
 			throws Exception {
-		String htmlStr = HttpUtils.downloadHtml(httpClient, imgae1htmlUrl);
+		String htmlStr = this.downloadHtml(httpClient, imgae1htmlUrl);
 
 		Elements elements = HtmlUtils.seletctAsElement(htmlStr, null, "option");
 		for (Element element : elements) {
@@ -145,6 +145,15 @@ public class OrientalCastGirlsEngine extends AbstractEngine implements Engine {
 			} else {
 				fireDownloadEvent(accessDetail, null, imageUrl, realSavePath, realFileName);
 			}
+		}
+	}
+
+	private String downloadHtml(HttpClient httpClient, String linkUrl) {
+		try {
+			return HttpUtils.downloadHtml(httpClient, linkUrl);
+		} catch (Exception e) {
+			logger.error("occur error when searching [" + linkUrl + "]", e);
+			return "";
 		}
 	}
 }
