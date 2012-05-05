@@ -78,6 +78,8 @@
 	
 	<bean id="castedeuropevideo" class="com.vicutu.batchdownload.domain.AccessDetail" />
 	
+	<bean id="gipsdreams" class="com.vicutu.batchdownload.domain.AccessDetail" />
+	
 	<bean id="accessDetailDao" class="com.vicutu.batchdownload.dao.impl.simple.AccessDetailDaoSimpleImpl">
 		<property name="accessDetails">
 			<list>
@@ -86,6 +88,7 @@
 				<ref bean="orientalcastgirls" />
 				<ref bean="castedeurope" />
 				<ref bean="castedeuropevideo" />
+				<ref bean="gipsdreams" />
 			</list>
 		</property>
 	</bean>
